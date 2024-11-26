@@ -1,0 +1,9 @@
+node_modules/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+.idea/
+.vscode/
+# An md file that begins with a dot should be considered a draft.
+.*.md
+docs/.DS_Store
+.DS_Store

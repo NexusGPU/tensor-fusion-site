@@ -1,0 +1,38 @@
+{
+  "devDependencies": {
+    "@braintree/sanitize-url": "7.1.0",
+    "@types/video.js": "7.3.58",
+    "@typescript-eslint/eslint-plugin": "8.16.0",
+    "@typescript-eslint/parser": "8.16.0",
+    "@vue/tsconfig": "0.6.0",
+    "cytoscape": "3.30.4",
+    "cytoscape-cose-bilkent": "4.1.0",
+    "dayjs": "1.11.13",
+    "debug": "4.3.7",
+    "eslint": "9.15.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-vue": "9.31.0",
+    "langium": "^3.2.0",
+    "lint-staged": "15.2.10",
+    "markdown-it-container": "4.0.0",
+    "mermaid": "11.4.0",
+    "typescript": "5.7.2",
+    "vitepress": "1.5.0",
+    "vitepress-plugin-image-viewer": "1.1.5",
+    "vitepress-plugin-mermaid": "2.0.17",
+    "vitepress-plugin-sandpack": "1.1.4",
+    "vue": "3.5.13",
+    "vue-tsc": "2.1.10"
+  },
+  "scripts": {
+    "dev": "vitepress dev docs --host",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs",
+    "lint": "eslint --ignore-path .eslintignore docs/.vitepress/**/*.{vue,ts} --fix",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@videojs-player/vue": "1.0.0",
+    "video.js": "8.20.0"
+  }
+}
