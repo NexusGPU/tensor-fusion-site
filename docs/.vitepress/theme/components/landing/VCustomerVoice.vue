@@ -16,8 +16,8 @@
           </div>
           <div class="testimonial-grid">
             <div v-for="(testimonial, index) in testimonials" 
-                 :key="testimonial.id"
                  :id="testimonial.nodeId"
+                 :key="testimonial.id"
                  :data-w-id="testimonial.dataId"
                  :style="testimonial.style"
                  :class="['testimonial-card', { 'hide-landscape': testimonial.hideOnLandscape }]">

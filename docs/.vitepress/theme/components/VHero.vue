@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 import { VideoPlayer } from "@videojs-player/vue/dist/videojs-player.cjs.js";
 
 const logos = ref([

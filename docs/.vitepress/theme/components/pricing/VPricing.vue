@@ -11,7 +11,7 @@
                     <div data-w-id="eedf3d47-80d0-df4e-60d4-07d023f7177e" style="opacity:0"
                         class="pricing-grid-wrapper">
                         <div class="pricing-grid">
-                            <div v-for="plan in plans" :key="plan.id" :id="plan.id" :class="['price-card']">
+                            <div v-for="plan in plans" :id="plan.id" :key="plan.id" :class="['price-card']">
                                 <div class="price-card-content">
                                     <div class="price-icon"><img loading="lazy" src="https://cdn.prod.website-files.com/66d7569e04e345dd50a3517d/66d892f44dbb976defe58569_Price%20Icon.svg" alt="" class="contain">
                                     </div>

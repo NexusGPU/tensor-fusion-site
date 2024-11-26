@@ -15,7 +15,7 @@
               </div>
             </div>
             <!-- Hero images section referenced from original -->
-            <div class="hero-images" v-if="showHeroImages">
+            <div v-if="showHeroImages" class="hero-images">
               <img :src="heroImage1" alt="Hero Image 1" />
               <div class="hero-video">
                 <!-- Video content -->
