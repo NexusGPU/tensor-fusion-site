@@ -3621,6 +3621,7 @@ blockquote {
 }
 
 .faq-list {
+  margin-top: 4rem;
   grid-row-gap: .5rem;
   flex-direction: column;
   grid-template-rows: auto auto;

@@ -19,7 +19,6 @@
                  :id="testimonial.nodeId"
                  :key="testimonial.id"
                  :data-w-id="testimonial.dataId"
-                 :style="testimonial.style"
                  :class="['testimonial-card', { 'hide-landscape': testimonial.hideOnLandscape }]">
               <div class="quote-icon"><img loading="lazy"
                   src="https://cdn.prod.website-files.com/66f30c8d2ac082d2aee64be2/66f30c8d2ac082d2aee64c45_Quote%20Icon.svg"

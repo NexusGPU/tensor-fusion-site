@@ -4,19 +4,24 @@
     <VNavBar></VNavBar>
 
     <!-- landing page home -->
-    <VHero v-if="isHome"></VHero>
-    <VFeatures v-if="isHome"></VFeatures>
-    <VCustomerVoice v-if="isHome"></VCustomerVoice>
-    <VScenario v-if="isHome"></VScenario>
+    <template v-if="currentRoute === '/'">
+      <VHero></VHero>
+      <VFeatures></VFeatures>
+      <VCustomerVoice></VCustomerVoice>
+      <VScenario></VScenario>
+    </template>
 
-    <!-- landing page pricing -->
-    <VPricing v-if="isPricing"></VPricing>
+    <template v-else-if="currentRoute === '/pricing'">
+      <VPricing></VPricing>
+    </template>
 
-    <!-- landing page features -->
-    <VFeatures v-if="isFeatures"></VFeatures>
+    <template v-else-if="currentRoute === '/features'">
+      <VFeatures></VFeatures>
+    </template>
 
-    <!-- landing page help -->
-    <VHelp v-if="isHelp"></VHelp>
+    <template v-else-if="currentRoute === '/help'">
+      <VHelp></VHelp>
+    </template>
 
     <!-- landing page markdown doc -->
     <div class="padding-global">
@@ -33,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute } from "vitepress";
 import VFooter from './landing/VFooter.vue'
 import VNavBar from './landing/VNavBar.vue'
@@ -45,10 +50,15 @@ import VCustomerVoice from './landing/VCustomerVoice.vue'
 import VScenario from './landing/VScenario.vue'
 
 const route = useRoute()
-const isHome = ref(route.path === '/')
-const isPricing = ref(route.path === '/pricing')
-const isHelp = ref(route.path === '/help')
-const isFeatures = ref(route.path === '/features')
+
+const currentRoute = ref(route.path)
+
+watch(route, (newRoute) => {
+  currentRoute.value = newRoute.path
+  setTimeout(() => {
+    location.reload()
+  }, 10);
+})
 
 onMounted(() => {
   // @ts-expect-error Dynamic import
