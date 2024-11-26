@@ -6,8 +6,8 @@ outline: deep
 
 ## Quick Start for Kubernetes Cluster
 
-[Kubernetes Cluster Deployment](/docs/en/guide/deployment-k8s.md)
+[Kubernetes Cluster Deployment](/en/guide/deployment-k8s.md)
 
 ## Quick Start for VM/BareMetal Cluster
 
-[VM/BareMetal Deployment](/docs/en/guide/deployment-vm.md)
+[VM/BareMetal Deployment](/en/guide/deployment-vm.md)
