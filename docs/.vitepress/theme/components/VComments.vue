@@ -16,7 +16,7 @@ const { frontmatter, title, isDark } = useData()
     -->
     <ClientOnly>
       <component :is="'script'" src="https://giscus.app/client.js" 
-        data-repo="NexusGPU/docs"
+        data-repo="NexusGPU/tensor-fusion-site"
         data-repo-id="R_kgDONFJmVA"
         data-category="General"
         data-category-id="DIC_kwDONFJmVM4Cjqv7"

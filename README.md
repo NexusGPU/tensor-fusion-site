@@ -110,7 +110,7 @@ Don't forget to give the project a star! Thanks again!
 ### Top contributors
 
 <a href="https://github.com/NexusGPU/tensor-fusion-site/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=NexusGPU/docs" alt="contrib.rocks image" />
+  <img src="https://contrib.rocks/image?repo=NexusGPU/tensor-fusion-site" alt="contrib.rocks image" />
 </a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

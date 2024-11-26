@@ -7,3 +7,4 @@ docs/.vitepress/dist/
 .*.md
 docs/.DS_Store
 .DS_Store
+.vitepress/dist
