@@ -55,9 +55,7 @@ const currentRoute = ref(route.path)
 
 watch(route, (newRoute) => {
   currentRoute.value = newRoute.path
-  setTimeout(() => {
-    location.reload()
-  }, 10);
+  location.reload()
 })
 
 onMounted(() => {
