@@ -17,9 +17,9 @@ const { frontmatter, title, isDark } = useData()
     <ClientOnly>
       <component :is="'script'" src="https://giscus.app/client.js" 
         data-repo="NexusGPU/tensor-fusion-site"
-        data-repo-id="R_kgDONFJmVA"
+        data-repo-id="R_kgDONOd-Xw"
         data-category="General"
-        data-category-id="DIC_kwDONFJmVM4Cjqv7"
+        data-category-id="DIC_kwDONOd-X84Ckzvc"
         data-mapping="pathname" data-strict="0" 
         :data-theme="isDark ? 'dark' : 'light'"
         data-reactions-enabled="1" data-emit-metadata="0"
