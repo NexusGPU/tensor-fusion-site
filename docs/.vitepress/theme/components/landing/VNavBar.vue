@@ -28,8 +28,8 @@ src="https://filecdn.code2life.top/tensor-fusion.png" style="height: 80%;width: 
                   </a><a href="/book-demo" target="_blank" class="primary-button w-inline-block">
                     <div class="text-size-small text-weight-bold">Book a Demo</div>
                   </a>
-                  <a href="https://app.tensor-fusion.ai/login" target="_blank" class="primary-button w-inline-block">
-                    <div class="text-size-small text-weight-bold">Login / Sign Up</div>
+                  <a href="https://app.tensor-fusion.ai/sign-in" target="_blank" class="primary-button w-inline-block">
+                    <div class="text-size-small text-weight-bold">Sign In / Sign Up</div>
                   </a>
                   
                 </div>
@@ -61,7 +61,7 @@ src="https://filecdn.code2life.top/tensor-fusion.png" style="height: 80%;width: 
               </div>
             </a>
 
-              <a href="https://app.tensor-fusion.ai/login" target="_blank" class="primary-button w-inline-block">
+              <a href="https://app.tensor-fusion.ai/sign-in" target="_blank" class="primary-button w-inline-block">
                 <div class="relative">
                   <div class="text-size-small text-weight-bold">Login / Sign Up</div>
                   <!-- <div class="text-size-small text-weight-bold">Join Wait List</div> -->
