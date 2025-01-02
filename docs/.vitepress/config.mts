@@ -44,7 +44,7 @@ export default defineConfig(
     metaChunk: true,
 
     sitemap: {
-      hostname: "https://docs.code2life.top",
+      hostname: "https://tensor-fusion.ai",
     },
 
     mermaid: {},
@@ -72,7 +72,7 @@ export default defineConfig(
       ["meta", { property: "twitter:description", content: "Tensor Fusion is a real-world GPU virtualization framework that maximizes GPU usage and minimizes the cost of GPU resources." }],
       ["meta", { property: "twitter:image", content: "https://filecdn.code2life.top/tensor-fusion.png" }],
       ["meta", { name: "twitter:card", content: "summary_large_image" }],
-      
+      ['meta', { name: 'robots', content: 'index, follow' }],
       ["link", { rel: "icon", href: "/favicon.ico" }],
       ["link", { rel: "robots", href: "/robots.txt" }],
       ["link", { rel: "apple-touch-icon", href: "https://filecdn.code2life.top/tensor-fusion.png" }],
