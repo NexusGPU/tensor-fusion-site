@@ -1,5 +1,5 @@
 <template>
-  <div v-cloak>
+  <div v-cloak style="background-color: #111;color: wheat;">
     <div class="vp-doc"></div>
     <VNavBar></VNavBar>
 

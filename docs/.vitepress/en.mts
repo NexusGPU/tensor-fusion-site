@@ -3,7 +3,7 @@ import { defineConfig, type DefaultTheme } from 'vitepress'
 
 export const en = defineConfig({
   lang: 'en-US',
-  description: 'The full-fledged tech doc template powered by VitePress & Diátaxis framework',
+  description: 'Maximize your GPU Usage with Pooling and Virtualization, Remote GPU Sharing, GPU over IP, Improve GPU cluster utilization',
 
   themeConfig: {
     nav: nav(),

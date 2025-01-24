@@ -220,8 +220,6 @@ html {
 }
 
 body {
-  color: #333;
-  background-color: #fff;
   min-height: 100%;
   margin: 0;
   font-family: Arial, sans-serif;
@@ -2102,8 +2100,8 @@ textarea.w-input, textarea.w-select {
 }
 
 body {
-  background-color: var(--color--black);
-  color: var(--color--white);
+  background-color: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;

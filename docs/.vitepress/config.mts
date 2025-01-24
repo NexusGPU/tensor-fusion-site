@@ -24,7 +24,7 @@ export default defineConfig(
     },
 
     title: "Tensor Fusion",
-    titleTemplate: "Maximize your GPU Usage with Pooling and Virtualization | Remote GPU Sharing",
+    titleTemplate: "Maximize your GPU usage, powered by GPU virtualization and pooling, fractional GPU, Remote GPU Sharing, GPU over IP",
     description: "Tensor Fusion is a AI infra solution focusing on maximizing GPU usage with pooling and intelligent scheduling. It's based on a cutting-edge API-remoting GPU virtualization. Run more AI apps, with less GPUs.",
     rewrites: {
       "en/:rest*": ":rest*",
