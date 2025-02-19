@@ -6,18 +6,18 @@ outline: deep
 
 ## Files
 
-https://r2-upload.code2life.top/CUDA-Fusion.tar
+https://cdn.tensor-fusion.ai/CUDA-Fusion.tar
 
 ## Client
 
 **Environment**: Ubuntu 24.04 or Rocky Linux 9.0
 
 **Dependencies**:
-1. Install CUDA 12.1 official package [Download Link](https://r2-upload.code2life.top/cuda_12.1.0_530.30.02_linux.run)
+1. Install CUDA 12.1 official package [Download Link](https://cdn.tensor-fusion.ai/cuda_12.1.0_530.30.02_linux.run)
     During installation, select to install CUDA Toolkit only, do not install the NVIDIA driver;
 2. Install Tensor Fusion client part
     Extract CUDA-Fusion.tar, copy all files from `CUDA-Fusion/client/libs` to the CUDA installation directory `/usr/local/cuda-12.1/lib64/`
-3. Install PyTorch, [Download Link](https://r2-upload.code2life.top/torch-2.1.0a0+gita8e7c98-cp312-cp312-linux_x86_64.whl)
+3. Install PyTorch, [Download Link](https://cdn.tensor-fusion.ai/torch-2.1.0a0+gita8e7c98-cp312-cp312-linux_x86_64.whl)
     This version uses PyTorch code tag-v2.1.2 and dynamically links to the CUDA runtime.
 
 **Startup Command**:
@@ -48,9 +48,9 @@ https://r2-upload.code2life.top/CUDA-Fusion.tar
      ```sh
      apt install nvidia-driver-535
      ```
-2. Install CUDA 12.1 official package [Download Link](https://r2-upload.code2life.top/cuda_12.1.0_530.30.02_linux.run)
+2. Install CUDA 12.1 official package [Download Link](https://cdn.tensor-fusion.ai/cuda_12.1.0_530.30.02_linux.run)
     During installation, select to install CUDA Toolkit only, do not install the NVIDIA driver.
-3. Install CUDNN, [Download Link](https://r2-upload.code2life.top/cudnn-linux-x86_64-8.8.1.3_cuda12-archive.tar.xz)
+3. Install CUDNN, [Download Link](https://cdn.tensor-fusion.ai/cudnn-linux-x86_64-8.8.1.3_cuda12-archive.tar.xz)
     Extract and place it in the `/usr/local/` directory.
 
 **Startup Command**:

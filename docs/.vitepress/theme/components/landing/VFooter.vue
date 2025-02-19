@@ -5,7 +5,7 @@
         <div class="footer-component">
           <div data-w-id="93f4457d-ec22-3c66-b213-0b7ef6a67132" class="footer-heading">
             <img 
-              loading="lazy" src="https://filecdn.code2life.top/tensor-fusion.png" class="logo-responsive"
+              loading="lazy" src="https://cdn.tensor-fusion.ai/tensor-fusion.png" class="logo-responsive"
               alt="Tensor Fusion Logo" />
           </div>
           <div data-w-id="93f4457d-ec22-3c66-b213-0b7ef6a67134" class="w-layout-grid footer-grid" style="margin-top: 60px;">

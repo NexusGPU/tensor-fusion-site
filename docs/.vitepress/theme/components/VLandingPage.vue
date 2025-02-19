@@ -79,7 +79,7 @@ onMounted(() => {
   document.documentElement.setAttribute('data-wf-site', '66f30c8d2ac082d2aee64be2')
 
   const wf = document.createElement('script')
-  wf.src = 'https://filecdn.code2life.top/wf.min.js'
+  wf.src = 'https://cdn.tensor-fusion.ai/wf.min.js'
   wf.type = 'text/javascript'
   document.head.appendChild(wf)
 

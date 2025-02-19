@@ -11,8 +11,8 @@ TensorFusion is the real-world GPU virtualization framework.
 Run more AI apps, with less GPUs.
 
 <video-player 
-                        src="https://filecdn.code2life.top/TensorFusion-demo.mp4"
-                        poster="https://filecdn.code2life.top/tfs-no-play-poster.png"
+                        src="https://cdn.tensor-fusion.ai/TensorFusion-demo.mp4"
+                        poster="https://cdn.tensor-fusion.ai/tfs-no-play-poster.png"
                         >
                         </video-player>
 

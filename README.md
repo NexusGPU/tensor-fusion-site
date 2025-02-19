@@ -1,14 +1,19 @@
-<p align="center"><a href="javascript:void(0);" target="_blank" rel="noreferrer"><img width="300" src="https://filecdn.code2life.top/tensor-fusion.png" alt="Logo"></a></p>
+<p align="center"><a href="javascript:void(0);" target="_blank" rel="noreferrer"><img width="300" src="https://cdn.tensor-fusion.ai/tensor-fusion.png" alt="Logo"></a></p>
 
-# Tensor Fusion
+<p align="center">
+    <strong><a href="https://tensor-fusion.ai" target="_blank">TensorFusion.AI</a></strong><br/>Next-Generation GPU Virtualization and Pooling for Enterprises<br><b>Less GPUs, More AI Apps.</b>
+    <br />
+    <a href="https://tensor-fusion.ai/guide/overview"><strong>Explore the docs »</strong></a>
+    <br />
+    <a href="https://tensor-fusion.ai/guide/overview">View Demo</a>
+    |
+    <a href="https://github.com/NexusGPU/tensor-fusion/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    |
+    <a href="https://github.com/NexusGPU/tensor-fusion/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+  </p>
 
-Tensor Fusion is a AI infra solution focusing on maximizing GPU usage with pooling and intelligent scheduling. It's based on a cutting-edge API-remoting GPU virtualization.
 
-**Less GPUs, More AI Apps**. 
-
-## Documents
-
-<a id="readme-top"></a>
+# ⚡ Tensor Fusion
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -17,84 +22,107 @@ Tensor Fusion is a AI infra solution focusing on maximizing GPU usage with pooli
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
+Tensor Fusion is a state-of-the-art **GPU virtualization and pooling solution** designed to optimize GPU cluster utilization to its fullest potential.
+
+<a href="https://tensor-fusion.ai/guide/overview"><b>English</b></a>
+    |
+    <a href="./README-zh.md">简体中文</a>
 <br />
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+## 🌟 Show Cases
+
+### Fractional GPU with Single TFlops/MiB Precision
+
+### Battle-tested GPU-over-IP Remote GPU Sharing 
+
+### GPU-first Scheduling and Auto-scaling
+
+### Computing Oversubscription and GPU VRAM Expansion
+
+### GPU Live Migration
+
+## 🚀 Quick Start
+
+### Onboard Your Own AI Infra to TensorFusion Cloud in 5 Minutes
+
+- [Getting Started on Kubernetes](https://tensor-fusion.ai/guide/deployment-k8s)
+- [Getting Started on VM](https://tensor-fusion.ai/guide/deployment-vm)
+- [Demo Console - Working in progress](https://app.tensor-fusion.ai?hint=demo)
+
+### Self-host TensorFusion Community Edition
+
+- [Self-host Community Edition](https://tensor-fusion.ai/guide/self-host)
+
+Experience Basic Features in 3 Minutes
+
+```bash
+# Step 1: Install TensorFusion in Kubernetes
+helm install --repo https://nexusgpu.github.io/tensor-fusion/ --create-namespace
+
+# Step 2. Onboard GPU nodes into TensorFusion cluster
+kubectl apply -f https://raw.githubusercontent.com/NexusGPU/tensor-fusion/main/manifests/gpu-node.yaml
+
+# Step 3. Check if cluster and pool is ready
+kubectl get gpupools -o wide && kubectl get gpunodes -o wide
+
+# Step3. Create an inference app using virtual, remote GPU resources in TensorFusion cluster
+kubectl apply -f https://raw.githubusercontent.com/NexusGPU/tensor-fusion/main/manifests/inference-app.yaml
+
+# Then you can forward the port to test inference, or exec shell
+```
+
+(TODO: Asciinema)
+
+### 💬 Discussion
+
+- Discord channel: [https://discord.gg/2bybv9yQNk](https://discord.gg/2bybv9yQNk)
+- Discuss anything about TensorFusion: [Github Discussions](https://github.com/NexusGPU/tensor-fusion/discussions)
+- Contact us with WeCom for Greater China region: [企业微信](https://work.weixin.qq.com/ca/cawcde42751d9f6a29) 
+- Email us: [support@tensor-fusion.com](mailto:support@tensor-fusion.com)
+- Schedule [1:1 meeting with TensorFusion founders](https://tensor-fusion.ai/book-demo)
 
 
-## About The Project
+## Features & Roadmap
 
-<!-- [![Product Name Screen Shot][product-screenshot]](https://tensor-fusion.ai) -->
+### Core Virtualization
 
-[Tensor Fusion Docs](https://tensor-fusion.ai/guide/overview)
+- [x] Fractional GPU and flexible oversubscription
+- [x] GPU-over-IP, remote GPU sharing with less than 4% performance loss
+- [x] GPU VRAM Expansion to host RAM
+- [ ] None NVIDIA GPU/NPU vendor support
 
-## Getting Started
+### Pooling & Scheduling & Management
 
-::warn:: **This project is currently in heavy development.**
+- [x] GPU/NPU pool management in Kubernetes
+- [x] GPU-first resource scheduler based on virtual TFlops/VRAM capacity
+- [x] GPU-first auto provisioning and bin-packing
+- [x] Seamless onboarding experience for Pytorch, TensorFlow, llama.cpp, vLLM, Tensor-RT, SGlang and all popular AI training/serving frameworks
+- [x] Basic management console and dashboards
+- [ ] Basic autoscaling policies, auto set requests/limits/replicas
+- [ ] Grouped GPU scheduling for LLMs
+- [ ] Support different QoS levels
 
-Onboard your GPU cluster to Tensor Fusion in minutes.
+### Enterprise Features
 
-### Installation
+- [x] Second level GPU live-migration, fastest in the world
+- [ ] Preloading and P2P distribution of container images & AI models
+- [ ] Advanced auto-scaling policies, Scale to zero, rebalance of hot GPUs
+- [ ] Advanced observability features, detailed metrics & tracing/profiling of CUDA calls
+- [ ] Multi-tenant billing based on actual usage
+- [ ] Enterprise level high availability and resilience, topology aware scheduling and GPU node auto failover etc.
+- [ ] Enterprise level security and compliance, complete on-premise deployment supported, SOC2 report available
+- [ ] SSO/SAML support, advanced audit/ReBAC features of management console, compliance reports etc.
 
-- [Installation on Kubernetes](https://docs.tensor-fusion.ai/guide/deployment-k8s)
-- [Installation on Kubernetes](https://docs.tensor-fusion.ai/guide/deployment-k8s)
+### 🗳️ Platform Support
 
-<!-- ## Usage
+- [x] Run on Linux Kubernetes clusters
+- [x] Run on Linux VMs or Bare Metal (one-click onboarding to Edge K3S)
+- [x] Run on Windows (Docs not ready, contact us for support)
+- [ ] Run on MacOS (Imagining mount a virtual NVIDIA GPU device on MacOS!)
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources. -->
+See the [open issues](https://github.com/NexusGPU/tensor-fusion/issues) for a full list of proposed features (and known issues).
 
-## Roadmap
-
-### Core Features
-
-- [x] NVIDIA GPU pooling
-- [x] Pytorch support
-- [ ] Seamless CUDA Context migration
-- [ ] QoS levels
-- [ ] Autoscaling policies
-- [ ] TensorFlow and other framework support
-- [ ] Compression, multiplexing & RDMA
-- [ ] Support multiple GPU/NPU vendors based on [ZLUDA](https://github.com/vosen/ZLUDA)
-
-### Scheduling & Management
-
-- [ ] Metrics & tracing of CUDA calls
-- [ ] Advanced scheduling, super burst mode
-- [ ] Hybrid scheduling, auto move communication intensive models schedule to local GPU
-- [ ] Management dashboard
-
-### Platform Support
-
-- [x] Run on VM/BareMetal
-- [x] Run on Kubernetes clusters
-- [ ] Run on ARM chips
-
-See the [open issues](https://github.com/NexusGPU/tensor-fusion-site/issues) for a full list of proposed features (and known issues).
-
-## Contributing
+## 🙏 Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -109,45 +137,29 @@ Don't forget to give the project a star! Thanks again!
 
 ### Top contributors
 
-<a href="https://github.com/NexusGPU/tensor-fusion-site/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=NexusGPU/tensor-fusion-site" alt="contrib.rocks image" />
+<a href="https://github.com/NexusGPU/tensor-fusion/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=NexusGPU/tensor-fusion" alt="contrib.rocks image" />
 </a>
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- LICENSE -->
 ## License
 
-TensorFusion is not open sourced as of now. It will be open after GA with BSL license.
-
-## Support & Contact
-
-- Discord channel: [https://discord.gg/2bybv9yQNk](https://discord.gg/2bybv9yQNk)
-- Email address: [@support@tensor-fusion.com](mailto:support@tensor-fusion.com)
-- Project link: [https://github.com/NexsusGPU/TensorFusion](https://github.com/NexsusGPU/TensorFusion)
-
-## Acknowledgments
-
-* [GPU Less](https://choosealicense.com)
-* [rCUDA](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
+1. This repo is open sourced with [Apache 2.0 License](./LICENSE), which includes **GPU pooling, scheduling, management features**, you can use it for free and modify it.
+2. **GPU virtualization and GPU-over-IP features** are also free to use as the part of **Community Plan**, the implementation is not fully open sourced, and you can not exceed 10 GPU/NPU instances per organization.
+3. Features mentioned in "Enterprise Features" are paid, only licensed users can unlock these features.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/NexusGPU/tensor-fusion-site.svg?style=for-the-badge
-[contributors-url]: https://github.com/NexusGPU/tensor-fusion-site/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/NexusGPU/tensor-fusion-site.svg?style=for-the-badge
-[forks-url]: https://github.com/NexusGPU/tensor-fusion-site/network/members
-[stars-shield]: https://img.shields.io/github/stars/NexusGPU/tensor-fusion-site.svg?style=for-the-badge
-[stars-url]: https://github.com/NexusGPU/tensor-fusion-site/stargazers
-[issues-shield]: https://img.shields.io/github/issues/NexusGPU/tensor-fusion-site.svg?style=for-the-badge
-[issues-url]: https://github.com/NexusGPU/tensor-fusion-site/issues
-[license-shield]: https://img.shields.io/github/license/NexusGPU/tensor-fusion-site.svg?style=for-the-badge
-[license-url]: https://github.com/NexusGPU/tensor-fusion-site/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/NexusGPU/tensor-fusion.svg?style=for-the-badge
+[contributors-url]: https://github.com/NexusGPU/tensor-fusion/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/NexusGPU/tensor-fusion.svg?style=for-the-badge
+[forks-url]: https://github.com/NexusGPU/tensor-fusion/network/members
+[stars-shield]: https://img.shields.io/github/stars/NexusGPU/tensor-fusion.svg?style=for-the-badge
+[stars-url]: https://github.com/NexusGPU/tensor-fusion/stargazers
+[issues-shield]: https://img.shields.io/github/issues/NexusGPU/tensor-fusion.svg?style=for-the-badge
+[issues-url]: https://github.com/NexusGPU/tensor-fusion/issues
+[license-shield]: https://img.shields.io/github/license/NexusGPU/tensor-fusion.svg?style=for-the-badge
+[license-url]: https://github.com/NexusGPU/tensor-fusion/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/company/tensor-fusion/about
-[product-screenshot]: images/screenshot.png
+

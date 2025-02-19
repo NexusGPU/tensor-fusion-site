@@ -17,7 +17,7 @@ hero:
       text: Reference
       link: /reference/cli-params
   image:
-    src: https://filecdn.code2life.top/tensor-fusion.png
+    src: https://cdn.tensor-fusion.ai/tensor-fusion.png
     alt: Tensor Fusion Logo
 
 features:

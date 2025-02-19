@@ -5,18 +5,18 @@ outline: deep
 # 在VM/BareMetal部署Tensor Fusion
 
 ## 文件
-https://r2-upload.code2life.top/CUDA-Fusion.tar
+https://cdn.tensor-fusion.ai/CUDA-Fusion.tar
 
 ## 客户端
 
 **环境**：Ubuntu 24.04 or Rocky linux 9.0
 
 **安装依赖**：
-1. 安装 CUDA 12.1 官方安装包 [下载链接](https://r2-upload.code2life.top/cuda_12.1.0_530.30.02_linux.run)
+1. 安装 CUDA 12.1 官方安装包 [下载链接](https://cdn.tensor-fusion.ai/cuda_12.1.0_530.30.02_linux.run)
 安装时勾选安装 CUDA Toolkit 即可，不要安装 NVIDIA 驱动；
 2. 安装 Tensor Fusion 客户端部分
 解压CUDA-Fusion.tar，将 `CUDA-Fusion/client/libs` 下的所有文件覆盖拷贝至 CUDA 安装目录 `/usr/local/cuda-12.1/lib64/`
-3. 安装pytorch，[下载链接](https://r2-upload.code2life.top/torch-2.1.0a0+gita8e7c98-cp312-cp312-linux_x86_64.whl)
+3. 安装pytorch，[下载链接](https://cdn.tensor-fusion.ai/torch-2.1.0a0+gita8e7c98-cp312-cp312-linux_x86_64.whl)
 该版本使用pytorch代码tag-v2.1.2，且动态链接cuda runtime library
 
 **启动命令**：
@@ -47,9 +47,9 @@ https://r2-upload.code2life.top/CUDA-Fusion.tar
     ```sh
     apt install nvidia-driver-535
     ```
-2. 安装 CUDA 12.1 官方安装包 [下载链接](https://r2-upload.code2life.top/cuda_12.1.0_530.30.02_linux.run)
+2. 安装 CUDA 12.1 官方安装包 [下载链接](https://cdn.tensor-fusion.ai/cuda_12.1.0_530.30.02_linux.run)
 安装时勾选安装 CUDA Toolkit 即可，不要安装 NVIDIA 驱动
-3. 安装 CUDNN，[下载链接](https://r2-upload.code2life.top/cudnn-linux-x86_64-8.8.1.3_cuda12-archive.tar.xz) 
+3. 安装 CUDNN，[下载链接](https://cdn.tensor-fusion.ai/cudnn-linux-x86_64-8.8.1.3_cuda12-archive.tar.xz) 
 解压后放在 `/usr/local/` 目录下
 
 **启动命令**：

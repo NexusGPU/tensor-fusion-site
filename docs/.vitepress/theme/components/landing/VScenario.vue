@@ -42,7 +42,7 @@
                 <div class="right-content">
                   <div class="steps-image"><img
                       sizes="(max-width: 479px) 93vw, (max-width: 767px) 95vw, (max-width: 991px) 46vw, 47vw"
-                      srcset="https://filecdn.code2life.top/byo-k8s.jpeg 1244w"
+                      srcset="https://cdn.tensor-fusion.ai/byo-k8s.jpeg 1244w"
                       alt="Stack Image"
                       loading="lazy" class="image" /></div>
                 </div>
@@ -77,7 +77,7 @@
                 <div class="right-content">
                   <div class="steps-image"><img
                       sizes="(max-width: 479px) 93vw, (max-width: 767px) 95vw, (max-width: 991px) 46vw, 47vw"
-                      srcset="https://filecdn.code2life.top/byo-cloud.webp 1244w"
+                      srcset="https://cdn.tensor-fusion.ai/byo-cloud.webp 1244w"
                       alt="Stack Image"
                       loading="lazy" class="image" /></div>
                 </div>
@@ -112,7 +112,7 @@
                 <div class="right-content">
                   <div class="steps-image"><img
                       sizes="(max-width: 479px) 93vw, (max-width: 767px) 95vw, (max-width: 991px) 46vw, 47vw"
-                      srcset="https://filecdn.code2life.top/gpu-vendor.jpg 1244w"
+                      srcset="https://cdn.tensor-fusion.ai/gpu-vendor.jpg 1244w"
                       alt="Stack Image"
                       loading="lazy" class="image" /></div>
                 </div>

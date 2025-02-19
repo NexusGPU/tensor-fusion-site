@@ -8,7 +8,7 @@ data-animation="default" data-collapse="medium" data-duration="400" data-easing=
 href="/" data-w-id="6deb3682-e1f7-9f5f-adeb-87fc1448026f" aria-current="page"
             class="brand w-nav-brand w--current">
             <img
-src="https://filecdn.code2life.top/tensor-fusion.png" style="height: 80%;width: 70%;"
+src="https://cdn.tensor-fusion.ai/tensor-fusion.png" style="height: 80%;width: 70%;"
               loading="lazy" alt="Logo Navbar" />
             </a>
           <div class="nav-menu-wrap">
