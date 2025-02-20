@@ -108,10 +108,10 @@ kubectl apply -f https://raw.githubusercontent.com/NexusGPU/tensor-fusion/main/m
 - [ ] Preloading and P2P distribution of container images, AI models, GPU snapshots etc.
 - [ ] Advanced auto-scaling policies, scale to zero, rebalance of hot GPUs
 - [ ] Advanced observability features, detailed metrics & tracing/profiling of CUDA calls
-- [ ] Multi-tenant billing based on actual usage
+- [ ] Multi-tenancy billing based on actual usage
 - [ ] Enterprise level high availability and resilience, support topology aware scheduling, GPU node auto failover etc.
-- [ ] Enterprise level security and compliance, complete on-premise deployment supported, SOC2 report available
-- [ ] SSO/SAML support, advanced audit/ReBAC features of management console, compliance reports etc.
+- [ ] Enterprise level security, complete on-premise deployment support, encryption in-transit & at-rest
+- [ ] Enterprise level compliance, SSO/SAML support, advanced audit, ReBAC control, SOC2 and other compliance reports available
 
 ### 🗳️ Platform Support
 
