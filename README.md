@@ -13,7 +13,7 @@
   </p>
 
 
-# ⚡ Tensor Fusion
+# ♾️ Tensor Fusion
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -29,31 +29,31 @@ Tensor Fusion is a state-of-the-art **GPU virtualization and pooling solution** 
     <a href="./README-zh.md">简体中文</a>
 <br />
 
-## 🌟 Show Cases
+## 🌟 Highlights
 
-### Fractional GPU with Single TFlops/MiB Precision
+#### 📐 Fractional GPU with Single TFlops/MiB Precision
+#### 🔄 Battle-tested GPU-over-IP Remote GPU Sharing 
+#### ⚖️ GPU-first Scheduling and Auto-scaling
+#### 📊 Computing Oversubscription and GPU VRAM Expansion
+#### 🛫 GPU Live Migration
 
-### Battle-tested GPU-over-IP Remote GPU Sharing 
+## 🎬 Demo
 
-### GPU-first Scheduling and Auto-scaling
-
-### Computing Oversubscription and GPU VRAM Expansion
-
-### GPU Live Migration
+WIP
 
 ## 🚀 Quick Start
 
-### Onboard Your Own AI Infra to TensorFusion Cloud in 5 Minutes
+### Onboard Your Own AI Infra
 
 - [Getting Started on Kubernetes](https://tensor-fusion.ai/guide/deployment-k8s)
 - [Getting Started on VM](https://tensor-fusion.ai/guide/deployment-vm)
-- [Demo Console - Working in progress](https://app.tensor-fusion.ai?hint=demo)
+- [Deploy Self-hosted Community Edition](https://tensor-fusion.ai/guide/self-host)
 
-### Self-host TensorFusion Community Edition
+### Try it out
 
-- [Self-host Community Edition](https://tensor-fusion.ai/guide/self-host)
+- Explore the demo account: [Demo Console - Working in progress](https://app.tensor-fusion.ai?hint=demo)
 
-Experience Basic Features in 3 Minutes
+- Run following command to try TensorFusion in 3 minutes
 
 ```bash
 # Step 1: Install TensorFusion in Kubernetes
@@ -82,13 +82,13 @@ kubectl apply -f https://raw.githubusercontent.com/NexusGPU/tensor-fusion/main/m
 - Schedule [1:1 meeting with TensorFusion founders](https://tensor-fusion.ai/book-demo)
 
 
-## Features & Roadmap
+## 🔮 Features & Roadmap
 
-### Core Virtualization
+### Core GPU Virtualization Features
 
 - [x] Fractional GPU and flexible oversubscription
 - [x] GPU-over-IP, remote GPU sharing with less than 4% performance loss
-- [x] GPU VRAM Expansion to host RAM
+- [x] GPU VRAM expansion or swap to host RAM
 - [ ] None NVIDIA GPU/NPU vendor support
 
 ### Pooling & Scheduling & Management
@@ -99,17 +99,17 @@ kubectl apply -f https://raw.githubusercontent.com/NexusGPU/tensor-fusion/main/m
 - [x] Seamless onboarding experience for Pytorch, TensorFlow, llama.cpp, vLLM, Tensor-RT, SGlang and all popular AI training/serving frameworks
 - [x] Basic management console and dashboards
 - [ ] Basic autoscaling policies, auto set requests/limits/replicas
-- [ ] Grouped GPU scheduling for LLMs
+- [ ] GPU Group scheduling for LLMs
 - [ ] Support different QoS levels
 
 ### Enterprise Features
 
-- [x] Second level GPU live-migration, fastest in the world
-- [ ] Preloading and P2P distribution of container images & AI models
-- [ ] Advanced auto-scaling policies, Scale to zero, rebalance of hot GPUs
+- [x] GPU live-migration, fastest in the world
+- [ ] Preloading and P2P distribution of container images, AI models, GPU snapshots etc.
+- [ ] Advanced auto-scaling policies, scale to zero, rebalance of hot GPUs
 - [ ] Advanced observability features, detailed metrics & tracing/profiling of CUDA calls
 - [ ] Multi-tenant billing based on actual usage
-- [ ] Enterprise level high availability and resilience, topology aware scheduling and GPU node auto failover etc.
+- [ ] Enterprise level high availability and resilience, support topology aware scheduling, GPU node auto failover etc.
 - [ ] Enterprise level security and compliance, complete on-premise deployment supported, SOC2 report available
 - [ ] SSO/SAML support, advanced audit/ReBAC features of management console, compliance reports etc.
 
@@ -142,11 +142,11 @@ Don't forget to give the project a star! Thanks again!
 </a>
 
 <!-- LICENSE -->
-## License
+## 🔷 License
 
 1. This repo is open sourced with [Apache 2.0 License](./LICENSE), which includes **GPU pooling, scheduling, management features**, you can use it for free and modify it.
-2. **GPU virtualization and GPU-over-IP features** are also free to use as the part of **Community Plan**, the implementation is not fully open sourced, and you can not exceed 10 GPU/NPU instances per organization.
-3. Features mentioned in "Enterprise Features" are paid, only licensed users can unlock these features.
+2. **GPU virtualization and GPU-over-IP features** are also free to use as the part of **Community Plan**, the implementation is not fully open sourced
+3. Features mentioned in "**Enterprise Features**" above are paid, **licensed users can automatically unlock these features**.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
