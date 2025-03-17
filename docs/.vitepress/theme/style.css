@@ -155,3 +155,6 @@ elements-api > div {
   height: 30px;
 }
 
+.VPSidebar {
+  scrollbar-width: none!important;
+}

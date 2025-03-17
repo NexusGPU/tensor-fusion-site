@@ -4,84 +4,104 @@ outline: deep
 
 # Overview
 
-## What is TensorFusion ?
+## ♾️ What is TensorFusion？
 
-TensorFusion is the real-world GPU virtualization framework.
+TensorFusion is a cutting-edge GPU virtualization and pooling platform designed to maximize GPU utilization, seamlessly scale AI applications, and automate AI infrastructure management.
 
-Run more AI apps, with less GPUs.
+### 🌟 Core Features
 
-<video-player 
-                        src="https://cdn.tensor-fusion.ai/TensorFusion-demo.mp4"
-                        poster="https://cdn.tensor-fusion.ai/tfs-no-play-poster.png"
-                        >
-                        </video-player>
+- 📐 Fractional GPU with Single TFlops/MiB Precision
+- 🔄 Battle-tested GPU-over-IP Remote GPU Sharing
+- ⚖️ GPU-first Scheduling and Auto-scaling
+- 📊 Computing Oversubscription and GPU VRAM Expansion
+- 🛫 GPU Pooling, Monitoring, Live Migration, AI Model Preloading, and more
 
-- It allows multiple AI models sharing a fused distributed GPU pool and using Virtual GPU to for inference.
-- It auto scales up and down AI apps at CUDA API level within milliseconds
+<!-- ## 🎬 Demo TODO -->
 
-Just Imagine Every AI app is powered by ALL GPUs !
+## 💎 Why TensorFusion?
 
-## How it works ?
+TensorFusion is the one-stop solution for AI Infra teams, enabling more AI applications with fewer GPUs, core values are:
 
-Tensor Fusion framework consists of:
+- **Reduce GPU/NPU costs**: Achieve 40% to 90% cost savings through GPU sharing, pooling, and oversubscription, with less than 4% performance impact
+- **Increase AI application elasticity**: GPU-first scheduling and allocation, allowing AI applications to scale in seconds, imagining using GPUs like NFS(Network File System)!
+- **Reduce AI Infra management complexity**: A full-fledged, automated AI infrastructure management solution.
 
-- cf-client: the stub that hooks CUDA API to make inference apps running without GPU
-- cf-server: replay real CUDA calls and shift VRAM/context of multiple AI models
-- cf-mediator (optional): CUDA calls load-balancer
-- cf-control (optional): Control plane for managing GPU cluster metadata, CUDA traces/metrics, control scheduling policies
+## 🚀 Quick Start
 
-![](https://cdn.gamma.app/2bbv2jorfkzmum4/d644830ef2ba49a78fb7e51f1b3d974f/original/CUDA-Fusion_Page-1--1728562838096.png)
+- [Deploy in Kubernetes cluster](/guide/getting-started/deployment-k8s.md)
+- [Create new cluster in VM/BareMetal](/guide/getting-started/deployment-vm.md)
+- [Learn Essential Concepts & Architecture](/guide/getting-started/architecture.md)
 
-## How can TensorFusion help you ?
+## ✅ Applicable Scenarios
 
-### Saving 40%-90% of  GPU costs
+1. **Multi-model serving scenario**. Typical scenarios include: Model as a Service(MaaS) platform; IaaS or PaaS cloud vendors offering GPU rentals; AI SaaS platforms running multiple AI models.
+2. **Hands-on lab scenario**. Create temporary lab environments with local/remote virtual GPU for developers, students, or researchers. Typical scenarios include: AI teaching experiments, AI application development, AI research, on-demand scientific computing.
 
-Shape GPU utilization by ms level scheduling, eviction, load-balancing, get rid of periodical GPU spiking-sleeping, auto scale down to nearly zero.
+## 😔 Inapplicable Scenarios
 
-### Nx faster and more scalable inference
+🚧 TensorFusion currently doesn't support **AI models with intensive GPU communication and parameter sizes larger than a single GPU's capacity**. Examples include large-scale distributed training and deploying FP8 precision LLMs with 405B or 671B parameters. We're planning to add support for these ultra-large AI models in the future.
 
-Auto scale up AI models from CUDA API level, significantly increase inference throughput and reduce latency for hot models.
+## ⚖️ Compare with Other Solutions
 
-### Manage GPU nodes with ease
+#### Feature Comparison
 
-No GPU-operator, no drivers, device plugins or any annoying infra issues.
+TensorFusion is the only solution that can deliver the following features in one-stop AI Infra solution:
+- **True GPU virtualization**, achieving virtual memory address, error isolation, and resource oversubscription etc.
+- **Zero-intrusion GPU remote sharing (GPU-over-IP)**, with less than 5% performance loss
+- **GPU memory hot/warm/cold tiering**, second-level swapping between GPU memory and host memory
+- **Fully automated GPU/NPU pool management**, monitoring, alerting, bin-packing etc.
+- 🚧 Customizable QoS levels, usage measurement and AI computing monetization
+- 🚧 Distributed live-migration of GPU contexts, AI model preloading
 
-Just leave the auto-pilot bare metal GPU pool, use it just like a NFS !
+#### Price Comparison
 
+TensorFusion community version is free for small teams, and a paid commercial version that charges below any other commercial solutions such as Run.AI, NVIDIA vGPU, and VirtAI OrionX etc.
 
-## Motivations
+- For users with up to 10 GPUs, **TensorFusion community version is free**
+- For users with more than 10 GPUs, TensorFusion charges **below 4% of the computing cost**, while achieving more than 50% savings, far below the prices of Run.AI, NVIDIA vGPU, and VirtAI OrionX
 
-There are 3 common problems in the industry.
+#### Other Differences
 
-### #1 AI models cost too much in production envs
+- **Open Source**. TensorFusion's pooling, scheduling, and GPU partitioning core components are **open source**, while NVIDIA vGPU, Run.AI, and VirtAI OrionX commercial solutions are closed source.
+- **Lightweight**. TensorFusion does not require Kubernetes DevicePlugin, does not require NVIDIA GPU Operator, while other solutions such as HAMi introduce more components, making maintenance more complex
+- **Unparalleled Performance**. The virtualization layer, crafted in Rust and C++, is meticulously optimized for NVIDIA GPUs. Remarkably, in over 50% of benchmark tests, performance surpasses that of directly running on physical GPU.
 
-When it comes to large scale inference of multiple models, Multiple GPUs can not be fully utilized
-Ideally, it should keep steady 70% GPU usage, saving more than 50% of costs.
+### Detailed Comparison Report
 
-![](https://cdn.gamma.app/2bbv2jorfkzmum4/eeba1fce813f4a789ddca1b5892a62ae/original/image.png)
+- [TensorFusion vs. MIG/MPS/Timeslicing](/guide/comparison/compare-with-mig-mps.md)
+- [TensorFusion vs. NVIDIA vGPU](/guide/comparison/compare-with-vgpu.md)
+- [TensorFusion vs. Run.AI](/guide/comparison/compare-with-run-ai.md)
+- [TensorFusion vs. HAMi](/guide/comparison/compare-with-hami.md)
+- [TensorFusion vs. VirtAI OrionX](/guide/comparison/compare-with-virtai.md)
 
-### #2 Developers are waiting for GPUs to test new AI models
+## 📚 Reference Documentation
 
-When it comes to develop AI apps or learn by hands-on labs, everyone is queuing to lock GPU machines when multiple developers/students need it.
+- [Kubernetes Custom Resource Schema](/reference/crd-schema.md)
+- [Performance Test Report](/reference/benchmark.md)
+- [Open API Reference](/reference/api-schema.md)
+- [System Metrics](/reference/metrics.md)
 
-Ideally, they could reuse the same GPU without lock whole VM, use GPU resource on-demand.
+## ❓ FAQ
 
-![](https://cdn.gamma.app/2bbv2jorfkzmum4/635d6cff36ab4096bccccd7d19f27e2a/original/CUDA-Fusion_Page-2--1728563773207.png)
+**Q: What are the success cases of TensorFusion?**
 
-### #3 Cloud vendors don't have enough GPUs for customers
+<!-- - [ZOOM](https://zoom.com) -->
+- [How TenClass Saved 80% on GPU Costs with TensorFusion ?](/guide/case-study/ten-class.md)
 
-Cloud vendors sell GPU machines to customers, but they always lack of available GPU.
+**Q: Is TensorFusion open source?**
 
-Ideally, they should be able to oversell the same GPU to different tenants.
+Yes, TensorFusion open sourced most of the codes, including the core components of pooling, scheduling, and GPU worker hypervisor, while the client stub and worker code are temporarily not open sourced, the implementation of Worker-ClientStub originates from [rCUDA](https://ieeexplore.ieee.org/document/5547126), but much more powerful.
 
-![](https://cdn.gamma.app/2bbv2jorfkzmum4/3df49b34ff9a4171ba45bab3bcb31809/original/Screenshot-2024-10-10-at-20.41.13.png)
+**Q: In what cases is TensorFusion free?**
 
-## When to use TensorFusion ?
+For users with up to 10 managed GPUs, TensorFusion is completely free for both commercial and non-commercial purposes, unless you need enable enterprise features, which are not important for startups and small teams.
+For users with more than 10 managed GPUs, please [contact us](mailto:support@tensor-fusion.com) to obtain commercial or educational licenses.
 
-- Serve multiple small/medium/large models, but not super large ones like Llama-3.1-70B or 405B
-- When you are building AI hands-on labs for multiple learners.
+**Q: Where is the development team of TensorFusion?**
 
-## When not to use TensorFusion ? 
+The TensorFusion product and related Github projects are developed and operated by NexusGPU PTE.LTD., headquartered in Singapore, with members distributed in the United States, China, Singapore, and possibly other countries in future.
 
-- Serve single super large foundation model that's bigger than 70B, it can not be loaded to single GPU, thus it's communication intensive, and remote GPU pool is not the best practice, please buy NVLink and NVSwitch to increase throughput.
-- When you don't care the GPU costs.
+**Q: Which vendors and versions of GPUs does TensorFusion support?**
+
+TensorFusion supports all series of NVIDIA GPUs from Volta architecture and above, with NVIDIA driver versions starting from 470.x, and CUDA versions range from 11.8 to the latest.
+AMD GPU support is currently under planning
