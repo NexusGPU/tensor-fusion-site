@@ -20,9 +20,9 @@ SELECT * FROM tensor_fusion_cluster;
 
 Example output:
 
-![](TODO)
+<!-- ![](TODO) -->
 
 Note: 
 If you configured GreptimeDB Cloud, you can query data from GreptimeDB Cloud Console directly.
 
-![](TODO)
+<!-- ![](TODO) -->

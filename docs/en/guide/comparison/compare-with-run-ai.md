@@ -4,9 +4,9 @@ outline: deep
 
 # Compare with Run.AI
 
-[Run.AI](https://run.ai) is a closed-source GPU pooling and virtualization solution. Feature set is similar to [HAMi](https://github.com/Project-HAMi/HAMi). It was acquired by NVIDIA in Dec. 2024.
+[Run.AI](https://run.ai) is a closed source proprietary GPU management platform offering pooling and fractional GPU capabilities. Its feature set resembles that of [HAMi](https://github.com/Project-HAMi/HAMi), and doesn't support GPU remote sharing or VRAM tiering. By the way, NVIDIA acquired Run.AI in December 2024.
 
-TensorFusion open sourced most of the codes and offers end-to-end GPU virtualization, pooling solution, support almost all industrial in-use NVIDIA GPU models. It's newer and vendor agnostic.
+TensorFusion open sourced most of the codes and offers end-to-end GPU virtualization, pooling solution. It's newer and vendor agnostic, design for AI Infra team, with completely different technical architecture and different feature set.
 
 ### Features
 
@@ -30,7 +30,7 @@ TensorFusion open sourced most of the codes and offers end-to-end GPU virtualiza
 | Dynamic MIG(Multi-instance GPU) | 👋 | ✅ |
 | IDE Extensions & Plugins | 🚧 | ❌ |
 | Centralized Dashboard & Control Plane | ✅ | ✅ |
-| Support AMD GPU/NPU | 🚧 | ❌ |
+| Support AMD GPU | 🚧 | ❌ |
 | Support HuaweiAscend/Cambricon and other GPU/NPU | 🚧 | ❌ |
 | <b>Enterprise Features</b> |  |  |
 | GPU Live Migration | 🚧 | ❌ |
@@ -46,13 +46,13 @@ Notes:
 - ❓ means unknown
 - 👋 means not necessary any more
 
-In summary, Run.AI offers command line tools and user interface to manage GPU pools and GPU workloads in proprietary way.
+In summary, Run.AI is a proprietary solution, offers command line tools, user interface and APIs to manage GPU pools and GPU workloads, 
 
 ### Deploy & Usage
 
 Run.AI doesn't offer self-service onboarding, you can only "Book a Demo" and contact salesperson to get started. Run.AI also tries to wrapper higher layer proprietary Custom Resources like "InferenceWorkload". It's definitely not a seamless solution and will impact existing workloads.
 
-TensorFusion has less dependencies and offers full-fledged control plane to operator the GPU/NPU cluster for both community and commercial users.
+TensorFusion has less dependencies and offers full-fledged control plane to operator the GPU/NPU cluster for both community and commercial users, which can self-service onboarding.
 
 ```yaml
 # Example Run.AI InferenceWorkload to obtain GPU resources and run deployments
@@ -98,3 +98,15 @@ metadata:
 
 <!-- ### Performance Comparison -->
 <!-- Benchmark -->
+
+## Total Cost of Ownership
+
+TCO of Run.AI is much higher than TensorFusion due to its:
+
+- High pricing
+- None-open source and hidden logic
+- Proprietary schema definition, incompatible with existing workloads
+- Limited autoscaling policies
+- Vendor lock-in
+
+In comparison, TensorFusion is vendor-neutral and open source, supports seamless onboarding and flexible autoscaling. It's free for small teams, and charges less than 4% of computing cost for medium and large teams to archive 50%+ cost saving.

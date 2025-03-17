@@ -89,10 +89,10 @@ pipe("Hello")
 ```
 ## Option #2 None Cloud Installation
 
-When you need pure local installation and don't want to use advanced features, you can try [pure local installation](/zh/guide/deploy-k8s-local.md), but you can not use [TensorFusion Console](https://app.tensor-fusion.ai/workbench) for centralized management in this mode.
+When you need pure local installation and don't want to use advanced features, you can try [pure local installation](/guide/recipes/deploy-k8s-local-mode.md), but you can not use [TensorFusion Console](https://app.tensor-fusion.ai/workbench) for centralized management in this mode.
 
 ## Next Steps
 
-- [Migrate existing AI Workloads to TensorFusion](/zh/guide/migrate-existing-ai-workloads.md)
-- [Customize your cluster and GPU pool settings](/zh/guide/customize-cluster.md)
-- [Deploy production grade high availability cluster](/zh/guide/production-grade-high-availability-deployment.md)
+- [Migrate existing AI Workloads to TensorFusion](/guide/recipes/migrate-existing.md)
+- [Customize your cluster and GPU pool settings](/guide/recipes/configure-qos-and-pricing.md)
+- [Deploy production grade high availability cluster](/guide/recipes/production-grade-deployment.md)

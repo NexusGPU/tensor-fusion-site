@@ -2,23 +2,23 @@
 outline: deep
 ---
 
-# 概述
+# TensorFusion概览
 
-## 什么是TensorFusion？
+## ♾️ 什么是TensorFusion？
 
-TensorFusion是一个GPU虚拟化和池化解决方案。
+TensorFusion是一个**先进的GPU虚拟化和池化平台**，旨在最大GPU集群利用率、为AI应用提供极致弹性、自动化AI基础设施管理。
 
 ### 🌟 核心功能
 
-- 📐 Fractional GPU with Single TFlops/MiB Precision
-- 🔄 Battle-tested GPU-over-IP Remote GPU Sharing
-- ⚖️ GPU-first Scheduling and Auto-scaling
-- 📊 Computing Oversubscription and GPU VRAM Expansion
-- 🛫 GPU Live Migration
+- 📐 精确到单TFlops/MiB级别的GPU切分、虚拟化
+- 🔄 GPU共享
+- ⚖️ GPU优先的调度和自动扩缩容
+- 📊 计算超额订阅和GPU显存扩展
+- 🛫 GPU池化、监控、实时迁移、AI模型预加载等更多功能
 
 <!-- ## 🎬 演示 TODO -->
 
-## 为什么需要TensorFusion？
+## 💎 为什么需要TensorFusion？
 
 TensorFusion是为AI Infra团队量身打造的一站式解决方案，其核心是通过虚拟化和池化实现的先进的**GPU效能管理能力**，实现**用更少的GPU，运行更多AI应用**。
 
@@ -28,8 +28,9 @@ TensorFusion是为AI Infra团队量身打造的一站式解决方案，其核心
 
 ## 🚀 快速开始
 
-- [在Kubernetes集群部署](/zh/guide/get-started.md)
-- [在VM/BareMetal创建新集群](/zh/guide/onboard-from-scratch.md)
+- [在Kubernetes集群部署](/zh/guide/getting-started/deployment-k8s.md)
+- [在VM/BareMetal创建新集群](/zh/guide/getting-started/deployment-vm.md)
+- [了解TensorFusion的核心概念、架构、原理](/zh/guide/getting-started/architecture.md)
 
 ## ⚖️ 与业界其他方案对比
 
@@ -48,7 +49,7 @@ TensorFusion是为AI Infra团队量身打造的一站式解决方案，其核心
 TensorFusion提供免费的社区版和付费的商业版，免费版功能已经基本满足多数中小型企业的需求，商业版本定价远低于Run.AI、NVIDIA vGPU、VirtAI OrionX等闭源方案。
 
 - TensorFusion社区版对GPU/NPU数量不超过10个的用户完全免费
-- GPU/NPU数量超过10个时，TensorFusion仅收取低于算力成本4%的订阅价格达成50%以上的节省，远低于vGPU、Run.AI等商业方案的高昂定价
+- GPU/NPU数量超过10个时，TensorFusion仅收取低于算力成本4%的订阅价格达成50%以上的节省，远低于vGPU、Run.AI等商业方案
 
 #### 其他不同点
 
@@ -60,11 +61,11 @@ TensorFusion提供免费的社区版和付费的商业版，免费版功能已�
 
 ### 详细对比报告
 
-- [TensorFusion vs. MIG/MPS/Timeslicing](/zh/guide/compare-with.md)
-- [TensorFusion vs. NVIDIA vGPU](/zh/guide/compare-with.md)
-- [TensorFusion vs. Run.AI](/zh/guide/compare-with.md)
-- [TensorFusion vs. HAMi](/zh/guide/compare-with.md)
-- [TensorFusion vs. VirtAI OrionX](/zh/guide/compare-with.md)
+- [TensorFusion vs. MIG/MPS/Timeslicing](/zh/guide/comparison/compare-with-mig-mps.md)
+- [TensorFusion vs. NVIDIA vGPU](/zh/guide/comparison/compare-with-vgpu.md)
+- [TensorFusion vs. Run.AI](/zh/guide/comparison/compare-with-run-ai.md)
+- [TensorFusion vs. HAMi](/zh/guide/comparison/compare-with-hami.md)
+- [TensorFusion vs. VirtAI OrionX](/zh/guide/comparison/compare-with-virtai.md)
 
 ## ✅ 适用场景
 
@@ -77,29 +78,39 @@ TensorFusion提供免费的社区版和付费的商业版，免费版功能已�
 
 ## 📚 参考文档
 
-- [TensorFusion的运行原理](/zh/guide/architecture.md)
-- [Kubernetes Custom Resource详细定义](/zh/reference/deployment-k8s.md)
-- [性能测试报告](/zh/reference/deployment-k8s.md)
-- [API参考](/zh/reference/api.md)
+- [Kubernetes Custom Resource详细定义](/zh/reference/crd-schema.md)
+- [性能测试报告](/zh/reference/benchmark.md)
+- [API参考](/zh/reference/api-schema.md)
+- [系统指标](/zh/reference/metrics.md)
 
 ## ❓ FAQ
 
 **Q: TensorFusion有哪些成功案例？**
 
 <!-- - [ZOOM](https://zoom.com) -->
-- [TenClass](https://tenclass.com)
+- [十方融海如何用TensorFusion节省80%GPU成本？](/zh/guide/case-study/ten-class.md)
+
+<br>
 
 **Q: TensorFusion是开源的吗？**
 
 是的，TensorFusion以Apache 2.0许可证开源了大部分代码，包括池化管理、调度器、虚拟化层Hypervisor等核心组件，而Client Stub和Worker代码暂不开源，具体实现与[rCUDA](https://ieeexplore.ieee.org/document/5547126)相近，但更先进。
 
+<br>
+
 **Q：TensorFusion在什么情况下免费使用？**
 
-对于管理GPU数量**不超过10**的商业用途、非商业用途用户，都完全免费。管理GPU数量超过10个的，请[与我们联系](mailto:support@tensor-fusion.com)获取商业版、教育版许可证。
+对于管理GPU数量**不超过10**的商业用途、非商业用途用户，都完全免费，除非用到了一般小团队用不到的企业版功能。
+
+管理GPU数量超过10个的客户，请[与我们联系](mailto:support@tensor-fusion.com)获取商业版、教育版许可证。
+
+<br>
 
 **Q：TensorFusion开发团队在哪里？**
 
-TensorFusion产品以及相关Github项目，由总部位于新加坡的NexusGPU PTE.LTD.开发、运营，成员分布在中国、美国、新加坡等地。
+TensorFusion产品以及相关Github项目，由新加坡公司NexusGPU PTE.LTD. 开发、运营，成员分布在中国、美国、新加坡等地，主要面向国际市场，也在中国成立了公司为中国大陆客户提供服务。
+
+<br>
 
 **Q：TensorFusion支持哪些厂商和版本的GPU？**
 

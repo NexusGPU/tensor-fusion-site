@@ -2,13 +2,13 @@
 outline: deep
 ---
 
-# Compare with MIG/MPS
+# Compare with MIG/MPS/Timeslicing
 
-NVIDIA MIG(Multi-instance GPU) only offers basic GPU splitting feature, 7 sub-gpus per GPU card, and requires GPU architecture higher than Ampere.
+NVIDIA MIG (Multi-Instance GPU) provides basic GPU partitioning, allowing up to 7 instances per GPU card, but is limited to Ampere architecture and newer.
 
-NVIDIA GPU MPS and Timeslicing feature offers basic GPU sharing for multiple process, but both can not isolate errors nor CUDA/TensorCore & VRAM resources. Moreover, Timeslicing is proven to be not a good solution because of no resource control at all.
+NVIDIA's **MPS** (Multi-Process Service) and **Timeslicing** features offer simple GPU sharing for multiple processes. However, they lack error isolation and cannot effectively limit CUDA/TensorCore & VRAM resources. Furthermore, Timeslicing has proven inadequate due to its complete lack of resource control.
 
-TensorFusion offers end-to-end GPU virtualization, pooling solution, support almost all industrial in-use NVIDIA GPU models.
+TensorFusion offers end-to-end GPU virtualization, pooling solution, support almost all industrial in-use NVIDIA GPU models, it's far more than a GPU partitioning tool.
 
 ### Features
 
@@ -31,7 +31,7 @@ TensorFusion offers end-to-end GPU virtualization, pooling solution, support alm
 | GPU Compaction/Bin-packing | 🚧 | ❌ |
 | IDE Extensions & Plugins | 🚧 | ❌ |
 | Centralized Dashboard & Control Plane | ✅ | ❌ |
-| Support AMD GPU/NPU | 🚧 | ❌ |
+| Support AMD GPU | 🚧 | ❌ |
 | Support HuaweiAscend/Cambricon and other GPU/NPU | 🚧 | ❌ |
 | <b>Enterprise Features</b> |  |  |
 | GPU Live Migration | 🚧 | ❌ |
@@ -47,17 +47,19 @@ Notes:
 - ❓ means unknown
 - 👋 means not necessary any more
 
-In summary, MIG+MPS is the recommended GPU splitting and sharing tool from NVIDIA, but it's too complex and can not achieve fine-grained resource control, nor oversubscription and GPU remote sharing. It must be used with nvidia-gpu-operator in Kubernetes environment.
+In essence, while MIG+MPS is NVIDIA's official method for GPU partitioning and sharing, it has significant limitations. It's overly complex, lacks fine-grained resource control, doesn't support oversubscription or remote GPU sharing, and requires the nvidia-gpu-operator in Kubernetes environments.
 
-TensorFusion offers much more powerful features and also much more seamless onboarding experience.
+TensorFusion provides a more comprehensive feature set and a smoother onboarding process. It offers powerful capabilities with a user-friendly approach.
 
-Another huge difference is that MIG+MPS are implemented inside GPU hardware plus a software interface, while TensorFusion is vendor agnostic and hardware agnostic.
+A another key distinction is: MIG+MPS is tied to specific GPU hardware and software interfaces, whereas TensorFusion is designed to be vendor and hardware agnostic.
 
 ### Deploy & Usage
 
 NVIDIA MIG and MPS requires manual planning and configuration, learning curve is high.
 
 TensorFusion has less dependencies and offers full-fledged control plane to operator the GPU/NPU cluster for both community and commercial users.
+
+Let's compare the usage between these solutions:
 
 ```yaml
 # NVIDIA MIG+MPS Pod Template
@@ -118,6 +120,17 @@ metadata:
     # you can override profile fields
     tensor-fusion.ai/vram-limit: 4Gi // [!code highlight]
 ```
+
+## Total Cost of Ownership
+
+TCO of MIG+MPS is much higher than TensorFusion due to obvious disadvantages of MIG+MPS:
+
+- Complex manual planning and configuration
+- Coarse-grained resource control
+- Limited feature set
+- Vendor lock-in
+
+In comparison, TensorFusion is vendor-neutral and open source, supports fine-grained resource control and remote GPU sharing, with extensive automation across its feature set. It's free for small teams, and charges less than 4% of computing cost for medium and large teams to archive 50%+ cost saving.
 
 <!-- ### Performance Comparison -->
 <!-- Benchmark -->

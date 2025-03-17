@@ -28,19 +28,27 @@ export const en = defineConfig({
 function nav(): DefaultTheme.NavItem[] {
   return [
     {
-      text: 'Guide',
+      text: '💡 Guide',
       link: '/guide/overview',
       activeMatch: '/guide/'
     },
     {
-      text: 'Reference',
-      link: '/reference/cli-params',
+      text: '📚 Reference',
+      link: '/reference/crd-schema',
       activeMatch: '/reference/'
     },
     {
-      text: "Resources",
+      text: "⭐ Star Us",
+      link: 'https://github.com/NexusGPU/tensor-fusion'
+    },
+    {
+      text: "🔖 Resources",
       items: [{
-        text: "Contributing",
+        text: "Contributing TensorFusion",
+        link: 'https://github.com/NexusGPU/tensor-fusion'
+      },
+      {
+        text: "Contributing Docs",
         link: 'https://github.com/NexusGPU/tensor-fusion-site'
       }]
     }

@@ -51,19 +51,27 @@ export const zh = defineConfig({
 function nav(): DefaultTheme.NavItem[] {
   return [
     {
-      text: '指南',
-      link: '/guide/overview',
-      activeMatch: '/guide/'
+      text: '💡 用户指南',
+      link: '/zh/guide/overview',
+      activeMatch: '/zh/guide/'
     },
     {
-      text: '参考',
-      link: '/reference/cli-params',
-      activeMatch: '/reference/'
+      text: '📚 参考文档',
+      link: '/zh/reference/crd-schema',
+      activeMatch: '/zh/reference/'
     },
     {
-      text: "资源",
+      text: "给个 ⭐",
+      link: 'https://github.com/NexusGPU/tensor-fusion'
+    },
+    {
+      text: "🔖 资源",
       items: [{
-        text: "贡献",
+        text: "贡献 TensorFusion",
+        link: 'https://github.com/NexusGPU/tensor-fusion'
+      },
+      {
+        text: "贡献 TensorFusion Docs",
         link: 'https://github.com/NexusGPU/tensor-fusion-site'
       }]
     }

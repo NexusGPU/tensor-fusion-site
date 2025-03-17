@@ -2,50 +2,78 @@
 outline: deep
 ---
 
-# TensorFusion架构
+# TensorFusion Architecture
 
-## 系统架构
+## System Architecture
 
-TensorFusion由三个部分组成，分别是：
-- **虚拟化层**：实现GPU切分、地址和资源隔离、超额订阅、远程共享。包括Hypervisor、ResourceLimiter、GPU Worker、GPU Client Stub
-- **池化调度层**：实现GPU资源的池化管理、分布式调度、监控、云厂商集成。包括TensorFusion Operator & Scheduler、Node Discovery Job
-- **控制层**：在云端统一管理GPU/NPU集群，包括在用户Kubernetes集群中的ClusterAgent、云端的TensorFusion Portal
+TensorFusion consists of three layers:
 
-整体系统架构如下：
+- **Virtualization Layer**: Implements fractional GPU, GPU memory address and resource isolation, oversubscription, and remote sharing. Includes Hypervisor, ResourceLimiter, GPU Worker, and GPU Client Stub.
+- **Resource Pooling Layer**: Implements GPU resource pooling, distributed scheduling, monitoring, and cloud provider integration. Includes TensorFusion Operator & Scheduler and Node Discovery Job.
+- **Control Layer**: Centrally manages GPU/NPU clusters in the cloud, including ClusterAgent in user Kubernetes clusters and TensorFusion Portal in the cloud.
+
+Here is the overall system architecture:
 
 ![](https://cdn.tensor-fusion.ai/tf-architecture.png)
 
-## 部署拓扑
+## Core Concepts
 
-**部署TensorFusion后**，用户集群会增加：
-- 一个**TensorFusion Deployment**，包括controller/cluster-agent/vector-metrics-collector三个容器。
-- **每个GPU节点会自动部署Hypervisor及采集GPU信息的NodeDiscovery一次性Job**
-- 当需要AI算力的应用在集群任意节点运行时，TensorFusion在集群内**按需、动态启动对应的GPU Worker Pod**，每个Worker内置ResourceLimiter动态链接库、每个应用Pod内部自动注入GPU Stub动态链接库
+### Basic Concepts
 
-在部署TensorFusion前，每个AI应用需要挂载GPU设备，集群拓扑如下：
+- **TFLOPS**: Trillion Floating Point Operations Per Second, the fundamental unit for TensorFusion's compute allocation and scheduling, measured as FP16 non-sparse compute in TensorFusion.
+- **VRAM**: GPU/NPU memory, also known as "Framebuffer" or "GPU Mem", measured, allocated, and scheduled in MiB units in TensorFusion.
+- **vGPU**: Software-defined virtual GPU created through isolation and resource limitations of GPU/NPU devices, indistinguishable from physical GPU devices from the application's perspective.
+- **Fractional GPU**: GPU partitioning implemented through ResourceLimiter.
+- **GPU Cluster**: A collection of one or more GPU Pools, typically corresponding to a Kubernetes cluster and an Environment in the TensorFusion Console.
+- **GPU Pool**: A collection of one or more GPU Nodes, forming the basic unit of distributed compute scheduling.
+- **GPU Node**: Comprised of one or more GPU devices and a host server, serving as the basic unit for compute billing.
+
+### TensorFusion System Concepts
+
+- **GPU Worker**: Sandbox for running user GPU programs, comparable to VM instances in CPU virtualization or Pods in Kubernetes, automatically managed by TensorFusion without user intervention.
+- **GPU Client Stub**: User-space virtual GPU driver library for vGPU, automatically injected by TensorFusion without user intervention.
+- **TensorFusion Hypervisor**: Core component for managing GPU Workers, analogous to a Virtual Machine Monitor (VMM) in CPU virtualization or Kubelet in Kubernetes.
+- **TensorFusion Controller**: Kubernetes cluster extension including Operator and Scheduler built with Kubebuilder, serving as the core component for managing AI infrastructure, comparable to controller-manager and scheduler in Kubernetes.
+- **TensorFusion Workload**: AI applications using GPU compute, which can be manually managed or automatically managed by TensorFusion, comparable to Deployments in Kubernetes.
+- **TensorFusion Connection**: Kubernetes extension resource for managing connections between AI application instances and GPU Workers, comparable to Service Endpoints in Kubernetes, without requiring user awareness.
+- **QoS**: Compute service quality differentiated by priority, a critical configuration for ensuring compute availability for each service while maximizing overall efficiency of mixed AI workloads. High QoS applications have higher priority for compute allocation and preemption than low QoS applications.
+
+## Deployment Topology
+
+**After deploying TensorFusion**, the user's cluster gains these components:
+
+- A **TensorFusion Deployment** containing three containers: controller, cluster-agent, and vector-metrics-collector.
+- **Automatic deployment of Hypervisor and one-time NodeDiscovery Job for GPU information collection on each GPU node**.
+- When applications requiring AI compute run on any cluster node, TensorFusion **dynamically launches corresponding GPU Worker Pods as needed**, with each Worker containing the ResourceLimiter dynamic library and each application Pod automatically injected with the GPU Stub dynamic library.
+
+Before deploying TensorFusion, each AI application requires mounting GPU devices. The cluster topology is shown below:
+
 ![](https://cdn.tensor-fusion.ai/deploy-topo-before-tf.jpg)
 
-**部署TensorFusion后**，每个AI应用能够在本机或其他节点**按需、动态获取切分后的GPU资源、无需挂载硬件设备，实现1 TFlops级别的AI算力自动扩缩容**，集群拓扑如下：
+**After deploying TensorFusion**, each AI application can **dynamically access partitioned GPU resources on local or remote nodes without mounting hardware devices, enabling automatic scaling of AI compute at 1 TFlops granularity**. The cluster topology is shown below:
+
 ![](https://cdn.tensor-fusion.ai/tf-deploy-topo.jpg)
 
-### 虚拟化层核心原理
+### Virtualization Layer Principles
 
-- 用户在原有的Kubernetes Pod增加注解后，TensorFusion的Pod MutationWebhook通过InitContainer为其自动注入GPU运算所需的桩函数（GPU Stub）
-- TensorFusion调度器同时分配GPU资源，在最合适的GPU主机上启动对应的Shadow Worker，实现不同租户资源隔离、函数地址和数据地址隔离
-- 当Pod调用CUDA API时，通过GPU Stub将调用转发到Shadow Worker，经过特殊处理和优化后，实现安全的远程或本机共享GPU
-- Worker端运行的ResourceLimiter拦截GPU驱动层函数调用，对内存管理、核函数调用（LaunchKernel）等进行算力、显存资源的灵活控制
-- 在每个GPU主机上云霄的Hypervisor管理正在使用的多个Shadow Worker，实现VRAM的冷温热分层、实时监控、GPU上下文热迁移、模型预加载等高级功能。
+TensorFusion's virtualization layer builds upon academic research from predecessors like rCUDA and GaiaGPU, combined with the team's deep understanding of GPUs and extensive engineering optimizations, resulting in an industrial-grade solution developed in C++/Rust.
+
+- After users add annotations to their existing Kubernetes Pods, TensorFusion's Pod MutationWebhook automatically injects required GPU stub functions through InitContainers
+- The TensorFusion scheduler simultaneously allocates GPU resources, launching Workers on the most suitable GPU hosts, achieving tenant resource isolation and function/data address isolation
+- When Pods call CUDA APIs, calls are forwarded to Workers through the GPU Stub, where special processing and optimizations enable secure remote or local GPU sharing
+- The ResourceLimiter running on the Worker intercepts GPU driver function calls, flexibly controlling compute and VRAM resources for memory management and kernel function calls (LaunchKernel)
+- The Hypervisor running on each GPU host manages multiple active Workers, implementing cold/warm/hot VRAM layering, real-time monitoring, GPU context hot migration, and model preloading capabilities
 
 ![](https://cdn.tensor-fusion.ai/vgpu-flow-tf.pic.jpg)
 
-### 池化调度层原理
+### Resource Pooling Layer Principles
 
-TensorFusion完全基于Kubernetes扩展实现，通过一系列CRD的定义和状态协调器，实现GPU池管理的所有功能。
+TensorFusion is fully implemented as Kubernetes extensions, using a series of CRD definitions and state reconcilers to implement all GPU pool management functions.
 
 ![](https://cdn.tensor-fusion.ai/tf-crd.png)
 
-其中，对节点Bin-packing和自动买停，与[Karpenter](https://github.com/kubernetes-sigs/karpenter)类似，借鉴了Karpenter的核心流程和部分实现。
+The node defragmentation and automatic provisioning/termination are similar to the [Karpenter](https://github.com/kubernetes-sigs/karpenter) project, drawing inspiration from Karpenter's core processes and partial implementations.
 
-### 控制层原理
+### Control Layer Principles
 
-ClusterAgent启动后，根据AgentID和EnrollToken与云端控制台建立Secure WebSocket连接，实现与云端控制台的双向安全通信。
+After ClusterAgent starts, it establishes a secure WebSocket connection with the cloud console using the AgentID and EnrollToken, enabling secure bidirectional communication with the centralized cloud console.
