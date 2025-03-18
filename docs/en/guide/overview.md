@@ -88,18 +88,26 @@ TensorFusion community version is free for small teams, and a paid commercial ve
 <!-- - [ZOOM](https://zoom.com) -->
 - [How TenClass Saved 80% on GPU Costs with TensorFusion ?](/guide/case-study/ten-class.md)
 
+<br />
+
 **Q: Is TensorFusion open source?**
 
 Yes, TensorFusion open sourced most of the codes, including the core components of pooling, scheduling, and GPU worker hypervisor, while the client stub and worker code are temporarily not open sourced, the implementation of Worker-ClientStub originates from [rCUDA](https://ieeexplore.ieee.org/document/5547126), but much more powerful.
+
+<br />
 
 **Q: In what cases is TensorFusion free?**
 
 For users with up to 10 managed GPUs, TensorFusion is completely free for both commercial and non-commercial purposes, unless you need enable enterprise features, which are not important for startups and small teams.
 For users with more than 10 managed GPUs, please [contact us](mailto:support@tensor-fusion.com) to obtain commercial or educational licenses.
 
+<br />
+
 **Q: Where is the development team of TensorFusion?**
 
 The TensorFusion product and related Github projects are developed and operated by NexusGPU PTE.LTD., headquartered in Singapore, with members distributed in the United States, China, Singapore, and possibly other countries in future.
+
+<br />
 
 **Q: Which vendors and versions of GPUs does TensorFusion support?**
 
