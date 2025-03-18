@@ -61,7 +61,7 @@ function nav(): DefaultTheme.NavItem[] {
       activeMatch: '/zh/reference/'
     },
     {
-      text: "给个 ⭐",
+      text: "⭐ 点颗星",
       link: 'https://github.com/NexusGPU/tensor-fusion'
     },
     {

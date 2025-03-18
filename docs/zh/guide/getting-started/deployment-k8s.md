@@ -7,13 +7,13 @@ outline: deep
 ## 前提条件
 
 1. 创建包含NVIDIA GPU节点的Kubernetes集群
-2. 安装[NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#deploying-via-helm-install-with-a-direct-url-to-the-helm-package)和[Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes)，此步骤对于大多数云厂商的Kubernetes发行版可选（已内置）
+2. 安装[NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#deploying-via-helm-install-with-a-direct-url-to-the-helm-package)和[Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes)，一般云厂商的Kubernetes发行版可能已经内置，否则需手动安装
 
 ## 步骤一：安装TensorFusion
 
 [注册](https://accounts.tensor-fusion.ai/sign-up)账号后访问[TensorFusion控制台](https://app.tensor-fusion.ai/workbench)
 
-复制并运行集群接入命令：
+复制一键接入命令，在Kubernetes集群中运行：
 
 ![](https://cdn.tensor-fusion.ai/install-tf.png)
 
@@ -25,11 +25,12 @@ outline: deep
 
 ## 步骤三：部署验证
 
-当状态显示就绪时，点击"部署推理应用"启动PyTorch容器进行验证：
+当状态显示就绪时，点击"Deploy Inference App"启动PyTorch容器进行验证：
 
 ![](https://cdn.tensor-fusion.ai/verify-tf-cluster.png)
 
-示例部署清单（已启用TensorFusion GPU资源配置）：
+示例部署清单（已启用TensorFusion vGPU资源配置）：
+
 ```yaml
 # simple-pytorch.yaml
 # kubectl apply -f simple-pytorch.yaml
@@ -75,11 +76,14 @@ spec:
 ```
 
 执行以下命令验证GPU资源分配：
+
 ```bash
 nvidia-smi
+
+# 预期显存为4Gi，而不是显卡的总显存数量
 ```
 
-运行Python REPL测试T5模型推理（英译德）：
+运行Python REPL测试T5模型推断，测试简答的英译德任务：
 
 ```python
 from transformers import pipeline
@@ -89,7 +93,7 @@ pipe("Hello")
 
 ## 方案二：纯本地化部署
 
-如需完全本地化部署（不使用高级功能），可参考[纯本地部署方案](/zh/guide/recipes/deploy-k8s-local-mode.md)，但此模式无法使用[TensorFusion控制台](https://app.tensor-fusion.ai/workbench)的集中管理功能。
+如需完全本地化部署（不使用高级功能），可参考[纯本地部署方案](/zh/guide/recipes/deploy-k8s-local-mode.md)，但此模式无法使用[TensorFusion控制台](https://app.tensor-fusion.ai/workbench)的管控台功能。
 
 ## 后续步骤
 
