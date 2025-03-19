@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "Tensor Fusion"
   text: Less GPUs<br />More AI Apps
-  tagline: Supercharge your AI Infra with TensorFusion, <br />the Real-world GPU Virtualization Framework # Use it remotely like NFS! It's the #1 GPU pooling and dynamic scheduling solution, and the AI Infra powered by AI.
+  tagline: Supercharge your AI Infra with TensorFusion, <br />the State-of-the-art GPU Virtualization & Pooling # Use it remotely like NFS! It's the #1 GPU pooling and dynamic scheduling solution, and the AI Infra powered by AI.
   actions:
     - theme: brand
       text: Overview
@@ -36,8 +36,8 @@ features:
   - title: High Performance
     icon: ⚡
     details: With deep optimization, TensorFusion achieved <5% performance overhead for most AI models
-  - title: Cloud Agnostic
+  - title: Cloud & Hardware Agnostic
     icon: 🌥️
-    details: Support Kubernetes, Bare-metal, Edge cloud and more
+    details: Support Kubernetes, Bare-metal, Edge cloud and more. Beside NVIDIA, Support other GPU vendors in future
 
 ---

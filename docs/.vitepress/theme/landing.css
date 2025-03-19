@@ -416,7 +416,6 @@ h6 {
 
 p {
   margin-top: 0;
-  margin-bottom: 10px;
 }
 
 blockquote {
@@ -2153,10 +2152,6 @@ h6 {
   font-size: 12px;
   font-weight: 700;
   line-height: 18px;
-}
-
-p {
-  margin-bottom: 10px;
 }
 
 img {
@@ -3957,7 +3952,6 @@ blockquote {
   grid-row-gap: .5rem;
   justify-content: center;
   align-items: center;
-  height: 3rem;
   display: flex;
 }
 

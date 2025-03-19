@@ -79,7 +79,7 @@ metadata:
   labels:
     tensor-fusion.ai/enabled: 'true' // [!code highlight]
   annotations:
-    tensor-fusion.ai/client-profile: example-workload-profile // [!code highlight]
+    tensor-fusion.ai/workload-profile: example-workload-profile // [!code highlight]
     tensor-fusion.ai/vram-limit: 4Gi // [!code highlight]
 ```
 
