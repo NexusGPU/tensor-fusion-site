@@ -158,3 +158,98 @@ elements-api > div {
 .VPSidebar {
   scrollbar-width: none!important;
 }
+
+
+/* --- for CRD reference --- */
+
+/* CRD Documentation Styling */
+.required-tag {
+  display: inline-block;
+  color: var(--vp-c-danger-1);
+  font-size: 0.8em;
+  margin-left: 6px;
+  opacity: 0.8;
+}
+
+.required-tag::before {
+  content: "*";
+}
+
+.constraint-tag {
+  display: inline-block;
+  background-color: var(--vp-c-default-3);
+  color: var(--vp-c-white);
+  padding: 2px 6px;
+  margin: 4px 4px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  margin-right: 4px;
+}
+
+.enum-tag {
+  display: inline-block;
+  background-color: var(--vp-c-default-3);
+  color: var(--vp-c-white);
+  padding: 2px 6px;
+  margin: 4px 4px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  margin-right: 4px;
+}
+
+.nested-properties {
+  padding-left: 28px;
+  border-left: 1px solid var(--vp-c-gray-3);
+  display: none;
+}
+
+.nested-properties.expanded {
+  display: block;
+}
+
+.expandable-property {
+  cursor: pointer;
+  display: inline-block;
+  margin-left: 5px;
+  transition: transform 0.2s;
+}
+
+.expandable-property:hover {
+  color: var(--vp-c-brand-3);
+}
+
+.crd-navigation {
+  display: flex;
+  justify-content: space-between;
+}
+
+.crd-search input {
+  margin-top: 12px;
+  min-width: 240px;
+  padding: 5px 10px;
+  border: 1px solid var(--vp-c-gray-1);
+  border-radius: 4px;
+}
+
+.crd-actions button {
+  margin-left: 8px;
+  padding: 5px 10px;
+  background-color: var(--vp-c-gray-3);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.crd-actions button:hover {
+  background-color: var(--vp-c-gray-2);
+}
+
+.home .content-container,
+.home * .content-container {
+  max-width: 100% !important;
+  margin-right: 5rem important;
+}
+
+.home .aside,
+.home * .aside {
+  display: none !important;
+}

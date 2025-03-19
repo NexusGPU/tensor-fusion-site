@@ -4,7 +4,7 @@ workload profile
 
 ```yaml
 apiVersion: tensor-fusion.ai/v1
-kind: ClientProfile
+kind: WorkloadProfile
 metadata:
   name: auto-scale-template
 spec:

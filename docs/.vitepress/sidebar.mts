@@ -233,20 +233,169 @@ export const Guide = (lang: string) => [
 export const Reference = (lang: string) => [
   {
     text: match(lang, {
-      en: 'Reference',
-      zh: '参考'
+      en: 'For End Users',
+      zh: '终端用户参考'
     }),
     collapsed: false,
     items: [
       {
         text: match(lang, {
-          en: 'Cli Reference',
-          zh: 'Cli 参考'
+          en: 'Kubernetes Annotations',
+          zh: 'Kubernetes 注解'
+        }),
+        items: [
+          {
+            text: match(lang, {
+              en: 'Use vGPU by Annotations',
+              zh: '添加Pod注解使用vGPU'
+            }),
+            link: 'workload-annotation'
+          },
+        ]
+      },
+      {
+        text: match(lang, {
+          en: 'Kubernetes Resources',
+          zh: 'Kubernetes 资源'
+        }),
+        items: [
+          {
+            text: match(lang, {
+              en: 'TensorFusionWorkload',
+              zh: 'TensorFusionWorkload'
+            }),
+            link: 'schema/tensor-fusion-workload.md'
+          },
+          {
+            text: match(lang, {
+              en: 'TensorFusionConnection',
+              zh: 'TensorFusionConnection'
+            }),
+            link: 'schema/tensor-fusion-connection.md'
+          },
+          {
+            text: match(lang, {
+              en: 'WorkloadProfile',
+              zh: 'WorkloadProfile'
+            }),
+            link: 'schema/workload-profile.md'
+          },
+        ]
+      },
+      
+    ]
+  },
+  {
+    text: match(lang, {
+      en: 'For System Admins',
+      zh: '系统管理员参考'
+    }),
+    collapsed: false,
+    items: [
+      {
+        text: match(lang, {
+          en: 'Kubernetes Resources',
+          zh: 'Kubernetes 资源'
+        }),
+        items: [
+          {
+            text: match(lang, {
+              en: 'TensorFusionCluster',
+              zh: 'TensorFusionCluster'
+            }),
+            link: 'schema/tensor-fusion-cluster.md'
+          },
+          {
+            text: match(lang, {
+              en: 'GPUPool',
+              zh: 'GPUPool'
+            }),
+            link: 'schema/gpupool.md'
+          },
+          {
+            text: match(lang, {
+              en: 'GPUNode',
+              zh: 'GPUNode'
+            }),
+            link: 'schema/gpunode.md'
+          },
+          {
+            text: match(lang, {
+              en: 'GPU',
+              zh: 'GPU'
+            }),
+            link: 'schema/gpu.md'
+          },
+          {
+            text: match(lang, {
+              en: 'GPUNodeClass',
+              zh: 'GPUNodeClass'
+            }),
+            link: 'schema/gpunode-class.md'
+          },
+          {
+            text: match(lang, {
+              en: 'SchedulingConfigTemplate',
+              zh: 'SchedulingConfigTemplate'
+            }),
+            link: 'schema/scheduling-config-template.md'
+          }
+        ]
+      },
+      {
+        text: match(lang, {
+          en: 'CLI Reference',
+          zh: '命令行参考'
         }),
         link: 'cli-reference'
       },
+      {
+        text: match(lang, {
+          en: 'System Metrics',
+          zh: '系统监控指标'
+        }),
+        link: 'metrics'
+      },
+      {
+        text: match(lang, {
+          en: 'Benchmark Report',
+          zh: '性能测试报告'
+        }),
+        link: 'benchmark'
+      },
+      {
+        text: match(lang, {
+          en: 'GPU/Driver/OS Support Matrix',
+          zh: 'GPU/驱动/OS支持矩阵'
+        }),
+        link: 'support-matrix'
+      },
     ]
-  }
+  },
+  {
+    text: match(lang, {
+      en: 'For Developers',
+      zh: '开发者参考'
+    }),
+    collapsed: false,
+    items: [
+      {
+        text: match(lang, {
+          en: 'Kubernetes Resource Schema',
+          zh: 'Kubernetes 资源定义'
+        }),
+        link: 'crd-schema'
+      },
+      {
+        text: match(lang, {
+          en: 'OpenAPI Schema',
+          zh: 'OpenAPI参考'
+        }),
+        link: 'api-schema'
+      },
+      
+    ]
+  },
 ]
 
 function match(lang: string, dict: Record<string, string>): string {
