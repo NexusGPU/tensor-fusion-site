@@ -33,7 +33,8 @@
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
     "lint": "eslint --ignore-pattern .eslintignore docs/.vitepress/**/*.{vue,ts} --fix",
-    "type-check": "vue-tsc --noEmit"
+    "type-check": "vue-tsc --noEmit",
+    "gen:schema": "node scripts/gen.crd.mjs"
   },
   "dependencies": {
     "@videojs-player/vue": "1.0.0",

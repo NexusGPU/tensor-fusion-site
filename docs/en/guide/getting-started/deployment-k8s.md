@@ -7,13 +7,17 @@ outline: deep
 ## Prerequisites
 
 1. Create a Kubernetes cluster with NVIDIA GPU nodes added
-2. [NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#deploying-via-helm-install-with-a-direct-url-to-the-helm-package) and [Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes) installed, this step is optional for most cloud vendors' Kubernetes distribution, they are built-in
+2. [NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#deploying-via-helm-install-with-a-direct-url-to-the-helm-package) and [Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes) installed, this step is optional for most cloud vendors' Kubernetes distribution, they are built-in. Otherwise, using following command to install it.
+
+```bash
+helm upgrade --install --create-namespace  --namespace nvidia-device-plugin --repo https://nvidia.github.io/k8s-device-plugin/  nvdp nvidia-device-plugin
+```
 
 ## Step 1. Install TensorFusion
 
 [Sign-up](https://accounts.tensor-fusion.ai/sign-up) your account and then goto [TensorFusion Console](https://app.tensor-fusion.ai/workbench).
 
-Then, copy and run the command to onboard existing Kubernetes cluster
+Then, copy and run the command to onboard existing Kubernetes cluster, if you wanna customize Helm Chart values, see [Helm Chart Reference](/reference/helm-install-values.md)
 
 ![](https://cdn.tensor-fusion.ai/install-tf.png)
 
