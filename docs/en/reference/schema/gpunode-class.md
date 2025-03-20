@@ -28,8 +28,6 @@ GPUNodeClass is the Schema for the gpunodeclasses API.
 - [API Information](#api-information)
 - [Spec](#spec)
 - [Status](#status)
-- [Example](#example)
-
 ## Spec
 
 GPUNodeClassSpec defines the desired state of GPUNodeClass.
@@ -155,26 +153,6 @@ the OS image identifier string, default to use first one, if not found, fallback
 ## Status
 
 GPUNodeClassStatus defines the observed state of GPUNodeClass.
-
-## Example
-
-```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: GPUNodeClass
-metadata:
-  name: example-gpunode-class
-spec:
-  blockDeviceMappings: []
-  instanceProfile: example-instanceProfile
-  launchTemplate: {}
-  metadataOptions: {}
-  osImageSelectorTerms: []
-  osImageType: example-osImageType
-  securityGroupSelectorTerms: []
-  subnetSelectorTerms: []
-  tags: {}
-  userData: example-userData
-```
 
 <script setup>
 function toggleExpand(id) {

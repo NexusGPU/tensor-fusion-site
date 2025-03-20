@@ -28,8 +28,6 @@ WorkloadProfile is the Schema for the workloadprofiles API.
 - [API Information](#api-information)
 - [Spec](#spec)
 - [Status](#status)
-- [Example](#example)
-
 ## Spec
 
 WorkloadProfileSpec defines the desired state of WorkloadProfile.
@@ -83,20 +81,6 @@ WorkloadProfileSpec defines the desired state of WorkloadProfile.
 ## Status
 
 WorkloadProfileStatus defines the observed state of WorkloadProfile.
-
-## Example
-
-```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: WorkloadProfile
-metadata:
-  name: example-workload-profile
-spec:
-  isLocalGPU: true
-  poolName: example-poolName
-  qos: example-qos
-  resources: {}
-```
 
 <script setup>
 function toggleExpand(id) {

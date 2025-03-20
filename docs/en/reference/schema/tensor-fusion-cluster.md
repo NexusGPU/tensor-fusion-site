@@ -28,8 +28,6 @@ TensorFusionCluster is the Schema for the tensorfusionclusters API.
 - [API Information](#api-information)
 - [Spec](#spec)
 - [Status](#status)
-- [Example](#example)
-
 ## Spec
 
 TensorFusionClusterSpec defines the desired state of TensorFusionCluster.
@@ -945,20 +943,6 @@ TensorFusionClusterStatus defines the observed state of TensorFusionCluster.
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-conditions-items-type-details')">type</b><span class="required-tag"></span> | string | <span class="constraint-tag">maxLength: 316</span> <span class="constraint-tag" title="^([a-z0-9]([-a-z0-9]&#42;[a-z0-9])?(\.[a-z0-9]([-a-z0-9]&#42;[a-z0-9])?)&#42;/)?(([A-Za-z0-9][-A-Za-z0-9&#95;.]&#42;)?[A-Za-z0-9])$">pattern: Regex</span>  | type of condition in CamelCase or in foo.example.com/CamelCase. |
 
 </div>
-
-## Example
-
-```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: TensorFusionCluster
-metadata:
-  name: example-tensor-fusion-cluster
-spec:
-  computingVendor: {}
-  dataPipelines: {}
-  gpuPools: []
-  storageVendor: {}
-```
 
 <script setup>
 function toggleExpand(id) {

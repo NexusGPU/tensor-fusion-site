@@ -27,8 +27,6 @@ GPU is the Schema for the gpus API.
 
 - [API Information](#api-information)
 - [Status](#status)
-- [Example](#example)
-
 ## Status
 
 GPUStatus defines the observed state of GPU.
@@ -68,16 +66,6 @@ GPUStatus defines the observed state of GPU.
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-capacity-vram-details')">vram</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
 
 </div>
-
-## Example
-
-```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: GPU
-metadata:
-  name: example-gpu
-spec: {}
-```
 
 <script setup>
 function toggleExpand(id) {
