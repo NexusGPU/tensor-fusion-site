@@ -16,7 +16,20 @@ TensorFusion is a cutting-edge GPU virtualization and pooling platform designed 
 - 📊 Computing Oversubscription and GPU VRAM Expansion
 - 🛫 GPU Pooling, Monitoring, Live Migration, AI Model Preloading, and more
 
-<!-- ## 🎬 Demo TODO -->
+## 🎬 Demo
+
+### Fractional vGPU & GPU-over-IP & Distributed Allocation 
+
+- Stay tuned
+
+### Comprehensive AI Infra Console
+
+- Stay tuned
+
+### GPU Live Migration 
+
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://cdn.tensor-fusion.ai/GPU_Content_Migration.mp4" :controls="true">
+</VideoPlayer>
 
 ## 💎 Why TensorFusion?
 

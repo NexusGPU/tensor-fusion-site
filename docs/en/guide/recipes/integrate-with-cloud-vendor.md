@@ -2,9 +2,9 @@
 outline: deep
 ---
 
-🚧 Under Construction
-
 # Create Managed GPU Pool for Bring Your Own Cloud
+
+🚧 Under Construction
 
 ## Bring your Own AWS
 
