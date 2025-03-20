@@ -1,6 +1,4 @@
-
-
-## Create a Workload WorkloadProfile
+# Create a Workload WorkloadProfile
 
 ## Step 1. Analyze Computing Resource Requirements and QoS Level
 

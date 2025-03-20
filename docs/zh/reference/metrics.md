@@ -1,4 +1,1 @@
-# TensorFusion System Metrics
-
-[Under Construction]
-
+<!--@include: ../../en/reference/metrics.md-->

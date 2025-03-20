@@ -1,8 +1,10 @@
+# 配置QoS级别与内部计价
 
-
-## Config GPU-Info Map
+## 配置QoS级别的调度优先级
 
 🚧 Under Construction
+
+## 配置GPU租用单价信息
 
 ```bash
 kubectl edit configmap tensor-fusion-sys-public-gpu-info -n tensor-fusion-sys

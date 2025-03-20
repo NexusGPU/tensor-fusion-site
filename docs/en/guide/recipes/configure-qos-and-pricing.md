@@ -1,8 +1,10 @@
+# Config GPU-Info Map
 
-
-## Config GPU-Info Map
+## Configure Scheduling Priority of Each QoS Level
 
 🚧 Under Construction
+
+## Configure Unit Price of GPU
 
 ```bash
 kubectl edit configmap tensor-fusion-sys-public-gpu-info -n tensor-fusion-sys

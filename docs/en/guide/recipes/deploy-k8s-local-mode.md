@@ -1,5 +1,6 @@
+# Deployment Locally without Cluster Agent (Not Recommended)
 
-### None Agent Installation (Not Recommended)
+### Installation
 
 When you need pure local installation and don't want to use advanced features, you can use this option, but you can not use [TensorFusion Console](https://app.tensor-fusion.ai/workbench) for centralized management.
 
