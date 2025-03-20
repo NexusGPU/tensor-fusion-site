@@ -28,8 +28,6 @@ TensorFusionWorkload is the Schema for the tensorfusionworkloads API.
 - [API Information](#api-information)
 - [Spec](#spec)
 - [Status](#status)
-- [Example](#example)
-
 ## Spec
 
 TensorFusionWorkloadSpec defines the desired state of TensorFusionWorkload.
@@ -108,21 +106,6 @@ TensorFusionWorkloadStatus defines the observed state of TensorFusionWorkload.
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-workload-workerStatuses-items-workerPort-details')">workerPort</b> | integer |   |  |
 
 </div>
-
-## Example
-
-```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: TensorFusionWorkload
-metadata:
-  name: example-tensor-fusion-workload
-spec:
-  isLocalGPU: true
-  poolName: example-poolName
-  qos: example-qos
-  replicas: 1
-  resources: {}
-```
 
 <script setup>
 function toggleExpand(id) {

@@ -28,8 +28,6 @@ GPUNode is the Schema for the gpunodes API.
 - [API Information](#api-information)
 - [Spec](#spec)
 - [Status](#status)
-- [Example](#example)
-
 ## Spec
 
 GPUNodeSpec defines the desired state of GPUNode.
@@ -167,20 +165,6 @@ Allocation details is for node compaction, and calculate used apps
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-region-details')">region</b> | string |   |  |
 
 </div>
-
-## Example
-
-```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: GPUNode
-metadata:
-  name: example-gpunode
-spec:
-  cloudVendorParam: example-cloudVendorParam
-  costPerHour: example-costPerHour
-  gpuCardIndices: []
-  manageMode: example-manageMode
-```
 
 <script setup>
 function toggleExpand(id) {

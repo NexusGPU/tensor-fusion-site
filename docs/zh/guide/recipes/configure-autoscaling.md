@@ -1,6 +1,6 @@
+# 配置AI应用自动扩缩容
 
-
-workload profile
+[Under Construction]
 
 ```yaml
 apiVersion: tensor-fusion.ai/v1

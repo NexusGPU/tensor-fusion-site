@@ -7,13 +7,17 @@ outline: deep
 ## 前提条件
 
 1. 创建包含NVIDIA GPU节点的Kubernetes集群
-2. 安装[NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#deploying-via-helm-install-with-a-direct-url-to-the-helm-package)和[Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes)，一般云厂商的Kubernetes发行版可能已经内置，否则需手动安装
+2. 安装[NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#deploying-via-helm-install-with-a-direct-url-to-the-helm-package)和[Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes)，一般云厂商的Kubernetes发行版可能已经内置，否则需用以下命令手动安装
+
+```bash
+helm upgrade --install --create-namespace  --namespace nvidia-device-plugin --repo https://nvidia.github.io/k8s-device-plugin/  nvdp nvidia-device-plugin
+```
 
 ## 步骤一：安装TensorFusion
 
 [注册](https://accounts.tensor-fusion.ai/sign-up)账号后访问[TensorFusion控制台](https://app.tensor-fusion.ai/workbench)
 
-复制一键接入命令，在Kubernetes集群中运行：
+复制一键接入命令，在Kubernetes集群中运行，如果需要定制Helm Chart的变量，参考此文档：[Helm Chart Reference](/zh/reference/helm-install-values.md)：
 
 ![](https://cdn.tensor-fusion.ai/install-tf.png)
 

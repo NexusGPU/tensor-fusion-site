@@ -351,6 +351,13 @@ export const Reference = (lang: string) => [
       },
       {
         text: match(lang, {
+          en: 'Helm Chart Values',
+          zh: 'Helm Chart配置参数'
+        }),
+        link: 'helm-install-values'
+      },
+      {
+        text: match(lang, {
           en: 'System Metrics',
           zh: '系统监控指标'
         }),

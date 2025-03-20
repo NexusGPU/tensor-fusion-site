@@ -28,8 +28,6 @@ SchedulingConfigTemplate is the Schema for the schedulingconfigtemplates API.
 - [API Information](#api-information)
 - [Spec](#spec)
 - [Status](#status)
-- [Example](#example)
-
 ## Spec
 
 Place the workload to right nodes and scale smart.
@@ -278,20 +276,6 @@ avoid hot GPU devices and continuously balance the workload<br />implemented by 
 ## Status
 
 SchedulingConfigTemplateStatus defines the observed state of SchedulingConfigTemplate.
-
-## Example
-
-```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: SchedulingConfigTemplate
-metadata:
-  name: example-scheduling-config-template
-spec:
-  autoScaling: {}
-  hypervisor: {}
-  placement: {}
-  reBalancer: {}
-```
 
 <script setup>
 function toggleExpand(id) {

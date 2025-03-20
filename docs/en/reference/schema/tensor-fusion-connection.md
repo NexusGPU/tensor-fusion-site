@@ -28,8 +28,6 @@ TensorFusionConnection is the Schema for the tensorfusionconnections API.
 - [API Information](#api-information)
 - [Spec](#spec)
 - [Status](#status)
-- [Example](#example)
-
 ## Spec
 
 TensorFusionConnectionSpec defines the desired state of TensorFusionConnection.
@@ -47,17 +45,6 @@ TensorFusionConnectionStatus defines the observed state of TensorFusionConnectio
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-connection-connectionURL-details')">connectionURL</b><span class="required-tag"></span> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-connection-phase-details')">phase</b><span class="required-tag"></span> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-connection-workerName-details')">workerName</b><span class="required-tag"></span> | string |   |  |
-
-## Example
-
-```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: TensorFusionConnection
-metadata:
-  name: example-tensor-fusion-connection
-spec:
-  workloadName: example-workloadName
-```
 
 <script setup>
 function toggleExpand(id) {

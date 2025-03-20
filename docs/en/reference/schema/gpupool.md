@@ -26,8 +26,6 @@ pageClass: home
 - [API Information](#api-information)
 - [Spec](#spec)
 - [Status](#status)
-- [Example](#example)
-
 ## Spec
 
 GPUPoolSpec defines the desired state of GPUPool.
@@ -760,7 +758,7 @@ GPUPoolStatus defines the observed state of GPUPool.
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpupool-notReadyNodes-details')">notReadyNodes</b><span class="required-tag"></span> | integer&lt;int32&gt; |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpupool-phase-details')">phase</b><span class="required-tag"></span> | string |  <span class="enum-tag">Pending</span> <span class="enum-tag">Running</span> <span class="enum-tag">Updating</span> <span class="enum-tag">Destroying</span> <span class="enum-tag">Unknown</span> |  Default: `Pending` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpupool-potentialSavingsPerMonth-details')">potentialSavingsPerMonth</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpupool-readyNodes-details')">readyNodes</b> | integer&lt;int32&gt; |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpupool-readyNodes-details')">readyNodes</b><span class="required-tag"></span> | integer&lt;int32&gt; |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpupool-savedCostsPerMonth-details')">savedCostsPerMonth</b> | string |   | aggregated with interval |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpupool-totalGPUs-details')">totalGPUs</b> | integer&lt;int32&gt; |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpupool-totalNodes-details')">totalNodes</b> | integer&lt;int32&gt; |   |  |
@@ -811,23 +809,6 @@ when updating any component version or config, pool controller will perform roll
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpupool-conditions-items-type-details')">type</b><span class="required-tag"></span> | string | <span class="constraint-tag">maxLength: 316</span> <span class="constraint-tag" title="^([a-z0-9]([-a-z0-9]&#42;[a-z0-9])?(\.[a-z0-9]([-a-z0-9]&#42;[a-z0-9])?)&#42;/)?(([A-Za-z0-9][-A-Za-z0-9&#95;.]&#42;)?[A-Za-z0-9])$">pattern: Regex</span>  | type of condition in CamelCase or in foo.example.com/CamelCase. |
 
 </div>
-
-## Example
-
-```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: GPUPool
-metadata:
-  name: example-gpupool
-spec:
-  capacityConfig: {}
-  componentConfig: {}
-  nodeManagerConfig: {}
-  observabilityConfig: {}
-  qosConfig: {}
-  schedulingConfig: {}
-  schedulingConfigTemplate: example-schedulingConfigTemplate
-```
 
 <script setup>
 function toggleExpand(id) {

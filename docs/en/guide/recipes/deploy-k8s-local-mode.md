@@ -42,9 +42,8 @@ kubectl get nodes --show-labels | grep nvidia.com/gpu.present=true
 To resolve this issue, you can neither add the label or change the TensorFusionCluster resource to use your own labels to find GPU nodes.
 
 ```bash
-Add env var to tensor-fusion-operator:
-
-initialGpuNodeLabelSelector: your-own-gpu-label-key=value
+# Using helm `initialGpuNodeLabelSelector` parameter to add env var `INITIAL_GPU_NODE_LABEL_SELECTOR` to tensor-fusion-operator:
+helm upgrade --install --create-namespace --namespace tensor-fusion-sys --repo https://helm.tensor-fusion.ai --set agent.agentId="" --set initialGpuNodeLabelSelector="your-own-gpu-label-key=value" tensor-fusion-sys tensor-fusion
 ```
 
 ```bash
