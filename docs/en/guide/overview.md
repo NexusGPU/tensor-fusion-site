@@ -124,5 +124,5 @@ The TensorFusion product and related Github projects are developed and operated 
 
 **Q: Which vendors and versions of GPUs does TensorFusion support?**
 
-TensorFusion supports all series of NVIDIA GPUs from Volta architecture and above, with NVIDIA driver versions starting from 470.x, and CUDA versions range from 11.8 to the latest.
+TensorFusion supports all series of NVIDIA GPUs from Volta architecture and above, with NVIDIA driver versions starting from 530.x, and CUDA versions range from 11.8 to the latest.
 AMD GPU support is currently under planning
