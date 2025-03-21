@@ -1,15 +1,15 @@
 # GPU/Driver/OS Support Matrix
 
-TensorFusion supports all series of NVIDIA GPUs from Volta architecture and above, with NVIDIA driver versions starting from 470.x, and CUDA versions range from 11.8 to the latest.
+TensorFusion supports all series of NVIDIA GPUs from Volta architecture and above, with NVIDIA driver versions starting from 530.x, and CUDA versions range from 11.8 to the latest.
 
 | GPU Vendor | GPU Architecture | GPU Series | Driver Version |
 |------------|------------------|------------|----------------|
-| NVIDIA     | Volta            | V100, Tesla V100 | 470.x - Latest |
-|            | Turing           | RTX 20 Series, Quadro RTX Series  | 470.x - Latest |
-|            | Ampere           | A100, A40, A10, A10G, A800, RTX 30 Series, RTX A Series | 470.x - Latest |
-|            | Hopper           | H100, H200, H800, H20 | 470.x - Latest |
-|            | Ada Lovelace     | L40, L40S, L4, RTX 40 Series, RTX Ada Series | 470.x - Latest |
-|            | Blackwell        | B100, B40, RTX 50 Series | 470.x - Latest |
+| NVIDIA     | Volta            | V100, Tesla V100 | 530.x - Latest |
+|            | Turing           | RTX 20 Series, Quadro RTX Series  | 530.x - Latest |
+|            | Ampere           | A100, A40, A10, A10G, A800, RTX 30 Series, RTX A Series | 530.x - Latest |
+|            | Hopper           | H100, H200, H800, H20 | 530.x - Latest |
+|            | Ada Lovelace     | L40, L40S, L4, RTX 40 Series, RTX Ada Series | 530.x - Latest |
+|            | Blackwell        | B100, B40, RTX 50 Series | 530.x - Latest |
 | AMD        | RDNA             | RX 6000 Series, RX 7000 Series | Planned    |
 |            | CDNA             | MI200 Series, MI300 Series | Planned    |
 

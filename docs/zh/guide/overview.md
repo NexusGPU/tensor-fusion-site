@@ -127,5 +127,5 @@ TensorFusion产品以及相关Github项目，由新加坡公司NexusGPU PTE.LTD.
 
 **Q：TensorFusion支持哪些厂商和版本的GPU？**
 
-- TensorFusion支持从Volta架构及以上的NVIDIA全系列GPU，NVIDIA驱动版本不低于470.x，支持的CUDA版本从11.8到最新的CUDA 12.8
+- TensorFusion支持从Volta架构及以上的NVIDIA全系列GPU，NVIDIA驱动版本不低于530.x，支持的CUDA版本从11.8到最新的CUDA 12.8
 - AMD GPU的支持在规划中
