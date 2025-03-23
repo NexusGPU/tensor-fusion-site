@@ -12,7 +12,7 @@ hero:
       link: /guide/overview
     - theme: alt
       text: How-to Guides
-      link: /guide/get-started
+      link: /guide/overview#%F0%9F%9A%80-quick-start
     - theme: alt
       text: Reference
       link: /reference/cli-params

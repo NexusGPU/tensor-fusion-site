@@ -17,7 +17,7 @@
             <div class="footer-grid-wrap">
               <div class="text-size-large text-weight-medium">Learn</div>
               <div class="footer-links-wrapper"><a href="/guide/overview" class="footer-link">Docs</a></div>
-              <a href="https://tensor-fusion.hall.community/" class="footer-link">Forums</a><a href="/blog" class="footer-link">Blogs</a>
+              <a href="https://tensor-fusion.hall.community/" class="footer-link">Forums</a><a href="/guide/case-study/ten-class" class="footer-link">Blogs</a>
             </div>
             <div id="w-node-b91edead-1de6-1605-60a1-b4a85284b2d2-f6a6712e" class="footer-grid-wrap">
               <div class="text-size-large text-weight-medium">Use</div>

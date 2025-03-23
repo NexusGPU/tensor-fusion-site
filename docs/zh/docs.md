@@ -12,7 +12,7 @@ hero:
       link: /zh/guide/overview
     - theme: alt
       text: 用户手册
-      link: /zh/guide/get-started
+      link: /zh/guide/overview#%F0%9F%9A%80-quick-start
     - theme: alt
       text: 参考
       link: /zh/reference/cli-params

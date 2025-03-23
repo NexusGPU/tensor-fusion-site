@@ -30,9 +30,9 @@ This repo is for TensorFusion official website and documentation. Check out the 
 
 ### Onboard Your Own AI Infra
 
-- [Getting Started on Kubernetes](https://tensor-fusion.ai/guide/deployment-k8s)
-- [Getting Started on VM](https://tensor-fusion.ai/guide/deployment-vm)
-- [Deploy Self-hosted Community Edition](https://tensor-fusion.ai/guide/self-host)
+- [Getting Started on Kubernetes](https://tensor-fusion.ai/guide/getting-started/deployment-k8s)
+- [Getting Started on VM](https://tensor-fusion.ai/guide/getting-started/deployment-vm)
+- [Deploy Self-hosted Community Edition](https://tensor-fusion.ai/guide/recipes/deploy-k8s-local-mode)
 
 ### Try it out
 

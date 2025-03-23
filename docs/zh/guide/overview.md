@@ -20,11 +20,13 @@ TensorFusion是一个**先进的GPU虚拟化和池化平台**，旨在最大GPU�
 
 ### GPU虚拟化 & 远程共享 & 分布式调度
 
-- Stay tuned
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://cdn.tensor-fusion.ai/tensor-fusion-vgpu-allocation-demo.mp4" :controls="true">
+</VideoPlayer>
 
 ### 一站式AI Infra管控台
 
-- Stay tuned
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://cdn.tensor-fusion.ai/ai-infra-console-demo.mp4" :controls="true">
+</VideoPlayer>
 
 ### GPU上下文保存和迁移
 
