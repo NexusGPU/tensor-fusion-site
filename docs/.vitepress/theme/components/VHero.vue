@@ -3,7 +3,7 @@
         <div class="padding-global">
             <div class="w-layout-blockcontainer container w-container">
                 <div class="hero-wrapper">
-                    <div class="hero-component"><a href="/blog" class="read-more-tag w-inline-block">
+                    <div class="hero-component"><a href="/guide/case-study/ten-class" class="read-more-tag w-inline-block">
                             <div class="text-size-small text-weight-bold">What's new ?</div>
                             <div class="vertical-line-tag"></div>
                             <div class="read-more-button">
@@ -20,13 +20,14 @@
                         </div>
                     </div>
                     <div data-w-id="aa42755f-aac4-abbd-e604-8f2924a89a26" style="opacity:0"
-                        class="double-button-component margin-top-button-hero"><a href="/guide/get-started"
+                        class="double-button-component margin-top-button-hero"><a href="/guide/overview#%F0%9F%9A%80-quick-start"
                             class="primary-button w-inline-block">
                             <div class="relative">
                                 <div class="text-size-small text-weight-bold">Get Started</div>
                             </div>
                             <div class="button-elipse"></div>
-                        </a><a href="/guide/compare-with" class="secondary-button w-inline-block">
+                        </a><a href="/guide/overview#%E2%9A%96%EF%B8%8F-compare-with-other-solutions
+                        " class="secondary-button w-inline-block">
                             <div class="button-wrapper">
                                 <div class="secondary-button-text">
                                     <div class="text-weight-bold text-size-small">Compare with</div>

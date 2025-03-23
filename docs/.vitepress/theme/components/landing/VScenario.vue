@@ -32,7 +32,7 @@
                     <div class="steps-description">
                       <div>Onboard existing Kubernetes cluster to Tensor Fusion with one simple Operator deployment, no need to change your existing workflow, seamless migration</div>
                     </div>
-                  </div><a href="/guide/deployment-k8s" class="primary-button w-inline-block">
+                  </div><a href="/guide/getting-started/deployment-k8s" class="primary-button w-inline-block">
                     <div class="relative">
                       <div class="text-size-small text-weight-bold">Onboard your Kubernetes</div>
                     </div>
@@ -67,7 +67,7 @@
                     <div class="steps-description">
                       <div>For new users, just add cloud vendor integration, it could be AWS/GCP/Azure etc. Tensor Fusion will manage the auto-provisioned, auto-pilot GPU pool in your own cloud account</div>
                     </div>
-                  </div><a href="/guide/deployment-cloud" class="primary-button w-inline-block">
+                  </div><a href="/guide/recipes/integrate-with-cloud-vendor" class="primary-button w-inline-block">
                     <div class="relative">
                       <div class="text-size-small text-weight-bold">Connect to Cloud Vendor</div>
                     </div>

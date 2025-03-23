@@ -70,7 +70,7 @@ sizes="(max-width: 479px) 73vw, 339.640625px"
             </div>
           </div>
           <div data-w-id="8987cab3-f15e-de6f-2dab-834f91d30665" class="double-button-component"><a
-              href="/guide/architecture" class="primary-button w-inline-block">
+              href="/guide/getting-started/architecture" class="primary-button w-inline-block">
               <div class="relative">
                 <div class="text-size-small text-weight-bold">How it works ?</div>
               </div>
