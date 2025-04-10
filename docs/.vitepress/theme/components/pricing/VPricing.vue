@@ -4,11 +4,11 @@
             <div class="w-layout-blockcontainer container w-container">
                 <div class="hero-wrapper"  style="margin-top: 15vh;">
                     <div class="hero-component">
-                        <div data-w-id="980a8621-76b9-aff7-a87c-734266717f1c" style="opacity:0" class="max-width-90ch">
+                        <div data-w-id="980a8621-76b9-aff7-a87c-734266717f1c"  class="max-width-90ch">
                             <div class="heading-3 text-weight-bold">Unleash Your GPU Potential</div>
                         </div>
                     </div>
-                    <div data-w-id="eedf3d47-80d0-df4e-60d4-07d023f7177e" style="opacity:0"
+                    <div data-w-id="eedf3d47-80d0-df4e-60d4-07d023f7177e" 
                         class="pricing-grid-wrapper">
                         <div class="pricing-grid">
                             <div v-for="plan in plans" :id="plan.id" :key="plan.id" :class="['price-card']">
@@ -54,7 +54,7 @@
                                         alt="Icon" class="contain" /></div>
                                 <div class="heading-6 text-weight-bold">Enterprise Plan</div>
                                 <div class="enterprise-text">
-                                    <div class="text-weight-medium">For companies with more than 1,000 GPUs</div>
+                                    <div class="text-weight-medium">For companies with more than 10,000 GPUs</div>
                                 </div>
                             </div>
                             <div class="price-button enterprise">
@@ -108,9 +108,8 @@ const plans = ref<PricePlan[]>([
     period: 'per month per GPU',
     desc: 'For small business or startups',
     features: [
-      'Up to 100 GPUs',
+      'Up to 500 GPUs',
       'Everything in Community Plan',
-      'Smart Burst',
       'Multi-Cloud Support',
       'Advanced Dashboard',
       'Alerts & Notifications',
@@ -125,7 +124,7 @@ const plans = ref<PricePlan[]>([
     period: 'per month per GPU',
     desc: 'For medium-sized organizations',
     features: [
-      'Up to 1000 GPUs',
+      'Up to 5000 GPUs',
       'Everything in Team Plan',
       'Enterprise SSO',
       'Advanced Diagnostic Report',

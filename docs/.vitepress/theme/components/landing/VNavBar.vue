@@ -16,9 +16,11 @@ src="https://cdn.tensor-fusion.ai/tensor-fusion.png" style="height: 80%;width: 7
               <nav role="navigation" class="nav-menu w-nav-menu">
                 <a href="/" aria-current="page" class="nav-link w-inline-block w--current">
                   <div>Product</div>
-                </a><a href="/features" class="nav-link w-inline-block">
+                </a>
+                <!-- <a href="/features" class="nav-link w-inline-block">
                   <div>Features</div>
-                </a><a href="/pricing" class="nav-link w-inline-block">
+                </a> -->
+                <a href="/pricing" class="nav-link w-inline-block">
                   <div>Pricing</div>
                 </a>
                 <div class="mobile-navbar-content"><a href="/guide/overview" target="_blank" class="link-block-navbar w-inline-block">
