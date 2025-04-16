@@ -39,3 +39,13 @@ TF_DISABLE_MEMORY_MANAGER=1
 ```
 
 启用此选项后，内存冻结和VRAM扩展/分层功能将无法使用。团队将继续致力于解决此问题。
+
+
+## 镜像拉取问题
+
+如果K8S集群无法拉取DockerHub, 检查是否添加了镜像仓库，参考 https://docs.k3s.io/installation/private-registry
+
+```bash
+# K3S中查询已经生效的的镜像仓库
+ll /var/lib/rancher/k3s/agent/etc/containerd/certs.d
+```

@@ -33,12 +33,24 @@ Since TensorFusion system runs in containerized environment, you need configure 
 
 ```bash
 # Just copy all and run them once for each node
+
+# For Debian/Ubuntu
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
 sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
 apt-get update
 apt-get install -y nvidia-container-toolkit
 
+# For RHEL/CentOS, Fedora, Amazon Linux, Alibaba Linux
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
+  sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+
+sudo dnf install -y nvidia-container-toolkit
+
+# Refer: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+```
+
+```bash
 mkdir -p /var/lib/rancher/k3s/agent/etc/containerd/
 cat << EOF >> /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
 version = 2
@@ -82,7 +94,13 @@ export MASTER_IP=<master-private-ip-from-step-1-vm>
 export K3S_TOKEN=<k3s-token-from-step-1-cat-command-result>
 
 curl -sfL https://get.k3s.io | K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
+
+
+# If you encountered container-selinux version issue, run it again with following env variable
+export INSTALL_K3S_SKIP_SELINUX_RPM=true
 ```
+
+If there isn't CUDA and NVIDIA driver on the host, eg. no nvidia-smi command or can not run it，install latest [CUDA & NVIDIA Driver here](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=runfile_local)
 
 ## Step 4. Verify if all GPU Nodes Added
 
