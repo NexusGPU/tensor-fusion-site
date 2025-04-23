@@ -19,31 +19,40 @@ cat > /etc/rancher/k3s/registries.yaml << EOF
 mirrors:
   docker.io:
     endpoint:
-      - "https://45hrqeao.mirror.aliyuncs.com"
+      - "https://docker.m.daocloud.io"
+  gcr.io:
+    endpoint:
+      - "https://gcr.m.daocloud.io"
+  ghcr.io:
+    endpoint:
+      - "https://ghcr.m.daocloud.io"
+  k8s.gcr.io:
+    endpoint:
+      - "https://k8s-gcr.m.daocloud.io"
+  registry.k8s.io:
+    endpoint:
       - "https://k8s.m.daocloud.io"
-      - "https://docker.mirrors.ustc.edu.cn"
-      - "https://hub-mirror.c.163.com"
-      - "https://registry.cn-hangzhou.aliyuncs.com/"
-  "k8s.gcr.io":
+  mcr.microsoft.com:
     endpoint:
-    - "https://lank8s.cn"
-    - "https://k8s.lank8s.cn"
-    - "https://registry.aliyuncs.com/google_containers"
-  "gcr.io":
+      - "https://mcr.m.daocloud.io"
+  nvcr.io:
     endpoint:
-    - "https://gcr.m.daocloud.io"
-    - "https://gcr.lank8s.cn"
-  "ghcr.io":
-    endpoint:
-    - "https://gcr.m.daocloud.io"
-    - "https://ghcr.lank8s.cn"
-  "registry.k8s.io":
-    endpoint:
-    - "https://registry.lank8s.cn"
-    - "https://registry.aliyuncs.com/v2/google_containers"
+      - "https://nvcr.m.daocloud.io"
   quay.io:
     endpoint:
-      - "https://quay.tencentcloudcr.com/"
+      - "https://quay.m.daocloud.io"
+  docker.elastic.co:
+    endpoint:
+      - "https://elastic.m.daocloud.io"
+  registry.ollama.ai:
+    endpoint:
+      - "https://ollama.m.daocloud.io"
+configs:
+  "docker.io":
+    auth: {}
+    tls: {}
+    rewrite:
+      "^docker.io/tensor-fusion/(.*)": "registry.cn-hangzhou.aliyuncs.com/tensor-fusion/$1"
 EOF
 ```
 
@@ -55,14 +64,24 @@ EOF
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server --tls-san $(curl -s https://ifconfig.me)
 
-# For China mainland users
+# 中国大陆用户
 curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - server --tls-san $(curl -s https://ifconfig.me)
 ```
 
-然后获取token，用于后续添加GPU节点
+然后获取并保存token，用于后续添加GPU节点
 
 ```bash
 cat /var/lib/rancher/k3s/server/node-token
+```
+
+运行完成后，执行`kubectl get no`命令预期可以看到一个Control Plane节点， 若输出不符预期，可能遇到的问题和解决方案如下：
+
+```bash
+# 如果遇到安装container-selinux依赖的错误，在命令中添加以下环境变量重新运行上述命令
+export INSTALL_K3S_SKIP_SELINUX_RPM=true
+
+# 如果K3S Master所在节点有GPU设备，执行以下命令，或在安装完成后用kubectl node label命令添加label：
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s - server --tls-san $(curl -s https://ifconfig.me)
 ```
 
 ## 步骤2：配置GPU节点
@@ -84,6 +103,7 @@ curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-contai
   sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
 
 sudo dnf install -y nvidia-container-toolkit
+# if dnf command not found, try `sudo yum install -y nvidia-container-toolkit`
 
 # Refer: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 ```
@@ -133,7 +153,7 @@ export K3S_TOKEN=<k3s-token-from-step-1-cat-command-result>
 
 curl -sfL https://get.k3s.io | K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
 
-# For China mainland users
+# 中国大陆用户
 curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_SKIP_SELINUX_RPM=true INSTALL_K3S_MIRROR=cn K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
 
 # 如果遇到安装container-selinux依赖的错误，在命令中添加以下环境变量重新运行上述命令

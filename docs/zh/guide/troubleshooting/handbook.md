@@ -45,7 +45,18 @@ TF_DISABLE_MEMORY_MANAGER=1
 
 如果K8S集群无法拉取DockerHub, 检查是否添加了镜像仓库，参考 https://docs.k3s.io/installation/private-registry
 
+如果是K3S + Containerd，检查K3S是否正确加载了`/etc/rancher/k3s/registries.yaml`文件
 ```bash
-# K3S中查询已经生效的的镜像仓库
+# 正确加载Mirror后会在这里创建对应host的目录
 ll /var/lib/rancher/k3s/agent/etc/containerd/certs.d
 ```
+
+如果仍在使用Docker作为容器云运行时，检查Docker是否正确加载了`/etc/docker/daemon.json`文件，重启Docker服务（`systemctl restart docker`）
+
+```json
+{
+  "registry-mirrors": ["https://docker.m.daocloud.io"]
+}
+```
+
+如果是GreptimeDB拉取不到，在helm install时添加 `--set greptime.image.repository=greptime-registry.cn-hangzhou.cr.aliyuncs.com/greptime/greptimedb`，如果是nvcr.io相关镜像拉取不到，建议自行同步到私有仓库。

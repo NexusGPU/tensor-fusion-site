@@ -183,10 +183,72 @@ Configuration for GreptimeDB integration
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-isCloud-details')">isCloud</b> | boolean |   | Whether to use GreptimeDB Cloud Default: `false` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-host-details')">host</b><span class="required-tag"></span> | string |   | Hostname of the GreptimeDB server Default: `greptimedb-standalone.greptimedb.svc.cluster.local` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-port-details')">port</b><span class="required-tag"></span> | integer |   | Port of the GreptimeDB server Default: `4001` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-image-details')">image</b> <span id="property-helm-values-greptime-image" class="expandable-property" data-uid="property-helm-values-greptime-image" @click="toggleExpand('property-helm-values-greptime-image-details')">↓</span> | object |   | Container image configuration for GreptimeDB |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-resources-details')">resources</b> <span id="property-helm-values-greptime-resources" class="expandable-property" data-uid="property-helm-values-greptime-resources" @click="toggleExpand('property-helm-values-greptime-resources-details')">↓</span> | object |   | Resource requirements for GreptimeDB |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-installStandalone-details')">installStandalone</b> | boolean |   | Whether to install a standalone GreptimeDB instance Default: `true` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-user-details')">user</b> | string |   | Username for GreptimeDB authentication |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-db-details')">db</b> | string |   | Database name in GreptimeDB |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-password-details')">password</b> | string |   | Password for GreptimeDB authentication |
+
+<div id="property-helm-values-greptime-image-details" class="nested-properties expanded">
+
+### image {#property-helm-values-greptime-image-heading}
+
+Container image configuration for GreptimeDB
+
+#### Properties {#properties-helm-values-greptime-image}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-image-repository-details')">repository</b> | string |   | Repository for the GreptimeDB image, for China mainland users, should change &#39;greptime.image.repository&#39; value to &#39;greptime-registry.cn-hangzhou.cr.aliyuncs.com/greptime/greptimedb&#39; Default: `docker.io/greptime/greptimedb` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-image-tag-details')">tag</b> | string |   | Tag for the GreptimeDB image Default: `latest` |
+
+</div>
+
+<div id="property-helm-values-greptime-resources-details" class="nested-properties expanded">
+
+### resources {#property-helm-values-greptime-resources-heading}
+
+Resource requirements for GreptimeDB
+
+#### Properties {#properties-helm-values-greptime-resources}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-resources-requests-details')">requests</b> <span id="property-helm-values-greptime-resources-requests" class="expandable-property" data-uid="property-helm-values-greptime-resources-requests" @click="toggleExpand('property-helm-values-greptime-resources-requests-details')">↓</span> | object |   | Resource requests for GreptimeDB |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-resources-limits-details')">limits</b> <span id="property-helm-values-greptime-resources-limits" class="expandable-property" data-uid="property-helm-values-greptime-resources-limits" @click="toggleExpand('property-helm-values-greptime-resources-limits-details')">↓</span> | object |   | Resource limits for GreptimeDB |
+
+<div id="property-helm-values-greptime-resources-requests-details" class="nested-properties expanded">
+
+### requests {#property-helm-values-greptime-resources-requests-heading}
+
+Resource requests for GreptimeDB
+
+##### Properties {#properties-helm-values-greptime-resources-requests}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-resources-requests-cpu-details')">cpu</b> | string |   | CPU request for GreptimeDB |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-resources-requests-memory-details')">memory</b> | string |   | Memory request for GreptimeDB |
+
+</div>
+
+<div id="property-helm-values-greptime-resources-limits-details" class="nested-properties expanded">
+
+### limits {#property-helm-values-greptime-resources-limits-heading}
+
+Resource limits for GreptimeDB
+
+##### Properties {#properties-helm-values-greptime-resources-limits}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-resources-limits-cpu-details')">cpu</b> | string |   | CPU limit for GreptimeDB |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-resources-limits-memory-details')">memory</b> | string |   | Memory limit for GreptimeDB |
+
+</div>
+
+</div>
 
 </div>
 
