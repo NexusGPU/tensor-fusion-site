@@ -39,3 +39,24 @@ TF_DISABLE_MEMORY_MANAGER=1
 ```
 
 启用此选项后，内存冻结和VRAM扩展/分层功能将无法使用。团队将继续致力于解决此问题。
+
+
+## 镜像拉取问题
+
+如果K8S集群无法拉取DockerHub, 检查是否添加了镜像仓库，参考 https://docs.k3s.io/installation/private-registry
+
+如果是K3S + Containerd，检查K3S是否正确加载了`/etc/rancher/k3s/registries.yaml`文件
+```bash
+# 正确加载Mirror后会在这里创建对应host的目录
+ll /var/lib/rancher/k3s/agent/etc/containerd/certs.d
+```
+
+如果仍在使用Docker作为容器云运行时，检查Docker是否正确加载了`/etc/docker/daemon.json`文件，重启Docker服务（`systemctl restart docker`）
+
+```json
+{
+  "registry-mirrors": ["https://docker.m.daocloud.io", "https://docker.1ms.run"]
+}
+```
+
+如果是GreptimeDB拉取不到，在helm install时添加 `--set greptime.image.repository=greptime-registry.cn-hangzhou.cr.aliyuncs.com/greptime/greptimedb`，如果是nvcr.io相关镜像拉取不到，建议自行同步到私有仓库。

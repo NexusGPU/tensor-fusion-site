@@ -40,3 +40,12 @@ TF_DISABLE_MEMORY_MANAGER=1
 ```
 
 Once this option enabled, freeze memory and VRAM expansion/tiering will not work. The team will keep working on this issue.
+
+## Image Pull Timeout Issue
+
+If your Kubernetes cluster can not access DockerHub or public registries, check if the mirrors are added, refer https://docs.k3s.io/installation/private-registry
+
+```bash
+# Check current working mirrors when using k3s
+ll /var/lib/rancher/k3s/agent/etc/containerd/certs.d
+```
