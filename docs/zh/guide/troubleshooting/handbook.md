@@ -55,7 +55,7 @@ ll /var/lib/rancher/k3s/agent/etc/containerd/certs.d
 
 ```json
 {
-  "registry-mirrors": ["https://docker.m.daocloud.io"]
+  "registry-mirrors": ["https://docker.m.daocloud.io", "https://docker.1ms.run"]
 }
 ```
 

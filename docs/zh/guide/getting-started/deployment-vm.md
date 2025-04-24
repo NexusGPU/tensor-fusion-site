@@ -20,6 +20,7 @@ mirrors:
   docker.io:
     endpoint:
       - "https://docker.m.daocloud.io"
+      - "https://docker.1ms.run"
   gcr.io:
     endpoint:
       - "https://gcr.m.daocloud.io"
