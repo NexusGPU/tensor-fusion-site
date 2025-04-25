@@ -53,7 +53,7 @@ configs:
     auth: {}
     tls: {}
     rewrite:
-      "^docker.io/tensor-fusion/(.*)": "registry.cn-hangzhou.aliyuncs.com/tensor-fusion/$1"
+      "^docker.io/tensorfusion/(.*)": "registry.cn-hangzhou.aliyuncs.com/tensorfusion/$1"
 EOF
 ```
 
