@@ -15,7 +15,7 @@ TensorFusion GPU资源池基于Kubernetes运行，您只需选择一台或多台
 
 ```bash
 mkdir -p /etc/rancher/k3s/
-cat > /etc/rancher/k3s/registries.yaml << EOF
+cat > /etc/rancher/k3s/registries.yaml << 'EOF'
 mirrors:
   docker.io:
     endpoint:
