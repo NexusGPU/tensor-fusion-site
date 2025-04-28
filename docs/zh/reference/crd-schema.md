@@ -17,3 +17,7 @@
 - [SchedulingConfigTemplate](/zh/reference/schema/scheduling-config-template.md)
 - [GPUNodeClass](/zh/reference/schema/gpunode-class.md)
 - [WorkloadProfile](/zh/reference/schema/workload-profile.md)
+
+## Devin DeepWiki
+
+- [TensorFusion DeepWiki](https://deepwiki.com/NexusGPU/tensor-fusion/1-overview)
