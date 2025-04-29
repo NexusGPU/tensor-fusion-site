@@ -4,6 +4,8 @@ outline: deep
 
 # Tensor Fusion Deployment for Kubernetes
 
+> The installation would take 2-5 minutes to complete.
+
 ## Prerequisites
 
 1. Create a Kubernetes cluster with NVIDIA GPU nodes added
