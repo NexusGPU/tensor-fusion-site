@@ -4,6 +4,8 @@ outline: deep
 
 # Tensor Fusion Kubernetes 部署指南
 
+> 部署TensorFusion集群大约需要2-5分钟时间。
+
 ## 前提条件
 
 1. 创建包含NVIDIA GPU节点的Kubernetes集群
