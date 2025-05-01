@@ -9,11 +9,7 @@ outline: deep
 ## Prerequisites
 
 1. Create a Kubernetes cluster with NVIDIA GPU nodes added
-2. [NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#deploying-via-helm-install-with-a-direct-url-to-the-helm-package) and [Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes) installed, this step is optional for most cloud vendors' Kubernetes distribution, they are built-in. Otherwise, using following command to install it.
-
-```bash
-helm upgrade --install --create-namespace  --namespace nvidia-device-plugin --repo https://nvidia.github.io/k8s-device-plugin/  nvdp nvidia-device-plugin
-```
+2. Install [Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes), this step is optional for most cloud vendors' Kubernetes distribution, they are built-in.
 
 ## Step 1. Install TensorFusion
 

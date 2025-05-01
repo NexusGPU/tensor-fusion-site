@@ -40,7 +40,6 @@ TF_DISABLE_MEMORY_MANAGER=1
 
 启用此选项后，内存冻结和VRAM扩展/分层功能将无法使用。团队将继续致力于解决此问题。
 
-
 ## 镜像拉取问题
 
 如果K8S集群无法拉取DockerHub, 检查是否添加了镜像仓库，参考 https://docs.k3s.io/installation/private-registry
@@ -60,3 +59,63 @@ ll /var/lib/rancher/k3s/agent/etc/containerd/certs.d
 ```
 
 如果是GreptimeDB拉取不到，在helm install时添加 `--set greptime.image.repository=greptime-registry.cn-hangzhou.cr.aliyuncs.com/greptime/greptimedb`，如果是nvcr.io相关镜像拉取不到，建议自行同步到私有仓库。
+
+
+## 无法使用NVIDIA原生的GPU调度方式，比如 `nvidia.com/gpu`
+
+如果想要保留NVIDIA原生的基于设备数量的调度方式，可以安装NVIDIA Device Plugin。
+
+```bash
+helm upgrade --install --create-namespace  --namespace nvidia-device-plugin --repo https://nvidia.github.io/k8s-device-plugin/  nvdp nvidia-device-plugin
+```
+
+
+## Pod 在启用 TensorFusion 后卡在启动状态
+
+**可能有两种原因：**
+
+1. 无可用GPU资源
+2. TensorFusion运行时库注入失败
+
+可通过以下命令定位根因：`kubectl get po -A --show-labels | grep tensor-fusion.ai/workload`。若TensorFusion Worker Pod未运行，则是问题1；否则是问题2。
+
+**定位和解决问题1** 
+
+检查TensorFusionWorkload自定义资源事件：`kubectl describe tensorfusionworkload <workload-name>`。若出现类似 `Failed to schedule GPU` 的错误，表示没有可用的GPU资源。然后检查 `kubectl get gpu`，确认可用资源是否大于请求的计算资源，若资源不足，解决方案是**减少当前应用或其他应用的requests的GPU资源**。
+
+若总TotalTflops为0或部分GPU未列出，表示**TensorFusion未发现某些GPU卡**。解决方案是检查 `kubectl get jobs -n tensor-fusion-sys`，确保所有NodeDiscovery Job成功，且`tensor-fusion-sys-public-gpu-info` configMap包含您的GPU型号，修改后删除NodeDiscovery Job触发GPU资源总量的自动刷新。
+
+**定位和解决问题2**
+
+若TensorFusion Worker Pod正在运行且状态为Ready，表示客户端注入可能失败，存在已知问题，即`LD_PRELOAD`可能被bash/zsh忽略，解决方案是使用`sh -c "bash/zsh ..."`运行bash或直接使用`sh`
+
+例如，当使用 `kubectl exec` 时，可以使用 `sh -c` 即使您想使用 bash:
+
+```bash
+kubectl exec -it <pod> -- sh -c "bash ..."
+
+echo $PATH
+# expected result should be:
+# /tensor-fusion:/root/.local/bin/:/usr/local/nvidia/bin:...
+
+# then run `nvidia-smi`
+# TensorFusion will take effect after PATH/LD_LIBRARY_PATH/LD_PRELOAD contains `/tensor-fusion`
+```
+
+当您的应用程序由另一个进程生成时，您可以使用 `strace` 进行调试。
+
+```bash
+# apt/apk/dnf/yum/pacman install strace
+strace -e execve -s 99999 <your_program> <your_program_args>
+```
+
+## 设备数量断言错误
+
+如果遇到类似以下错误，说明TensorFusion的Client端没有正确注入运行时环境，与👆🏻上一节的第二个问题相同
+
+```
+DeferredCudaCallError('CUDA call failed lazily at initialization with error: device >= 0 && device < num_gpus INTERNAL ASSERT FAILED 
+at "../aten/src/ATen/cuda/CUDAContext.cpp":50, please report a bug to PyTorch.
+```
+
+解决方案：可在程序启动时打印`LD_PRELOAD`、`LD_LIBRARY_PATH`、`PATH` 三个环境变量确认是否都带有`/tensor-fusion`，如果没有注入请检查容器是否用到了特殊的Entrypoint、Command启动，导致环境变量没有透传给子进程，也可通过`strace`命令进行调试。

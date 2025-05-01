@@ -67,6 +67,12 @@ export const Guide = (lang: string) => [
               zh: '迁移现有应用'
             }), link: 'recipes/migrate-existing'
           },
+          {
+            text: match(lang, {
+              en: 'Manage License',
+              zh: '管理许可证'
+            }), link: 'recipes/license-mgmt'
+          }
         ]
       },
       {
