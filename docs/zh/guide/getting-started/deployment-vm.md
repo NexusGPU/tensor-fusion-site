@@ -89,27 +89,34 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 
 由于TensorFusion系统运行在容器化环境中，您需要在GPU节点上配置NVIDIA Container Toolkit，然后安装K3S Agent。
 
+对于国内用户，推荐使用中科大镜像源，安装方法参考[NVIDIA Container 运行时库安装](https://mirrors.ustc.edu.cn/help/libnvidia-container.html)。有国际网络的用户可参考NVIDIA官方[安装指南](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)。
+
 ```bash
 # 只需要在每台GPU服务器上运行一次
 
 # For Debian/Ubuntu
-curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+  && curl -s -L https://mirrors.ustc.edu.cn/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://nvidia.github.io#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://mirrors.ustc.edu.cn#g' | \
+    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+apt update
+apt install -y nvidia-container-toolkit
 
-sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
-apt-get update
-apt-get install -y nvidia-container-toolkit
 
 # For RHEL/CentOS, Fedora, Amazon Linux, Alibaba Linux
-curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
+curl -s -L https://mirrors.ustc.edu.cn/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
+  sed 's#nvidia.github.io/libnvidia-container/stable/#mirrors.ustc.edu.cn/libnvidia-container/stable/#g' |
+  sed 's#nvidia.github.io/libnvidia-container/experimental/#mirrors.ustc.edu.cn/libnvidia-container/experimental/#g' |
   sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
 
 sudo dnf install -y nvidia-container-toolkit
 # if dnf command not found, try `sudo yum install -y nvidia-container-toolkit`
-
-# Refer: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 ```
 
+再到K3S配置添加Container Toolkit的相关内容：
+
 ```bash
+# sudo su -
 mkdir -p /var/lib/rancher/k3s/agent/etc/containerd/
 cat << EOF >> /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
 version = 2
