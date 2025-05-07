@@ -106,3 +106,21 @@ at "../aten/src/ATen/cuda/CUDAContext.cpp":50, please report a bug to PyTorch.
 ```
 
 Solution: you can print `LD_PRELOAD`、`LD_LIBRARY_PATH`、`PATH` environment variables to confirm whether they all contain `/tensor-fusion`, if not injected, please check if the container uses a special Entrypoint or Command to start, causing the environment variables to not be passed to the child process, you can also debug it `strace` command like last section.
+
+
+## Can not found libnvidia-ml.so.1 in Hypervisor Pod
+
+If hypervisor Pod not started and error log contains following error message, it indicates that NVIDIA Container Toolkit is not installed or properly configured. Refer [NVIDIA's install guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) to resolve it.
+
+```
+Error: a libloading error occurred: libnvidia-ml.so.1: cannot open shared object file: No such file or directory
+
+Caused by:
+    libnvidia-ml.so.1: cannot open shared object file: No such file or directory
+```
+
+If you encounter `libcuda.so not found` related errors, please check if NVIDIA Driver is installed correctly.
+
+```bash
+lsmod | grep nvidia
+```

@@ -119,3 +119,20 @@ at "../aten/src/ATen/cuda/CUDAContext.cpp":50, please report a bug to PyTorch.
 ```
 
 解决方案：可在程序启动时打印`LD_PRELOAD`、`LD_LIBRARY_PATH`、`PATH` 三个环境变量确认是否都带有`/tensor-fusion`，如果没有注入请检查容器是否用到了特殊的Entrypoint、Command启动，导致环境变量没有透传给子进程，也可通过`strace`命令进行调试。
+
+## 在Hypervisor Pod中无法找到libnvidia-ml.so.1
+
+如果hypervisor Pod错误日志包含以下内容，说明NVIDIA Container Toolkit未安装或配置不正确。参考[NVIDIA Container Toolkit安装指南](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)来解决。
+
+```
+Error: a libloading error occurred: libnvidia-ml.so.1: cannot open shared object file: No such file or directory
+
+Caused by:
+    libnvidia-ml.so.1: cannot open shared object file: No such file or directory
+```
+
+若出现 `libcuda.so not found` 相关错误，请再检查 NVIDIA Driver是否安装正确。
+
+```bash
+lsmod | grep nvidia
+```
