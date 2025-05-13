@@ -45,6 +45,7 @@
 | 注解 | 描述 | 示例值 |
 |------------|-------------|---------------|
 | `tensor-fusion.ai/gpu-count` | 请求的 GPU 设备数量，每个 vGPU worker 将映射到 N 物理 GPU 设备，vram/tflops 资源消耗将按此字段缩放，默认为 1，您的 AI 工作负载可以获取 `cuda:0` 设备 | `'4'` |
+| `tensor-fusion.ai/gpu-model` | 指定的GPU/NPU型号 | `A100` `H100` `L4` `L40s` |
 | `tensor-fusion.ai/auto-requests` | 根据工作负载历史指标自动设置 vram 和/或 tflops `requests`，请使用`WorkloadProfile`自定义资源进行详细设置 | `'true'` |
 | `tensor-fusion.ai/auto-limits` | 根据工作负载历史指标自动设置 vram 和/或 tflops `limits`，请使用`WorkloadProfile`自定义资源进行详细设置 | `'true'` |
 | `tensor-fusion.ai/auto-replicas` | 根据工作负载历史指标自动设置 vGPU worker `replicas`，请使用`WorkloadProfile`自定义资源进行详细设置 | `'true'` |
@@ -89,15 +90,6 @@ metadata:
   name: example-workload-profile
   namespace: 与您的工作负载相同的命名空间
 spec:
-  # 将Pod调度到和GPU Worker同一台GPU服务器提升性能
-  isLocalGPU: true
-
-  # 指定池名称（可选）
-  poolName: default-pool
-
-  # 指定 QoS 等级（默认为 medium）
-  qos: medium
-  
   # AI算力资源需求
   resources:
     requests:
@@ -106,11 +98,26 @@ spec:
     limits:
       tflops: "15"
       vram: "3Gi"
+  # Worker的数量，通常与Deployment的replicas相同
+  replicas: 1
   
-  # 自动扩缩容配置选项
-  autoScaling: true
-  minReplicas: 1
-  maxReplicas: 5
+  # 将Pod调度到和GPU Worker同一台GPU服务器提升性能（可选）
+  isLocalGPU: true
+
+  # 指定池名称（可选）
+  poolName: default-pool
+
+  # 指定 QoS 等级（默认为 medium）
+  qos: medium
+  
+  # 指定每个Worker的GPU设备数量（可选，默认为1）
+  gpuCount: 1
+  
+  # 指定特定GPU/NPU机型（可选）
+  gpuModel: A100
+  
+  # 自动扩缩容配置选项（可选）
+  autoScalingConfig: {}
 ```
 
 然后在Pod Annotation中引用，若Annotation中存在相同配置，WorkloadProfile优先级较低：

@@ -30,6 +30,7 @@ Add the following annotations to your Pod metadata to configure GPU workload req
 | Annotation | Description | Example Value |
 |------------|-------------|---------------|
 | `tensor-fusion.ai/gpu-count` | Requested GPU device count, each vGPU worker will map to N physical GPU devices set by this field, and vram/tflops resource consumption will be scaled by this field, default to 1, your AI workloads can get `cuda:0` device | `'4'` |
+| `tensor-fusion.ai/gpu-model` | Specifies the GPU/NPU model | `A100` `H100` `L4` `L40s` |
 | `tensor-fusion.ai/auto-requests` | Auto set vram and/or tflops `requests` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
 | `tensor-fusion.ai/auto-limits` | Auto set vram and/or tflops `limits` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
 | `tensor-fusion.ai/auto-replicas` | Auto set vGPU worker `replicas` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
@@ -74,6 +75,17 @@ metadata:
   name: example-workload-profile
   namespace: same-namespace-as-your-workload
 spec:
+  # Specify AI computing resources needed
+  resources:
+    requests:
+      tflops: "5"
+      vram: "3Gi"
+    limits:
+      tflops: "15"
+      vram: "3Gi"
+  # Specify the number of vGPU workers, usually the same as Deployment replicas
+  replicas: 1
+  
   # Schedule the workload to the same GPU server that runs GPU worker for best performance
   isLocalGPU: true
 
@@ -83,19 +95,14 @@ spec:
   # Specify QoS level (defaults to medium)
   qos: medium
   
-  # Resource requirements
-  resources:
-    requests:
-      tflops: "5"
-      vram: "3Gi"
-    limits:
-      tflops: "15"
-      vram: "3Gi"
+  # Specify the number of GPU devices per vGPU worker (optional, default to 1)
+  gpuCount: 1
   
-  # Auto-scaling configuration options
-  autoScaling: true
-  minReplicas: 1
-  maxReplicas: 5
+  # Specify the GPU/NPU model (optional)
+  gpuModel: A100
+  
+  # Auto-scaling configuration options (optional)
+  autoScalingConfig: {}
 ```
 
 Then reference this profile in your Pod annotation:
