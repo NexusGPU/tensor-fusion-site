@@ -9,7 +9,10 @@ helm upgrade --install --create-namespace --namespace tensor-fusion-sys --repo h
 对于无代理本地安装，使用以下命令获取并应用基本配置（仅测试）
 
 ```bash
-kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-cluster
+kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-cluster-cn
+# Use this if your cluster is not in China Mainland
+# kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-cluster
+
 kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-scheduling-config
 ```
 
