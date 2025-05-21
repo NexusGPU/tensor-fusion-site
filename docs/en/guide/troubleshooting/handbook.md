@@ -124,3 +124,7 @@ If you encounter `libcuda.so not found` related errors, please check if NVIDIA D
 ```bash
 lsmod | grep nvidia
 ```
+
+## How to avoid TensorFlow allocates all available GPU memory ?
+
+TensorFlow will occupy all GPU memory by default, to switch to on-demand mode, please set environment variable `TF_FORCE_GPU_ALLOW_GROWTH` to `true` in your workload, refer [https://www.tensorflow.org/guide/gpu](https://www.tensorflow.org/guide/gpu)

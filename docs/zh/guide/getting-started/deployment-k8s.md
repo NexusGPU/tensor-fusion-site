@@ -85,17 +85,72 @@ nvidia-smi
 # 预期显存为4Gi，而不是显卡的总显存数量
 ```
 
-运行Python REPL测试T5模型推断，测试简答的英译德任务：
+在CUDA:0设备中运行Qwen3 0.6B，验证TensorFusion
 
-```python
-from transformers import pipeline
-pipe = pipeline("translation_en_to_de", model="google-t5/t5-base", device="cuda:0")
-pipe("Hello")
+```bash
+pip config set global.index-url https://pypi.mirrors.ustc.edu.cn/simple
+pip install modelscope packaging transformers accelerate
+
+cat << EOF >> test-qwen.py
+from modelscope import AutoModelForCausalLM, AutoTokenizer
+
+model_name = "Qwen/Qwen3-0.6B"
+
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype="auto",
+    device_map="cuda:0"
+)
+
+prompt = "Give me a short introduction to large language model."
+messages = [
+    {"role": "user", "content": prompt}
+]
+text = tokenizer.apply_chat_template(
+    messages,
+    tokenize=False,
+    add_generation_prompt=True,
+    enable_thinking=True
+)
+model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
+generated_ids = model.generate(
+    **model_inputs,
+    max_new_tokens=32768
+)
+output_ids = generated_ids[0][len(model_inputs.input_ids[0]):].tolist() 
+try:
+    # rindex finding 151668 (</think>)
+    index = len(output_ids) - output_ids[::-1].index(151668)
+except ValueError:
+    index = 0
+
+thinking_content = tokenizer.decode(output_ids[:index], skip_special_tokens=True).strip("\n")
+content = tokenizer.decode(output_ids[index:], skip_special_tokens=True).strip("\n")
+
+print("thinking content:", thinking_content)
+print("content:", content)
+EOF
+```
+
+执行模型推理
+
+```bash
+python3 test-qwen.py
 ```
 
 ## 方案二：纯本地化部署
 
 如需完全本地化部署（不使用高级功能），可参考[纯本地部署方案](/zh/guide/recipes/deploy-k8s-local-mode.md)，但此模式无法使用[TensorFusion控制台](https://app.tensor-fusion.ai/workbench)的管控台功能。
+
+## 卸载TensorFusion
+
+运行如下命令一键卸载所有组件
+
+```bash
+# 可指定 KUBECONFIG 环境变量
+curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
+```
 
 ## 后续步骤
 

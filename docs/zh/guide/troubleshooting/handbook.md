@@ -136,3 +136,8 @@ Caused by:
 ```bash
 lsmod | grep nvidia
 ```
+
+
+## 如何避免TensorFlow占据所有显存 ?
+
+TensorFlow will occupy all GPU memory by default, to switch to on-demand mode, please set environment variable `TF_FORCE_GPU_ALLOW_GROWTH` to `true` in your workload, refer [https://www.tensorflow.org/guide/gpu](https://www.tensorflow.org/guide/gpu)

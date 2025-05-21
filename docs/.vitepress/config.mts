@@ -173,7 +173,7 @@ export default defineConfig(
       socialLinks: [
         {
           icon: "github",
-          link: "https://github.com/NexusGPU/tensor-fusion-site",
+          link: "https://github.com/NexusGPU/tensor-fusion",
         },
       ],
     },

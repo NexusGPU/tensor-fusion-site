@@ -1,12 +1,15 @@
-# Deployment Locally without Cluster Agent (Not Recommended)
+# Deployment Locally without Cluster Agent
 
 ### Installation
 
 When you need pure local installation and don't want to use advanced features, you can use this option, but you can not use [TensorFusion Console](https://app.tensor-fusion.ai/workbench) for centralized management.
 
 ```bash
-helm upgrade --install --create-namespace --namespace tensor-fusion-sys --repo https://helm.tensor-fusion.ai --set agent.agentId="" tensor-fusion-sys tensor-fusion
+helm upgrade --install --create-namespace --namespace tensor-fusion-sys --repo https://download.tensor-fusion.ai --set agent.agentId="" tensor-fusion-sys tensor-fusion
 ```
+
+Notes：
+- **On-prem Enterprise customer can deploy dedicated Console**, add `--set agent.enrollToken=xxx --set agent.agentId=xxx --set agent.cloudEndpoint=wss://app.tensor-fusion.ai/_ws` to start dedicated agent.
 
 For none-agent local installation, using the following command to get and apply a basic configuration (Not recommended, only for test)
 
@@ -44,7 +47,7 @@ To resolve this issue, you can neither add the label or change the TensorFusionC
 
 ```bash
 # Using helm `initialGpuNodeLabelSelector` parameter to add env var `INITIAL_GPU_NODE_LABEL_SELECTOR` to tensor-fusion-operator:
-helm upgrade --install --create-namespace --namespace tensor-fusion-sys --repo https://helm.tensor-fusion.ai --set agent.agentId="" --set initialGpuNodeLabelSelector="your-own-gpu-label-key=value" tensor-fusion-sys tensor-fusion
+helm upgrade --install --create-namespace --namespace tensor-fusion-sys --repo https://download.tensor-fusion.ai --set agent.agentId="" --set initialGpuNodeLabelSelector="your-own-gpu-label-key=value" tensor-fusion-sys tensor-fusion
 ```
 
 ```bash
@@ -63,3 +66,11 @@ curl https://app.tensor-fusion.ai/tmpl/tf-cluster > tf-cluster.yaml
 kubectl apply -f tf-cluster.yaml
 ```
 
+## Uninstall TensorFusion
+
+Run the following command to uninstall all components and custom resources
+
+```bash
+# export KUBECONFIG if needed
+curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
+```

@@ -93,6 +93,15 @@ pipe("Hello")
 
 When you need pure local installation and don't want to use advanced features, you can try [pure local installation](/guide/recipes/deploy-k8s-local-mode.md), but you can not use [TensorFusion Console](https://app.tensor-fusion.ai/workbench) for centralized management in this mode.
 
+## Uninstall TensorFusion
+
+Run the following command to uninstall all components and custom resources
+
+```bash
+# export KUBECONFIG if needed
+curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
+```
+
 ## Next Steps
 
 - [Migrate existing AI Workloads to TensorFusion](/guide/recipes/migrate-existing.md)

@@ -21,6 +21,12 @@ Choose one VM/BareMetal to install K3S to offer a simple Kubernetes environment.
 curl -sfL https://get.k3s.io | sh -s - server --tls-san $(curl -s https://ifconfig.me)
 ```
 
+If your K3S master has GPU cards and want the GPU resources to be scheduled by TensorFusion, **complete step 2 on this server first**, and then run the following command
+
+```bash
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s - server --tls-san $(curl -s https://ifconfig.me)
+```
+
 Then get the token to add more GPU nodes
 
 ```bash
@@ -86,7 +92,7 @@ version = 2
 EOF
 ```
 
-## Step 3. Add GPU Server as K3S Nodes
+## Step 3. Add more GPU Server as K3S Nodes
 
 ```bash
 # replace the MASTER_IP, K3S_TOKEN, and run the command on each GPU node
@@ -94,7 +100,6 @@ export MASTER_IP=<master-private-ip-from-step-1-vm>
 export K3S_TOKEN=<k3s-token-from-step-1-cat-command-result>
 
 curl -sfL https://get.k3s.io | K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
-
 
 # If you encountered container-selinux version issue, run it again with following env variable
 export INSTALL_K3S_SKIP_SELINUX_RPM=true
@@ -121,11 +126,11 @@ You can follow the [Kubernetes Deployment](/guide/getting-started/deployment-k8s
 
 After installation, you can use TensorFusion inside Kubernetes cluster.
 
-## Optional. Connect TensorFusion vGPU from VM/BareMetal
+## Uninstall TensorFusion
 
-If your workload is running on VM/BareMetal, you can allocate resource in TensorFusion cluster and connect vGPU from VM/BareMetal outside Kubernetes cluster.
+Run the following command to uninstall all components and custom resources
 
 ```bash
-TODO: Linux or Windows, Local or Remote vGPU
-# Download TensorFusion Libs, Add LD_PRELOAD / LD_LIBRARY_PATH env var
+# export KUBECONFIG if needed
+curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
 ```

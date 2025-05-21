@@ -69,6 +69,12 @@ curl -sfL https://get.k3s.io | sh -s - server --tls-san $(curl -s https://ifconf
 curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - server --tls-san $(curl -s https://ifconfig.me)
 ```
 
+如果K3S Control Plane节点也有GPU设备并且希望TensorFusion纳管，请**在这台节点完成第二步**, 再来运行以下命令
+
+```bash
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s - server --tls-san $(curl -s https://ifconfig.me)
+```
+
 然后获取并保存token，用于后续添加GPU节点
 
 ```bash
@@ -189,11 +195,11 @@ gpu-node-name   Ready   <none>   42h   v1.32.1 beta.kubernetes.io/arch=amd64,...
 
 安装完成后，您可以在新安装的Kubernetes集群中使用TensorFusion。
 
-## 可选项：从VM/BareMetal连接TensorFusion vGPU
+## 卸载TensorFusion
 
-如果您的工作负载运行在VM/BareMetal，您可以在TensorFusion集群中分配资源并从VM/BareMetal连接vGPU。
+运行如下命令一键卸载所有组件
 
 ```bash
-TODO: Linux or Windows, Local or Remote vGPU
-# Download TensorFusion Libs, Add LD_PRELOAD / LD_LIBRARY_PATH env var
+# 可指定 KUBECONFIG 环境变量
+curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
 ```
