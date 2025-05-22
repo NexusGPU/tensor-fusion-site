@@ -4,14 +4,44 @@ outline: deep
 
 # 虚拟机/物理机部署方案
 
-TensorFusion GPU资源池基于Kubernetes运行，您只需选择一台或多台服务器部署Kubernetes控制平面，并将GPU服务器作为节点接入集群即可。**该部署方式不会影响您现有的虚拟机/物理机环境以及非容器化服务**。
+TensorFusion GPU资源池基于Kubernetes运行，按步骤完成轻量级Kubernetes K3S集群搭建后，将GPU服务器作为节点接入集群即可。**该部署方式不会影响您现有的虚拟机/物理机环境以及非容器化服务**，K3S对现有环境侵入性小，稳定性也满足生产环境需求。
 
-完成集群搭建后，您可以将现有服务迁移至TensorFusion创建的本地或远程GPU工作节点。
 
-## 前置条件
+<!-- TensorFusion提供了一键安装脚本，若由于操作系统差异运行出错，请逐步按照本文档后续内容手动安装。
+
+::: code-group
+
+```bash [云端控制台模式]
+# 先注册登录TensorFusion，选择VM部署方式复制命令
+curl -sfL https://download.tensor-fusion.ai/install-vm.sh | \
+  ENROLL_TOKEN="copied-from-tensor-fusion-cloud" \
+  AGENT_ID="copied-from-tensor-fusion-cloud" \
+  sh -
+```
+
+```bash [无控制台模式]
+curl -sfL https://download.tensor-fusion.ai/install-vm.sh | sh -
+```
+
+```bash [私有化部署控制台模式]
+curl -sfL https://download.tensor-fusion.ai/install-vm.sh | \
+  ENROLL_TOKEN="copied-from-tensor-fusion-cloud" \
+  AGENT_ID="copied-from-tensor-fusion-cloud" \
+  CLOUD_ENDPOINT="your-own.domain" \
+  sh -
+```
+
+::: -->
+
+## 手动部署前置条件
 
 - 至少一台运行Linux的虚拟机或物理机，已安装GPU
 - 访问DockerHub网络，或每台机器用以下命令提前设置容器镜像仓库的拉取地址
+
+> [!NOTE]
+> 指南中的安装过程大约需要3-7分钟完成
+
+执行以下命令配置中国大陆网络环境镜像加速（可选）
 
 ```bash
 mkdir -p /etc/rancher/k3s/
@@ -72,7 +102,10 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 如果K3S Control Plane节点也有GPU设备并且希望TensorFusion纳管，请**在这台节点完成第二步**, 再来运行以下命令
 
 ```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s - server --tls-san $(curl -s https://ifconfig.me)
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true \
+  --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA \
+  --node-label feature.node.kubernetes.io/pci-10de.present=true" \
+  sh -s - server --tls-san $(curl -s https://ifconfig.me)
 ```
 
 然后获取并保存token，用于后续添加GPU节点
@@ -97,19 +130,20 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 
 对于国内用户，推荐使用中科大镜像源，安装方法参考[NVIDIA Container 运行时库安装](https://mirrors.ustc.edu.cn/help/libnvidia-container.html)。有国际网络的用户可参考NVIDIA官方[安装指南](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)。
 
-```bash
-# 只需要在每台GPU服务器上运行一次
+::: code-group 
 
-# For Debian/Ubuntu
+```bash [Debian/Ubuntu]
+# 在每台GPU服务器上运行一次即可
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
   && curl -s -L https://mirrors.ustc.edu.cn/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
     sed 's#deb https://nvidia.github.io#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://mirrors.ustc.edu.cn#g' | \
     sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 apt update
 apt install -y nvidia-container-toolkit
+```
 
-
-# For RHEL/CentOS, Fedora, Amazon Linux, Alibaba Linux
+```bash [RHEL/CentOS/Fedora/AlibabaLinux]
+# 在每台GPU服务器上运行一次即可
 curl -s -L https://mirrors.ustc.edu.cn/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
   sed 's#nvidia.github.io/libnvidia-container/stable/#mirrors.ustc.edu.cn/libnvidia-container/stable/#g' |
   sed 's#nvidia.github.io/libnvidia-container/experimental/#mirrors.ustc.edu.cn/libnvidia-container/experimental/#g' |
@@ -119,7 +153,9 @@ sudo dnf install -y nvidia-container-toolkit
 # if dnf command not found, try `sudo yum install -y nvidia-container-toolkit`
 ```
 
-再到K3S配置添加Container Toolkit的相关内容：
+:::
+
+每台GPU服务器执行以下命令，添加Container Toolkit配置：
 
 ```bash
 # sudo su -
@@ -158,7 +194,7 @@ version = 2
 EOF
 ```
 
-## 步骤3：添加GPU服务器为K3S节点
+## 步骤3：将GPU服务器加入K3S集群
 
 ```bash
 # 替换MASTER_IP和K3S_TOKEN，然后在每台GPU服务器上运行
@@ -191,15 +227,27 @@ gpu-node-name   Ready   <none>   42h   v1.32.1 beta.kubernetes.io/arch=amd64,...
 
 ## 步骤5：安装TensorFusion
 
-您可以按照[Kubernetes部署](/zh/guide/getting-started/deployment-k8s.md)来安装TensorFusion。
+您可以按照[Kubernetes部署](/zh/guide/getting-started/deployment-k8s.md)来安装和验证TensorFusion。
 
-安装完成后，您可以在新安装的Kubernetes集群中使用TensorFusion。
+## 卸载TensorFusion和K3S
 
-## 卸载TensorFusion
-
-运行如下命令一键卸载所有组件
+运行如下命令一键卸载所有TensorFusion组件
 
 ```bash
 # 可指定 KUBECONFIG 环境变量
 curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
 ```
+
+运行命令卸载K3S所有组件
+
+```bash
+# 在GPU节点上运行
+/usr/local/bin/k3s-agent-uninstall.sh
+```
+
+```bash
+# 在Master节点上运行
+/usr/local/bin/k3s-uninstall.sh
+```
+
+

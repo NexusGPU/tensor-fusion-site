@@ -13,6 +13,9 @@ Afterwards, you can migrate existing services to use **Local or Remote** GPU wor
 - At least one Linux VM or BareMetal with GPU card mounted.
 - Access to DockerHub
 
+> [!NOTE]
+> The installation would take 3-7 minutes to complete.
+
 ## Step 1. Install K3S Master
 
 Choose one VM/BareMetal to install K3S to offer a simple Kubernetes environment. You can also use other ways to initialize a Kubernetes.
@@ -24,7 +27,10 @@ curl -sfL https://get.k3s.io | sh -s - server --tls-san $(curl -s https://ifconf
 If your K3S master has GPU cards and want the GPU resources to be scheduled by TensorFusion, **complete step 2 on this server first**, and then run the following command
 
 ```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s - server --tls-san $(curl -s https://ifconfig.me)
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true \
+  --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA \
+  --node-label feature.node.kubernetes.io/pci-10de.present=true" \
+  sh -s - server --tls-san $(curl -s https://ifconfig.me)
 ```
 
 Then get the token to add more GPU nodes
@@ -35,26 +41,30 @@ cat /var/lib/rancher/k3s/server/node-token
 
 ## Step 2. GPU Node Setup
 
-Since TensorFusion system runs in containerized environment, you need configure NVIDIA Container Toolkit before install K3S Agent in GPU Nodes.
+Since TensorFusion system runs in containerized environment, you need configure NVIDIA Container Toolkit before install K3S Agent in GPU Nodes. Refer [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) for more details.
 
-```bash
+::: code-group 
+
+```bash [Debian/Ubuntu]
 # Just copy all and run them once for each node
-
-# For Debian/Ubuntu
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-
 sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
 apt-get update
 apt-get install -y nvidia-container-toolkit
+```
 
-# For RHEL/CentOS, Fedora, Amazon Linux, Alibaba Linux
+```bash [RHEL/CentOS/Fedora/AmazonLinux]
+# Just copy all and run them once for each node
 curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
-  sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
 
 sudo dnf install -y nvidia-container-toolkit
-
-# Refer: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 ```
+
+:::
+
+Configure NVIDIA container toolkit for K3S
 
 ```bash
 mkdir -p /var/lib/rancher/k3s/agent/etc/containerd/
@@ -124,13 +134,25 @@ gpu-node-name   Ready   <none>   42h   v1.32.1 beta.kubernetes.io/arch=amd64,...
 
 You can follow the [Kubernetes Deployment](/guide/getting-started/deployment-k8s.md) to install TensorFusion.
 
-After installation, you can use TensorFusion inside Kubernetes cluster.
+After installation, you can use TensorFusion inside the new created lightweight Kubernetes cluster.
 
-## Uninstall TensorFusion
+## Uninstall TensorFusion & K3S
 
-Run the following command to uninstall all components and custom resources
+Run the following command to uninstall all TensorFusion components and custom resources
 
 ```bash
 # export KUBECONFIG if needed
 curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
+```
+
+Run the following command to uninstall all K3S components
+
+```bash
+# on GPU nodes
+/usr/local/bin/k3s-agent-uninstall.sh
+```
+
+```bash
+# on master node
+/usr/local/bin/k3s-uninstall.sh
 ```

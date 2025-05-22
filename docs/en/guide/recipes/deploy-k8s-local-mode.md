@@ -2,23 +2,38 @@
 
 ### Installation
 
-When you need pure local installation and don't want to use advanced features, you can use this option, but you can not use [TensorFusion Console](https://app.tensor-fusion.ai/workbench) for centralized management.
+When you need fully local installation and don't want to use advanced features, you can use this option, but you can not use [TensorFusion Console](https://app.tensor-fusion.ai/workbench) for centralized management.
 
-```bash
-helm upgrade --install --create-namespace --namespace tensor-fusion-sys --repo https://download.tensor-fusion.ai --set agent.agentId="" tensor-fusion-sys tensor-fusion
+Step 1, deploy TensorFusion cluster with Helm command.
+
+::: code-group
+
+```bash [No Agent Mode]
+helm upgrade --install --create-namespace --namespace tensor-fusion-sys \
+  --repo https://download.tensor-fusion.ai --set agent.agentId="" \
+  tensor-fusion-sys tensor-fusion
+
+# Note: helm.tensor-fusion.ai is alternative to download.tensor-fusion.ai, both domain works
 ```
 
-Notes：
-- **On-prem Enterprise customer can deploy dedicated Console**, add `--set agent.enrollToken=xxx --set agent.agentId=xxx --set agent.cloudEndpoint=wss://app.tensor-fusion.ai/_ws` to start dedicated agent.
+```bash [On-premises Console Mode(For Enterprise)]
+helm upgrade --install --create-namespace --namespace tensor-fusion-sys \
+  --repo https://download.tensor-fusion.ai \
+  --set agent.enrollToken=xxx --set agent.agentId=xxx \
+  --set agent.cloudEndpoint=wss://your-own.domain/_ws \
+  tensor-fusion-sys tensor-fusion
+```
 
-For none-agent local installation, using the following command to get and apply a basic configuration (Not recommended, only for test)
+:::
+
+Step 2, apply the TensorFusion cluster configuration in to Kubernetes.
 
 ```bash
 kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-cluster
 kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-scheduling-config
 ```
 
-Then, run the following command to verify, if you see the hypervisor is running in each GPU node and GPUCluster resource is in ready status, you can start using TensorFusion.
+Step 3, verify the TensorFusion cluster is ready.
 
 ```bash
 kubectl get pods -n tensor-fusion-sys
@@ -31,6 +46,8 @@ kubectl get tensorfusionclusters
 # NAME                                  STATUS      AGE
 # shared-tensor-fusion-cluster          Ready       2m
 ```
+
+Finally, refer to [Deploy and Verify](/zh/guide/getting-started/deployment-k8s#step-3-deploy-and-verify-tensorfusion) for end-to-end testing by running a PyTorch model inference with TensorFusion virtual remote GPU.
 
 ### Potential Issues
 

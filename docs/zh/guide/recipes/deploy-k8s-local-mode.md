@@ -2,15 +2,34 @@
 
 当您需要纯本地安装且不需要使用高级功能时，可以使用此选项，但无法使用[TensorFusion控制台](https://app.tensor-fusion.ai/workbench)进行集中管理。
 
-```bash
-helm upgrade --install --create-namespace --namespace tensor-fusion-sys --repo https://download.tensor-fusion.ai --set agent.agentId="" tensor-fusion-sys tensor-fusion
+第一步，使用Helm命令一键安装TensorFusion。
+
+::: code-group
+
+```bash [国际网络]
+helm upgrade --install --create-namespace --namespace tensor-fusion-sys \
+  --repo https://download.tensor-fusion.ai \
+  --set agent.agentId="" tensor-fusion-sys tensor-fusion
 ```
 
-注：
-- 中国大陆网络请在命令中间增加 `-f https://download.tensor-fusion.ai/values-cn.yaml` 将所有镜像源替换为镜像加速域名
-- **私有化部署控制台的企业用户**可在命令中增加 `--set agent.enrollToken=xxx --set agent.agentId=xxx --set agent.cloudEndpoint=wss://app.tensor-fusion.ai/_ws` 参数启动Agent
+```bash [中国大陆网络]
+helm upgrade --install --create-namespace --namespace tensor-fusion-sys \
+  --repo https://download.tensor-fusion.ai \
+  --set agent.agentId="" -f https://download.tensor-fusion.ai/values-cn.yaml \
+  tensor-fusion-sys tensor-fusion
+```
 
-对于无代理本地安装，使用以下命令获取并应用基本配置（仅测试）
+```bash [私有化部署控制台的企业用户]
+helm upgrade --install --create-namespace --namespace tensor-fusion-sys \
+  --repo https://download.tensor-fusion.ai \
+  --set agent.enrollToken=xxx --set agent.agentId=xxx \
+  --set agent.cloudEndpoint=wss://your-own.domain/_ws \
+  tensor-fusion-sys tensor-fusion
+```
+
+:::
+
+第二步，应用TensorFusion的集群配置清单。
 
 ```bash
 kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-cluster-cn
@@ -21,7 +40,7 @@ kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-cluster-cn
 kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-scheduling-config
 ```
 
-然后运行以下命令验证，如果看到每个GPU节点上hypervisor正常运行且GPUCluster资源状态就绪，即可开始使用TensorFusion。
+第三步，验证TensorFusion是否安装成功。
 
 ```bash
 kubectl get pods -n tensor-fusion-sys
@@ -34,6 +53,8 @@ kubectl get tensorfusionclusters
 # NAME                                  STATUS      AGE
 # shared-tensor-fusion-cluster          Ready       2m
 ```
+
+最后，参考云端部署模式的[部署和验证](/zh/guide/getting-started/deployment-k8s#step-3-deploy-and-verify-tensorfusion)，创建一个PyTorch模型推理应用来验证TensorFusion的远程虚拟GPU。
 
 ### 常见问题
 

@@ -4,12 +4,14 @@ outline: deep
 
 # Tensor Fusion Deployment for Kubernetes
 
-> The installation would take 2-5 minutes to complete.
-
 ## Prerequisites
 
 1. Create a Kubernetes cluster with NVIDIA GPU nodes added
 2. Install [Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes), this step is optional for most cloud vendors' Kubernetes distribution, they are built-in.
+3. Optionally, you can refer simple [on-premises installation](/guide/recipes/deploy-k8s-local-mode.md), which won't offer centralized management console.
+
+> [!NOTE]
+> The installation would take 2-4 minutes to complete.
 
 ## Step 1. Install TensorFusion
 
@@ -91,7 +93,7 @@ pipe("Hello")
 ```
 ## Option #2 None Cloud Installation
 
-When you need pure local installation and don't want to use advanced features, you can try [pure local installation](/guide/recipes/deploy-k8s-local-mode.md), but you can not use [TensorFusion Console](https://app.tensor-fusion.ai/workbench) for centralized management in this mode.
+When you need fully local installation and don't want to use advanced features, you can try [on-premises installation](/guide/recipes/deploy-k8s-local-mode.md), but you can not use [TensorFusion Console](https://app.tensor-fusion.ai/workbench) for centralized management in this mode.
 
 ## Uninstall TensorFusion
 

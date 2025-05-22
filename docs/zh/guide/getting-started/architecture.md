@@ -20,7 +20,7 @@ TensorFusion由三个部分组成，分别是：
 
 ### 基本概念
 
-- **TFLOPS**：每秒万亿次浮点运算，是TensorFusion算力分配和调度的基本单位，在TensorFusion中统一以FP16非稀疏算力计量
+- **TFLOPS**：每秒万亿次浮点运算，是TensorFusion算力分配和调度的基本单位，在TensorFusion中统一以FP16稠密算力计量
 - **VRAM**： GPU/NPU显存，常用别名有"Framebuffer", "GPU Mem"，在TensorFusion中统一以MiB为最小单位计量、分配、调度
 - **vGPU**：GPU/NPU设备经过隔离与资源限制后的、软件定义的虚拟GPU，对于应用来说，vGPU与实际的GPU设备无异
 - **Fractional GPU**：GPU切分，通过ResourceLimiter实现

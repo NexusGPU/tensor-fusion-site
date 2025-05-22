@@ -4,12 +4,16 @@ outline: deep
 
 # Tensor Fusion Kubernetes 部署指南
 
-> 部署TensorFusion集群大约需要2-5分钟时间。
 
 ## 前提条件
 
 1. 创建包含NVIDIA GPU节点的Kubernetes集群
 2. 安装[Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-containerd-for-kubernetes)，一般云厂商的Kubernetes发行版可能已经内置
+3. 如果您不希望使用TensorFusion的控制台功能，可以参考[纯本地化部署](/zh/guide/recipes/deploy-k8s-local-mode.md)
+
+> [!NOTE]
+> 指南中的安装过程大约需要2-4分钟完成
+
 
 ## 步骤一：安装TensorFusion
 
@@ -85,7 +89,7 @@ nvidia-smi
 # 预期显存为4Gi，而不是显卡的总显存数量
 ```
 
-在CUDA:0设备中运行Qwen3 0.6B，验证TensorFusion
+执行以下脚本，可在虚拟GPU中运行Qwen3 0.6B，验证TensorFusion
 
 ```bash
 pip config set global.index-url https://pypi.mirrors.ustc.edu.cn/simple
@@ -131,11 +135,7 @@ content = tokenizer.decode(output_ids[index:], skip_special_tokens=True).strip("
 print("thinking content:", thinking_content)
 print("content:", content)
 EOF
-```
 
-执行模型推理
-
-```bash
 python3 test-qwen.py
 ```
 
