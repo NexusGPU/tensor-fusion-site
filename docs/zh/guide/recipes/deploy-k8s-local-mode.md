@@ -31,14 +31,19 @@ helm upgrade --install --create-namespace --namespace tensor-fusion-sys \
 
 第二步，应用TensorFusion的集群配置清单。
 
-```bash
+::: code-group
+
+```bash [中国大陆网络]
 kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-cluster-cn
-
-# 若网络环境不是中国大陆，请将上述`-cn`去掉，改为以下命令
-# kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-cluster
-
 kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-scheduling-config
 ```
+
+```bash [国际网络]
+kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-cluster
+kubectl apply -f https://app.tensor-fusion.ai/tmpl/tf-scheduling-config
+```
+
+:::
 
 第三步，验证TensorFusion是否安装成功。
 

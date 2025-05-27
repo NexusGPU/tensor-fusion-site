@@ -1,3 +1,4 @@
+*.css linguist-detectable=false
 docs/** -linguist-documentation
 .husky/** linguist-generated
 * text=auto eol=lf
