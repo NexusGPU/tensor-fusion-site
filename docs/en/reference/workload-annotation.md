@@ -34,7 +34,7 @@ Add the following annotations to your Pod metadata to configure GPU workload req
 | `tensor-fusion.ai/auto-requests` | Auto set vram and/or tflops `requests` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
 | `tensor-fusion.ai/auto-limits` | Auto set vram and/or tflops `limits` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
 | `tensor-fusion.ai/auto-replicas` | Auto set vGPU worker `replicas` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
-| `tensor-fusion.ai/no-standalone-worker-mode` | This mode is only available when `is-local-gpu` set to true, in this mode, TensorFusion will also inject vGPU worker into init container, so that to achieve best performance, trade-off is user might by-pass the vGPU worker and using physical GPU directly | `'true'` |
+| `tensor-fusion.ai/standalone-worker-mode` | When `is-local-gpu` is true, this option is false, it means vGPU worker will be injected into init container, not running standalone vGPU worker, to achieve best performance, the trade-off is user might bypass vGPU worker and directly use physical GPU, when `is-local-gpu` is false, this option is invalid | `'true'` |
 
 ### Example Config
 

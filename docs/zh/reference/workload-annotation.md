@@ -8,21 +8,6 @@
 
 ### 注解参考
 
-| 注释 | 描述 | 示例值 |
-|------------|-------------|---------------|
-| `tensor-fusion.ai/gpupool` | 指定目标 GPU 池 | `default-pool` |
-| `tensor-fusion.ai/inject-container` | 要注入 GPU 资源的容器，可以是逗号分隔格式 | `python` |
-| `tensor-fusion.ai/replicas` | 要创建的 GPU 工作副本数量 | `'1'` |
-| `tensor-fusion.ai/tflops-limit` | 允许的最大 TFLOPS | `'20'` |
-| `tensor-fusion.ai/tflops-request` | 请求的 TFLOPS | `'10'` |
-| `tensor-fusion.ai/vram-limit` | 允许的最大 VRAM | `4Gi` |
-| `tensor-fusion.ai/vram-request` | 请求的 VRAM | `4Gi` |
-| `tensor-fusion.ai/qos` | 服务质量等级 | `medium` |
-| `tensor-fusion.ai/workload` | 工作负载名称，如果指定，将重用预定义的 GPU 工作负载Worker，而不是生成新的 | `pytorch-example` |
-| `tensor-fusion.ai/generate-workload` | 启用工作负载生成，与 `workload` 互斥 | `'true'` |
-| `tensor-fusion.ai/workload-profile` | 引用 WorkloadProfile 以重用预定义参数 | `default-profile` |
-
-
 **基础注解**
 
 | 注解 | 描述 | 示例值 |
@@ -49,7 +34,7 @@
 | `tensor-fusion.ai/auto-requests` | 根据工作负载历史指标自动设置 vram 和/或 tflops `requests`，请使用`WorkloadProfile`自定义资源进行详细设置 | `'true'` |
 | `tensor-fusion.ai/auto-limits` | 根据工作负载历史指标自动设置 vram 和/或 tflops `limits`，请使用`WorkloadProfile`自定义资源进行详细设置 | `'true'` |
 | `tensor-fusion.ai/auto-replicas` | 根据工作负载历史指标自动设置 vGPU worker `replicas`，请使用`WorkloadProfile`自定义资源进行详细设置 | `'true'` |
-| `tensor-fusion.ai/no-standalone-worker-mode` | 仅在 `is-local-gpu` 设置为 true 时可用，在此模式下，TensorFusion 将也会将 vGPU worker 注入 init container，以实现最佳性能，代价是用户可能会绕过 vGPU worker 并直接使用物理 GPU | `'true'` |
+| `tensor-fusion.ai/standalone-worker-mode` | 在 `is-local-gpu`为 true 时，此选项为false，表示将 vGPU worker 注入 init container，不运行独立的vGPU worker，以实现最佳性能，代价是用户可能会绕过 vGPU worker 并直接使用物理 GPU，在`is-local-gpu`为false时，此选项无效 | `'true'` |
 
 ### 示例配置
 

@@ -6,17 +6,17 @@
 
 ::: code-group
 
-```bash [国际网络]
-helm upgrade --install --create-namespace --namespace tensor-fusion-sys \
-  --repo https://download.tensor-fusion.ai \
-  --set agent.agentId="" tensor-fusion-sys tensor-fusion
-```
-
 ```bash [中国大陆网络]
 helm upgrade --install --create-namespace --namespace tensor-fusion-sys \
   --repo https://download.tensor-fusion.ai \
   --set agent.agentId="" -f https://download.tensor-fusion.ai/values-cn.yaml \
   tensor-fusion-sys tensor-fusion
+```
+
+```bash [国际网络]
+helm upgrade --install --create-namespace --namespace tensor-fusion-sys \
+  --repo https://download.tensor-fusion.ai \
+  --set agent.agentId="" tensor-fusion-sys tensor-fusion
 ```
 
 ```bash [私有化部署控制台的企业用户]
