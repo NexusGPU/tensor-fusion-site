@@ -110,14 +110,11 @@ curl -sfL https://get.k3s.io | sh -s - server --tls-san $(curl -s https://ifconf
 ::: code-group
 
 ```bash [中国大陆网络]
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s - server --tls-san $(curl -s https://ifconfig.me)
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true --tls-san $(curl -s https://ifconfig.me)" sh -s - 
 ```
 
 ```bash [国际网络]
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true \
-  --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA \
-  --node-label feature.node.kubernetes.io/pci-10de.present=true" \
-  sh -s - server --tls-san $(curl -s https://ifconfig.me)
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true --tls-san $(curl -s https://ifconfig.me)" sh -s - 
 ```
 
 :::
@@ -133,9 +130,6 @@ cat /var/lib/rancher/k3s/server/node-token
 ```bash
 # 如果遇到安装container-selinux依赖的错误，在命令中添加以下环境变量重新运行上述命令
 export INSTALL_K3S_SKIP_SELINUX_RPM=true
-
-# 如果K3S Master所在节点有GPU设备，执行以下命令，或在安装完成后用kubectl node label命令添加label：
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s - server --tls-san $(curl -s https://ifconfig.me)
 ```
 
 ## 步骤2：配置GPU节点
@@ -210,15 +204,24 @@ EOF
 
 ## 步骤3：将GPU服务器加入K3S集群
 
-```bash
+::: code-group
+
+``` bash [中国大陆网络]
+export MASTER_IP=<master-private-ip-from-step-1-vm>
+export K3S_TOKEN=<k3s-token-from-step-1-cat-command-result>
+
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_SKIP_SELINUX_RPM=true INSTALL_K3S_MIRROR=cn K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
+```
+
+```bash [国际网络]
 # 替换MASTER_IP和K3S_TOKEN，然后在每台GPU服务器上运行
 export MASTER_IP=<master-private-ip-from-step-1-vm>
 export K3S_TOKEN=<k3s-token-from-step-1-cat-command-result>
 
 curl -sfL https://get.k3s.io | K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
+```
 
-# 中国大陆用户
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_SKIP_SELINUX_RPM=true INSTALL_K3S_MIRROR=cn K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
+:::
 
 # 如果遇到安装container-selinux依赖的错误，在命令中添加以下环境变量重新运行上述命令
 export INSTALL_K3S_SKIP_SELINUX_RPM=true

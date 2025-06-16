@@ -30,7 +30,8 @@ If your K3S master has GPU cards and want the GPU resources to be scheduled by T
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true \
   --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA \
   --node-label feature.node.kubernetes.io/pci-10de.present=true" \
-  sh -s - server --tls-san $(curl -s https://ifconfig.me)
+  --tls-san $(curl -s https://ifconfig.me) \
+  sh -s - 
 ```
 
 Then get the token to add more GPU nodes
