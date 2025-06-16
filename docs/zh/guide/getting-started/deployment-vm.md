@@ -92,21 +92,35 @@ EOF
 
 选择一台VM/BareMetal来安装K3S，以提供一个简单的Kubernetes环境。您也可以使用其他方式来初始化Kubernetes。
 
-```bash
-curl -sfL https://get.k3s.io | sh -s - server --tls-san $(curl -s https://ifconfig.me)
 
-# 中国大陆用户
+::: code-group
+
+```bash [中国大陆网络]
 curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - server --tls-san $(curl -s https://ifconfig.me)
 ```
 
-如果K3S Control Plane节点也有GPU设备并且希望TensorFusion纳管，请**在这台节点完成第二步**, 再来运行以下命令
+```bash [国际网络]
+curl -sfL https://get.k3s.io | sh -s - server --tls-san $(curl -s https://ifconfig.me)
+```
 
-```bash
+:::
+
+如果K3S Control Plane节点也有GPU设备，并且希望TensorFusion纳管，请**在先完成第二步**, 再来运行以下命令
+
+::: code-group
+
+```bash [中国大陆网络]
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s - server --tls-san $(curl -s https://ifconfig.me)
+```
+
+```bash [国际网络]
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true \
   --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA \
   --node-label feature.node.kubernetes.io/pci-10de.present=true" \
   sh -s - server --tls-san $(curl -s https://ifconfig.me)
 ```
+
+:::
 
 然后获取并保存token，用于后续添加GPU节点
 
