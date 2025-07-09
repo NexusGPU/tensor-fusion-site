@@ -12,29 +12,29 @@
 
 | 注解 | 描述 | 示例值 |
 |------------|-------------|---------------|
-| `tensor-fusion.ai/tflops-request` | 分配的 TFlops(FP16)算力，给到每个vGPU worker每个GPU device | `'10'` |
-| `tensor-fusion.ai/vram-request` | 分配的VRAM(即显存, Video Memory, Frame Buffer)，给到每个vGPU worker每个GPU device | `4Gi` |
-| `tensor-fusion.ai/tflops-limit` | 每个vGPU worker每个GPU device最大允许使用的TFlops(FP16)算力 | `'20'` |
-| `tensor-fusion.ai/vram-limit` | 每个vGPU worker每个GPU device允许的最大VRAM(显存) | `4Gi` |
-| `tensor-fusion.ai/inject-container` | 要注入vGPU的容器，多个容器用逗号分隔 | `python` |
-| `tensor-fusion.ai/qos` | QoS等级 | `low` `medium` `high` `critical` |
-| `tensor-fusion.ai/is-local-gpu` | 将工作负载调度到与vGPU worker同一台GPU服务器以提升性能，默认为false | `'true'` |
-| `tensor-fusion.ai/workload` | TensorFusionWorkload的名称，用来管理vGPU Worker，如果已存在，会复用已有的TensorFusionWorkload | `pytorch-example` |
-| `tensor-fusion.ai/generate-workload` | 启用工作负载生成，若为false则查找已存在的TensorFusionWorkload，不会创建新的 | `'true'` |
-| `tensor-fusion.ai/workload-profile` | 引用 WorkloadProfile 模板以重用预定义参数 | `default-profile` |
-| `tensor-fusion.ai/replicas` | 要创建的 vGPU worker 副本数量，每个 vGPU worker 将分配请求的计算资源，应该与Deployment的 `replicas` 相同 | `'2'` |
-| `tensor-fusion.ai/gpupool` | 指定目标GPU Pool | `default-pool` |
+| `tensor-fusion.ai/tflops-request` | 每个vGPU worker每个GPU设备请求的TFlops(FP16)算力 | `'10'` |
+| `tensor-fusion.ai/vram-request` | 每个vGPU worker每个GPU设备请求的VRAM(显存或帧缓冲) | `4Gi` |
+| `tensor-fusion.ai/tflops-limit` | 每个vGPU worker每个GPU设备允许的最大TFlops(FP16)算力 | `'20'` |
+| `tensor-fusion.ai/vram-limit` | 每个vGPU worker每个GPU设备允许的最大VRAM(显存或帧缓冲) | `4Gi` |
+| `tensor-fusion.ai/inject-container` | 要注入GPU资源的容器，多个容器可用逗号分隔 | `python` |
+| `tensor-fusion.ai/qos` | 服务质量等级 | `low` `medium` `high` `critical` |
+| `tensor-fusion.ai/is-local-gpu` | 将工作负载调度到运行vGPU worker的同一台GPU服务器以获得最佳性能，默认为false | `'true'` |
+| `tensor-fusion.ai/gpu-count` | 请求的GPU设备数量，每个vGPU worker将映射到此字段设置的N个物理GPU设备，vram/tflops资源消耗将按此字段缩放，默认为1，您的AI工作负载可以获得`cuda:0`设备 | `'4'` |
+| `tensor-fusion.ai/gpupool` | 指定目标GPU池 | `default-pool` |
 
 **高级注解**
 
 | 注解 | 描述 | 示例值 |
 |------------|-------------|---------------|
-| `tensor-fusion.ai/gpu-count` | 请求的 GPU 设备数量，每个 vGPU worker 将映射到 N 物理 GPU 设备，vram/tflops 资源消耗将按此字段缩放，默认为 1，您的 AI 工作负载可以获取 `cuda:0` 设备 | `'4'` |
-| `tensor-fusion.ai/gpu-model` | 指定的GPU/NPU型号 | `A100` `H100` `L4` `L40s` |
-| `tensor-fusion.ai/auto-requests` | 根据工作负载历史指标自动设置 vram 和/或 tflops `requests`，请使用`WorkloadProfile`自定义资源进行详细设置 | `'true'` |
-| `tensor-fusion.ai/auto-limits` | 根据工作负载历史指标自动设置 vram 和/或 tflops `limits`，请使用`WorkloadProfile`自定义资源进行详细设置 | `'true'` |
-| `tensor-fusion.ai/auto-replicas` | 根据工作负载历史指标自动设置 vGPU worker `replicas`，请使用`WorkloadProfile`自定义资源进行详细设置 | `'true'` |
-| `tensor-fusion.ai/standalone-worker-mode` | 在 `is-local-gpu`为 true 时，此选项为false，表示将 vGPU worker 注入 init container，不运行独立的vGPU worker，以实现最佳性能，代价是用户可能会绕过 vGPU worker 并直接使用物理 GPU，在`is-local-gpu`为false时，此选项无效 | `'true'` |
+| `tensor-fusion.ai/gpu-model` | 指定GPU/NPU型号 | `A100` `H100` `L4` `L40s` |
+| `tensor-fusion.ai/workload` | TensorFusionWorkload名称，如果存在，将共享相同的vGPU workers | `pytorch-example` |
+| `tensor-fusion.ai/workload-profile` | 引用WorkloadProfile以重用预定义参数 | `default-profile` |
+| `tensor-fusion.ai/enabled-replicas` | 设置为小于或等于ReplicaSet副本数的任何数字，用于TensorFusion的灰度发布 | `'1','42'` |
+| `tensor-fusion.ai/auto-requests` | 根据工作负载历史指标自动设置vram和/或tflops `requests`，详细设置请使用`WorkloadProfile`自定义资源 | `'true'` |
+| `tensor-fusion.ai/auto-limits` | 根据工作负载历史指标自动设置vram和/或tflops `limits`，详细设置请使用`WorkloadProfile`自定义资源 | `'true'` |
+| `tensor-fusion.ai/auto-replicas` | 根据工作负载历史指标自动设置vGPU worker `replicas`，详细设置请使用`WorkloadProfile`自定义资源 | `'true'` |
+| `tensor-fusion.ai/standalone-worker-mode` | 当`is-local-gpu`为true时，此选项为false，意味着vGPU worker将被注入到init容器中，而不是运行独立的vGPU worker，以实现最佳性能，代价是用户可能绕过vGPU worker直接使用物理GPU，当`is-local-gpu`为false时，此选项无效 | `'true'` |
+| `tensor-fusion.ai/disable-features` | 用于部分禁用tensor fusion内置功能的开关，多个功能可用逗号分隔 | `'gpu-limiter, gpu-opt, mem-manager'` |
 
 ### 示例配置
 
@@ -48,17 +48,13 @@ spec:
       labels:
         tensor-fusion.ai/enabled: "true"
       annotations:
-        tensor-fusion.ai/gpupool: default-pool
         tensor-fusion.ai/inject-container: python # 如果多个容器使用 GPU，可以用逗号分隔 // [!code highlight]
-        tensor-fusion.ai/replicas: '1' # GPU Worker的副本数量，大多数情况下与 Deployment 副本相同 // [!code highlight]
         tensor-fusion.ai/tflops-limit: '20'
         tensor-fusion.ai/tflops-request: '10'
         tensor-fusion.ai/vram-limit: 4Gi
         tensor-fusion.ai/vram-request: 4Gi
         tensor-fusion.ai/qos: medium
-        tensor-fusion.ai/workload: pytorch-example
-        tensor-fusion.ai/generate-workload: 'true'  # 如果设置为 false，将使用 tensor-fusion.ai/workload 的工作负载，而不是启动新的 GPU Worker // [!code highlight]
-        tensor-fusion.ai/workload-profile: default-profile # WorkloadProfile 优先级较低 // [!code highlight]
+        tensor-fusion.ai/workload-profile: default-profile # WorkloadProfile 作为模板，优先级低于annotation // [!code highlight]
         tensor-fusion.ai/is-local-gpu: 'true'
         tensor-fusion.ai/gpu-count: '1' # 每个 TensorFusion Worker 的 GPU 设备数量
     spec: {} 

@@ -19,22 +19,22 @@ Add the following annotations to your Pod metadata to configure GPU workload req
 | `tensor-fusion.ai/inject-container` | Container to inject GPU resources into, could be comma split format for multiple containers | `python` |
 | `tensor-fusion.ai/qos` | Quality of service level | `low` `medium` `high` `critical` |
 | `tensor-fusion.ai/is-local-gpu` | Schedule the workload to the same GPU server that runs vGPU worker for best performance, default to false | `'true'` |
-| `tensor-fusion.ai/workload` | TensorFusionWorkload name, if exists, will share the same vGPU workers | `pytorch-example` |
-| `tensor-fusion.ai/generate-workload` | Enables workload generation, if set to false, will not create new TensorFusionWorkload | `'true'` |
-| `tensor-fusion.ai/workload-profile` | Reference to a WorkloadProfile to reuse pre-defined parameters | `default-profile` |
-| `tensor-fusion.ai/replicas` | Number of vGPU worker replicas to create, each vGPU worker will be allocated requested computing resources, should be the same value as Deployment's `replicas` | `'2'` |
+| `tensor-fusion.ai/gpu-count` | Requested GPU device count, each vGPU worker will map to N physical GPU devices set by this field, and vram/tflops resource consumption will be scaled by this field, default to 1, your AI workloads can get `cuda:0` device | `'4'` |
 | `tensor-fusion.ai/gpupool` | Specifies target GPU pool | `default-pool` |
 
 **Advanced Annotations**
 
 | Annotation | Description | Example Value |
 |------------|-------------|---------------|
-| `tensor-fusion.ai/gpu-count` | Requested GPU device count, each vGPU worker will map to N physical GPU devices set by this field, and vram/tflops resource consumption will be scaled by this field, default to 1, your AI workloads can get `cuda:0` device | `'4'` |
 | `tensor-fusion.ai/gpu-model` | Specifies the GPU/NPU model | `A100` `H100` `L4` `L40s` |
+| `tensor-fusion.ai/workload` | TensorFusionWorkload name, if exists, will share the same vGPU workers | `pytorch-example` |
+| `tensor-fusion.ai/workload-profile` | Reference to a WorkloadProfile to reuse pre-defined parameters | `default-profile` |
+| `tensor-fusion.ai/enabled-replicas` | Set to any number less or equal to ReplicaSet replicas, for grey releasing TensorFusion | `'1','42'` |
 | `tensor-fusion.ai/auto-requests` | Auto set vram and/or tflops `requests` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
 | `tensor-fusion.ai/auto-limits` | Auto set vram and/or tflops `limits` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
 | `tensor-fusion.ai/auto-replicas` | Auto set vGPU worker `replicas` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
 | `tensor-fusion.ai/standalone-worker-mode` | When `is-local-gpu` is true, this option is false, it means vGPU worker will be injected into init container, not running standalone vGPU worker, to achieve best performance, the trade-off is user might bypass vGPU worker and directly use physical GPU, when `is-local-gpu` is false, this option is invalid | `'true'` |
+| `tensor-fusion.ai/disable-features` | Killer switch to disable tensor fusion built-in features partially, could be comma split format for multiple features | `'gpu-limiter, gpu-opt, mem-manager'` |
 
 ### Example Config
 
@@ -48,17 +48,13 @@ spec:
       labels:
         tensor-fusion.ai/enabled: "true"
       annotations:
-        tensor-fusion.ai/gpupool: default-pool
         tensor-fusion.ai/inject-container: python # could be comma split if multiple containers using GPU // [!code highlight]
-        tensor-fusion.ai/replicas: '1' # The GPU worker replicas, same as Deployment replicas in most cases // [!code highlight]
         tensor-fusion.ai/tflops-limit: '20'
         tensor-fusion.ai/tflops-request: '10'
         tensor-fusion.ai/vram-limit: 4Gi
         tensor-fusion.ai/vram-request: 4Gi
         tensor-fusion.ai/qos: medium
-        tensor-fusion.ai/workload: pytorch-example
-        tensor-fusion.ai/generate-workload: 'true'  # If set to false, will use the workload of tensor-fusion.ai/workload rather than start new GPU workers // [!code highlight]
-        tensor-fusion.ai/workload-profile: default-profile # WorkloadProfile has lower priority // [!code highlight]
+        tensor-fusion.ai/workload-profile: default-profile # WorkloadProfile has lower priority as template // [!code highlight]
         tensor-fusion.ai/is-local-gpu: 'true'
         tensor-fusion.ai/gpu-count: '1' # GPU device number per TensorFusion Worker
     spec: {} 
