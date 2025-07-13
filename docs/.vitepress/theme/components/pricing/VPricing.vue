@@ -2,72 +2,47 @@
    <section>
         <div class="padding-global">
             <div class="w-layout-blockcontainer container w-container">
-                <div class="hero-wrapper"  style="margin-top: 15vh;">
-                    <div class="hero-component">
-                        <div data-w-id="980a8621-76b9-aff7-a87c-734266717f1c"  class="max-width-90ch">
-                            <div class="heading-3 text-weight-bold">Unleash Your GPU Potential</div>
-                        </div>
-                    </div>
-                    <div data-w-id="eedf3d47-80d0-df4e-60d4-07d023f7177e" 
-                        class="pricing-grid-wrapper">
-                        <div class="pricing-grid">
-                            <div v-for="plan in plans" :id="plan.id" :key="plan.id" :class="['price-card']">
-                                <div class="price-card-content">
-                                    <div class="price-icon"><img loading="lazy" src="https://cdn.prod.website-files.com/66d7569e04e345dd50a3517d/66d892f44dbb976defe58569_Price%20Icon.svg" alt="" class="contain">
-                                    </div>
-                                    <div class="price-card-heading">
-                                        <div class="price">
-                                            <div class="heading-3 text-weight-bold">{{ plan.price }}</div>
-                                            <div class="margin-bottom-05">
-                                                <div class="text-size-medium">{{ plan.period }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="product-title">
-                                            <div class="heading-6 text-weight-medium">{{ plan.name }}</div>
-                                        </div>
-                                    </div>
-                                    <div class="price-features-wrap">
-                                        <div class="opacity-80">
-                                            <div class="text-size-small text-weight-medium">{{ plan.desc }}</div>
-                                        </div>
-                                        <div class="price-features">
-                                            <div class="price-check-list">
-                                                <div v-for="feature in plan.features" :key="feature" class="price-check-item">
-                                                    <div class="price-check-icon"><img width="13.996087074279785"
-                                                            height="12.25517749786377" alt="Check Icon"
-                                                            src="https://cdn.prod.website-files.com/66f30c8d2ac082d2aee64be2/66f30c8d2ac082d2aee64c73_Check%20Icon.svg"
-                                                            loading="lazy" class="price-check" /></div>
-                                                    <div class="text-size-medium">{{ feature }}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <a href="/book-demo" class="enterprise-banner w-inline-block">
-                            <div class="enterprise-content">
-                                <div class="price-icon black"><img loading="lazy"
-                                        src="https://cdn.prod.website-files.com/66f30c8d2ac082d2aee64be2/66f30c8d2ac082d2aee64c71_Price%20Icon.svg"
-                                        alt="Icon" class="contain" /></div>
-                                <div class="heading-6 text-weight-bold">Enterprise Plan</div>
-                                <div class="enterprise-text">
-                                    <div class="text-weight-medium">For companies with more than 10,000 GPUs</div>
-                                </div>
-                            </div>
-                            <div class="price-button enterprise">
-                                <div class="primary-button">
-                                    <div class="relative">
-                                        <div class="text-size-small text-weight-bold">Contact Us</div>
-                                    </div>
-                                    <div class="button-elipse"></div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                <div class="hero-wrapper" style="margin-top: 15vh;">
+                    <h1 class="heading-style-h1">Transparent pricing,</h1>
+                    <h1 class="heading-style-h1">No hidden fees</h1>
+                    <h1 class="heading-style-h1" style="margin-top: 48px;">$0/
+                        <span class="heading-style-h4" >month</span>
+                    </h1>
+                    <p style="font-size: 1.13rem;margin-top: 16px;">Everything you need to scale your business globally from day one.</p>
                 </div>
+                <div style="display: flex; justify-content: center; gap: 10px;margin-top: 32px;">
+                  <a href="/workbench" class="primary-button w-inline-block">
+                    <div class="relative">
+                      <div class="text-size-small text-weight-bold">Get Started</div>
+                    </div>
+                    <div class="button-elipse"></div>
+                  </a>  
+                  
+                  <a href="/book-demo" class="secondary-button w-inline-block">
+                    <div class="button-wrapper">
+                        <div class="secondary-button-text">
+                            <div class="text-weight-bold text-size-small">Talk to Sales</div>
+                        </div>
+                        <div class="button-icon">
+                            <div class="icon-wrapper">
+                              <img loading="lazy"
+                                    src="https://cdn.prod.website-files.com/66f30c8d2ac082d2aee64be2/66f30c8d2ac082d2aee64ccb_Arrow.svg"
+                                    alt="Arrow" class="icon" /><img loading="lazy"
+                                    src="https://cdn.prod.website-files.com/66f30c8d2ac082d2aee64be2/66f30c8d2ac082d2aee64ccb_Arrow.svg"
+                                    alt="Arrow" class="icon" /></div>
+                            </div>
+                        <div class="button-icon absolute"></div>
+                    </div>
+                </a>
+              </div>
+              <div style="display: flex; justify-content: center; margin-top: 64px;">
+                <div style="width: 1000px;">
+                  <div style="margin-top: 32px; font-size: 20px; font-weight: bold;">Features:</div>
+                  <div>
+                    <div v-for="(feature, index) in features" :key="feature" style="padding: 16px 24px; text-align: left;" :style="{backgroundColor: index % 2 === 0 ? 'transparent' : '#1f1f1f'}">{{feature}}</div>
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
     </section>
@@ -76,63 +51,29 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-interface PricePlan {
-  id: string
-  name: string
-  price: string
-  period: string
-  desc: string
-  features: string[]
-}
 
-const plans = ref<PricePlan[]>([
-  {
-    id: 'free',
-    name: 'Community Plan',
-    price: '$0',
-    period: 'per month',
-    desc: 'For personal use or education. No commercial use',
-    features: [
-      'Up to 10 GPUs',
-      'GPU Pool & Virtualization',
-      'Smart Scheduling',
-      'Auto Bin-packing',
-      'Auto Stop/Start GPU Nodes',
-      'Community Support'
-    ]
-  },
-  {
-    id: 'team',
-    name: 'Team Plan',
-    price: '$18.9',
-    period: 'per month per GPU',
-    desc: 'For small business or startups',
-    features: [
-      'Up to 500 GPUs',
-      'Everything in Community Plan',
-      'Multi-Cloud Support',
-      'Advanced Dashboard',
-      'Alerts & Notifications',
-      'Working Hours Support',
-      '99.99% Availability SLA'
-    ]
-  },
-  {
-    id: 'pro',
-    name: 'Pro Plan',
-    price: '$27.9',
-    period: 'per month per GPU',
-    desc: 'For medium-sized organizations',
-    features: [
-      'Up to 5000 GPUs',
-      'Everything in Team Plan',
-      'Enterprise SSO',
-      'Advanced Diagnostic Report',
-      'Compliance Report & Audit',
-      '24 x 7 Premier Support',
-      '99.999% Availability SLA'
-    ]
-  }
+
+
+const features = ref<string[]>([
+  'Up to 10 GPUs',
+  'GPU Pool & Virtualization',
+  'Smart Scheduling',
+  'Auto Bin-packing',
+  'Auto Stop/Start GPU Nodes',
+  'Community Support'
 ])
 
 </script>
+
+<style scoped>
+.heading-style-h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+.heading-style-h4 {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+</style>
