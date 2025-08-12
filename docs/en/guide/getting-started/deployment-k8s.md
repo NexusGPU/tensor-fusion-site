@@ -56,15 +56,11 @@ spec:
         app: pytorch-example
         tensor-fusion.ai/enabled: 'true'
       annotations:
-        tensor-fusion.ai/generate-workload: 'true'
-        tensor-fusion.ai/gpupool: shared-tensor-fusion-cluster-shared
         tensor-fusion.ai/inject-container: python
-        tensor-fusion.ai/replicas: '1'
         tensor-fusion.ai/tflops-limit: '10'
         tensor-fusion.ai/tflops-request: '20'
         tensor-fusion.ai/vram-limit: 4Gi
         tensor-fusion.ai/vram-request: 4Gi
-        tensor-fusion.ai/workload: pytorch-example
     spec:
       containers:
         - name: python

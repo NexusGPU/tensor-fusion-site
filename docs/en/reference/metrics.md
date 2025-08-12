@@ -1,84 +1,146 @@
-# TensorFusion System Metrics
+# TensorFusion Metrics Reference
 
-TensorFusion provides comprehensive metrics to monitor the performance, utilization, and health of your GPU infrastructure. This reference documents all available metrics for monitoring and troubleshooting your TensorFusion deployment.
+TensorFusion collects comprehensive metrics for monitoring GPU infrastructure, workloads, and system performance. All metrics are stored in GreptimeDB with time-series indexing.
 
-## Table of Contents
+## System Metrics
 
-- [GPU Metrics](#gpu-metrics)
-  - [Computing & VRAM](#computing--vram)
-  - [Network](#network)
-  - [Temperature](#temperature)
-- [GPU Scheduler Metrics](#gpu-scheduler-metrics)
-- [GPU Worker Metrics](#gpu-worker-metrics)
+**Measurement:** `tf_system_metrics`
 
-## GPU Metrics
+Cluster-wide system statistics and operational counters.
 
-These metrics provide insights into the performance and utilization of individual GPUs inside TensorFusion cluster.
+#### Tags
 
-### Computing & VRAM
+| Tag | Description |
+|-------|-------------|
+| `pool` | GPU pool identifier |
 
-| Metric Name | Description | Fields | Use Case |
-|-------------|-------------|--------|----------|
-| `tf_gpu_metrics_avg_compute_percentage` | Average GPU compute utilization percentage over the collection interval | `uuid` | Monitor GPU computational load and identify potential bottlenecks |
-| `tf_gpu_metrics_avg_memory_bytes` | Average GPU memory (VRAM) usage in bytes | `uuid` | Track memory consumption patterns and detect memory leaks or inefficient usage |
+#### Fields
 
-**Common Fields:**
-- `uuid`: Unique identifier of the GPU
-- `greptime_timestamp`: Time when the metric was collected
-- `greptime_value`: The metric value (percentage for compute, bytes for memory)
+| Field | Type | Description |
+|-------|------|-------------|
+| `total_workers_cnt` | int64 | Total active workers |
+| `total_nodes_cnt` | int64 | Total nodes in cluster |
+| `total_allocation_fail_cnt` | int64 | Cumulative allocation failures |
+| `total_allocation_success_cnt` | int64 | Cumulative successful allocations |
+| `total_scale_up_cnt` | int64 | Cumulative scale-up events |
+| `total_scale_down_cnt` | int64 | Cumulative scale-down events |
+| `ts` | timestamp | Record timestamp |
 
-### Network
+## Worker Resource Metrics
 
-| Metric Name | Description | Fields | Use Case |
-|-------------|-------------|--------|----------|
-| `tf_gpu_metrics_avg_rx` | Average GPU receive network throughput in bytes per second | `uuid` | Monitor data transfer to the GPU for distributed workloads |
-| `tf_gpu_metrics_avg_tx` | Average GPU transmit network throughput in bytes per second | `uuid` | Monitor data transfer from the GPU for distributed workloads |
+**Measurement:** `tf_worker_resources`
 
-**Common Fields:**
-- `uuid`: Unique identifier of the GPU
-- `greptime_timestamp`: Time when the metric was collected
-- `greptime_value`: Network throughput in bytes/second
+Resource allocation and usage per worker.
 
-### Temperature
+#### Tags
 
-| Metric Name | Description | Fields | Use Case |
-|-------------|-------------|--------|----------|
-| `tf_gpu_metrics_avg_temperature` | Average GPU temperature in degrees Celsius | `uuid` | Monitor thermal conditions to prevent overheating and ensure optimal performance |
+| Tag | Description |
+|-------|-------------|
+| `worker` | Worker identifier |
+| `workload` | Associated workload |
+| `pool` | GPU pool identifier |
+| `namespace` | Kubernetes namespace |
+| `qos` | Quality of Service class |
 
-**Common Fields:**
-- `uuid`: Unique identifier of the GPU
-- `greptime_timestamp`: Time when the metric was collected
-- `greptime_value`: Temperature in degrees Celsius
+#### Fields
 
-## GPU Scheduler Metrics
+| Field | Type | Description |
+|-------|------|-------------|
+| `tflops_request` | float64 | Requested TFLOPS |
+| `tflops_limit` | float64 | TFLOPS limit |
+| `vram_bytes_request` | float64 | Requested VRAM in bytes |
+| `vram_bytes_limit` | float64 | VRAM limit in bytes |
+| `gpu_count` | int | Number of GPUs allocated |
+| `raw_cost` | float64 | Raw compute cost |
+| `ready` | bool | Worker readiness status |
+| `ts` | timestamp | Record timestamp |
 
-These metrics provide insights into the GPU resource allocation and scheduling decisions.
+## Node Resource Metrics
 
-| Metric Name | Description | Fields | Use Case |
-|-------------|-------------|--------|----------|
-| `tf_gpu_tflops_limit` | Maximum TFLOPS (Trillion Floating Point Operations Per Second) capacity of the GPU | `namespace`, `pool`, `worker` | Understand the theoretical computational limits of available GPUs |
-| `tf_gpu_tflops_request` | Requested TFLOPS for the GPU by workloads | `namespace`, `pool`, `worker` | Track computational resource requests and allocation efficiency |
-| `tf_vram_bytes_limit` | Maximum VRAM capacity in bytes available on the GPU | `namespace`, `pool`, `worker` | Understand memory constraints for workload planning |
-| `tf_vram_bytes_request` | Requested VRAM in bytes by workloads | `namespace`, `pool`, `worker` | Track memory resource requests and allocation efficiency |
+**Measurement:** `tf_node_resources`
 
-**Common Fields:**
-- `namespace`: Kubernetes namespace
-- `pool`: GPU pool identifier
-- `worker`: Worker node identifier
-- `greptime_timestamp`: Time when the metric was collected
-- `greptime_value`: The metric value (TFLOPS or bytes depending on the metric)
+Resource allocation and utilization per node.
 
-## GPU Worker Metrics
+#### Tags
 
-These metrics provide insights into the performance and utilization at each TensorFusion GPU worker level.
+| Tag | Description |
+|-------|-------------|
+| `node` | Node identifier |
+| `pool` | GPU pool identifier |
+| `phase` | Node phase/status |
 
-| Metric Name | Description | Fields | Use Case |
-|-------------|-------------|--------|----------|
-| `tf_worker_metrics_avg_compute_percentage` | Average worker compute utilization percentage across all GPUs on the node | `worker`, `uuid` | Monitor overall worker node computational load and balance |
-| `tf_worker_metrics_avg_memory_bytes` | Average worker memory usage in bytes across all GPUs on the node | `worker`, `uuid` | Track overall worker node memory consumption patterns |
+#### Fields
 
-**Common Fields:**
-- `worker`: Worker node identifier
-- `uuid`: Unique identifier of the GPU
-- `greptime_timestamp`: Time when the metric was collected
-- `greptime_value`: The metric value (percentage for compute, bytes for memory)
+| Field | Type | Description |
+|-------|------|-------------|
+| `allocated_tflops` | float64 | Allocated TFLOPS |
+| `allocated_tflops_percent` | float64 | TFLOPS utilization percentage |
+| `allocated_vram_bytes` | float64 | Allocated VRAM in bytes |
+| `allocated_vram_percent` | float64 | VRAM utilization percentage |
+| `allocated_tflops_percent_virtual` | float64 | TFLOPS vs virtual capacity |
+| `allocated_vram_percent_virtual` | float64 | VRAM vs virtual capacity |
+| `raw_cost` | float64 | Node compute cost |
+| `gpu_count` | int | Number of GPUs on node |
+| `ts` | timestamp | Record timestamp |
+
+## Worker Usage Metrics
+
+**Measurement:** `tf_worker_usage`
+
+Real-time worker resource usage from hypervisor.
+
+#### Tags
+
+| Tag | Description |
+|-------|-------------|
+| `workload` | Associated workload |
+| `worker_name` | Worker identifier |
+| `pool_name` | GPU pool identifier |
+| `node_name` | Host node name |
+| `uuid` | GPU UUID |
+
+#### Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `compute_percentage` | float64 | GPU compute utilization |
+| `memory_bytes` | uint64 | VRAM usage in bytes |
+| `compute_tflops` | float64 | Actual TFLOPS usage |
+| `compute_throttled_cnt` | int64 | Compute throttling events |
+| `vram_freezed_cnt` | int64 | VRAM freeze events |
+| `vram_resumed_cnt` | int64 | VRAM resume events |
+| `ts` | timestamp | Record timestamp |
+
+## GPU Usage Metrics
+
+**Measurement:** `tf_gpu_usage`
+
+Detailed GPU hardware metrics from hypervisor.
+
+#### Tags
+
+| Tag | Description |
+|-------|-------------|
+| `node` | Host node name |
+| `pool` | GPU pool identifier |
+| `uuid` | GPU UUID |
+
+#### Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `compute_percentage` | float64 | GPU compute utilization |
+| `memory_percentage` | float64 | VRAM utilization percentage |
+| `memory_bytes` | uint64 | VRAM usage in bytes |
+| `compute_tflops` | float64 | Actual TFLOPS usage |
+| `rx` | float64 | PCIe receive KB/s |
+| `tx` | float64 | PCIe transmit KB/s |
+| `temperature` | float64 | GPU temperature (°C) |
+| `graphics_clock_mhz` | float64 | Graphics clock frequency |
+| `sm_clock_mhz` | float64 | SM clock frequency |
+| `memory_clock_mhz` | float64 | Memory clock frequency |
+| `video_clock_mhz` | float64 | Video clock frequency |
+| `power_usage` | float64 | Power consumption (W) |
+| `nvlink_rx` | float64 | NVLink receive throughput |
+| `nvlink_tx` | float64 | NVLink transmit throughput |
+| `ts` | timestamp | Record timestamp |

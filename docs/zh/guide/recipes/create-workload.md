@@ -26,16 +26,13 @@ TFlops估算较为复杂，因不同训练/推理框架及模型类型差异较�
 ### 添加Pod注解
 
 ```yaml
-tensor-fusion.ai/generate-workload: 'true'
-tensor-fusion.ai/gpupool: default-pool
 tensor-fusion.ai/inject-container: python
-tensor-fusion.ai/replicas: '1'
 tensor-fusion.ai/tflops-limit: '20'
 tensor-fusion.ai/tflops-request: '10'
 tensor-fusion.ai/vram-limit: 4Gi
 tensor-fusion.ai/vram-request: 4Gi
 tensor-fusion.ai/qos: medium
-tensor-fusion.ai/workload: pytorch-example
+tensor-fusion.ai/gpu-count: '1'
 ```
 
 ### 使用工作负载配置文件

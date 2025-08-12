@@ -28,16 +28,13 @@ Refer: [Common GPU Information](https://en.wikipedia.org/wiki/List_of_Nvidia_gra
 ### Add Pod Annotations
 
 ```yaml
-tensor-fusion.ai/generate-workload: 'true'
-tensor-fusion.ai/gpupool: default-pool
 tensor-fusion.ai/inject-container: python
-tensor-fusion.ai/replicas: '1'
 tensor-fusion.ai/tflops-limit: '20'
 tensor-fusion.ai/tflops-request: '10'
 tensor-fusion.ai/vram-limit: 4Gi
 tensor-fusion.ai/vram-request: 4Gi
 tensor-fusion.ai/qos: medium
-tensor-fusion.ai/workload: pytorch-example
+tensor-fusion.ai/gpu-count: '1'
 ```
 
 ### Use the WorkloadProfile
