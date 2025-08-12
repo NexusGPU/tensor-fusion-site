@@ -56,7 +56,7 @@ TensorFusion是为AI Infra团队量身打造的一站式解决方案，其核心
 - 对业务零侵入、性能损失低于5%的GPU远程共享（GPU-over-IP）方案
 - GPU显存冷温热分层、GPU显存与主机内存的秒级置换
 - 全自动化的GPU/NPU池的资源管理、监控告警、碎片整理
-- 🚧 可自定义QoS优先级、租户计费
+- 可自定义QoS优先级、租户计费
 - 🚧 GPU上下文跨机热迁移、AI模型预加载
 
 #### 价格对比
@@ -86,10 +86,6 @@ TensorFusion提供免费的社区版和付费的商业版，免费版功能已�
 
 1. **混合部署的多模型推断(Inference)场景**，有多个多个中小型模型混合部署。典型场景有：Model as a Service(MaaS)平台；提供GPU租赁的IaaS或PaaS云厂商；自有集群运行AI模型的AI SaaS平台。
 2. **动手实验室场景**，为开发者、学生或研究人员提供有GPU算力的实验环境。典型场景有：AI教学实验、AI应用开发。
-
-## 😔 不适用场景
-
-🚧 TensorFusion暂不支持**GPU通信密集且参数规模超过单GPU容量的AI模型**。比如：超大规模分布式训练，FP8精度的405B、671B参数量LLM的部署。对超大AI模型的支持正在规划中。
 
 ## 📚 参考文档
 
@@ -129,5 +125,5 @@ TensorFusion产品以及相关Github项目，由新加坡公司NexusGPU PTE.LTD.
 
 **Q：TensorFusion支持哪些厂商和版本的GPU？**
 
-- TensorFusion支持从Volta架构及以上的NVIDIA全系列GPU，NVIDIA驱动版本不低于530.x，支持的CUDA版本从11.8到最新的CUDA 12.8
+- TensorFusion支持从Volta架构及以上的NVIDIA全系列GPU，NVIDIA驱动版本不低于530.x，支持的CUDA版本从12.1到最新的CUDA
 - AMD GPU的支持在规划中

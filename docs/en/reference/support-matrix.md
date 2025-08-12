@@ -1,6 +1,6 @@
 # GPU/Driver/OS Support Matrix
 
-TensorFusion supports all series of NVIDIA GPUs from Volta architecture and above, with NVIDIA driver versions starting from 530.x, and CUDA versions range from 11.8 to the latest.
+TensorFusion supports all series of NVIDIA GPUs from Volta architecture and above, with NVIDIA driver versions starting from 530.x, and CUDA versions range from 12.1 to the latest.
 
 | GPU Vendor | GPU Architecture | GPU Series | Driver Version |
 |------------|------------------|------------|----------------|

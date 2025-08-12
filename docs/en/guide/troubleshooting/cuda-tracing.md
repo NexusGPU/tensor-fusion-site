@@ -25,3 +25,9 @@ Logs will be output to the container and collected by vector, sink to TSDB.
 ```bash
 /usr/local/cuda-12.8/nsight-compute-2025.1.1/target/linux-desktop-glibc_2_11_3-x64/ncu --config-file off --export profile-$(date +%Y%m%d-%H%M%S) --call-stack --force-overwrite python3 main.py --batch_size=1 --num_synth_data=10 --num_epochs=2
 ```
+
+## Hypervisor TUI
+
+```bash
+./hypervisor tui
+```

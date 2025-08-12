@@ -23,15 +23,14 @@ TensorFusion open sourced most of the codes and offers end-to-end GPU virtualiza
 | GPU Resource Oversubscription | ✅ | ❌ |
 | GPU VRAM Expansion and hot/warm/cold tiering | ✅ | ❌ |
 | GPU-first Autoscaling Policies | ✅ | ✅ |
-| Support different QoS levels | 🚧 | ❌ |
-| Request Multiple vGPUs | 🚧 | ✅ |
+| Support different QoS levels | ✅ | ❌ |
+| Request Multiple vGPUs | ✅ | ✅ |
 | GPU Node Auto Provisioning/Termination | ✅ | ❌ |
 | GPU Compaction/Bin-packing | 🚧 | ✅ |
 | Dynamic MIG(Multi-instance GPU) | 👋 | ✅ |
 | IDE Extensions & Plugins | 🚧 | ❌ |
 | Centralized Dashboard & Control Plane | ✅ | ✅ |
-| Support AMD GPU | 🚧 | ❌ |
-| Support HuaweiAscend/Cambricon and other GPU/NPU | 🚧 | ❌ |
+| Support None-Nvidia GPU | 🚧 | ❌ |
 | <b>Enterprise Features</b> |  |  |
 | GPU Live Migration | 🚧 | ❌ |
 | Advanced observability, CUDA Call Profiling/Tracing | 🚧 | ❌ |

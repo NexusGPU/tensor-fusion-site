@@ -52,10 +52,6 @@ TensorFusion is the one-stop solution for AI Infra teams, enabling more AI appli
 1. **Multi-model serving scenario**. Typical scenarios include: Model as a Service(MaaS) platform; IaaS or PaaS cloud vendors offering GPU rentals; AI SaaS platforms running multiple AI models.
 2. **Hands-on lab scenario**. Create temporary lab environments with local/remote virtual GPU for developers, students, or researchers. Typical scenarios include: AI teaching experiments, AI application development, AI research, on-demand scientific computing.
 
-## 😔 Inapplicable Scenarios
-
-🚧 TensorFusion currently doesn't support **AI models with intensive GPU communication and parameter sizes larger than a single GPU's capacity**. Examples include large-scale distributed training and deploying FP8 precision LLMs with 405B or 671B parameters. We're planning to add support for these ultra-large AI models in the future.
-
 ## ⚖️ Compare with Other Solutions
 
 #### Feature Comparison
@@ -65,7 +61,7 @@ TensorFusion is the only solution that can deliver the following features in one
 - **Zero-intrusion GPU remote sharing (GPU-over-IP)**, with less than 5% performance loss
 - **GPU memory hot/warm/cold tiering**, second-level swapping between GPU memory and host memory
 - **Fully automated GPU/NPU pool management**, monitoring, alerting, bin-packing etc.
-- 🚧 Customizable QoS levels, usage measurement and AI computing monetization
+- Customizable QoS levels, usage measurement and AI computing monetization
 - 🚧 Distributed live-migration of GPU contexts, AI model preloading
 
 #### Price Comparison
@@ -126,5 +122,5 @@ The TensorFusion product and related Github projects are developed and operated 
 
 **Q: Which vendors and versions of GPUs does TensorFusion support?**
 
-TensorFusion supports all series of NVIDIA GPUs from Volta architecture and above, with NVIDIA driver versions starting from 530.x, and CUDA versions range from 11.8 to the latest.
+TensorFusion supports all series of NVIDIA GPUs from Volta architecture and above, with NVIDIA driver versions starting from 530.x, and CUDA versions range from 12.1 to the latest.
 AMD GPU support is currently under planning
