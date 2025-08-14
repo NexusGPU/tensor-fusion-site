@@ -3,16 +3,11 @@
     <div class="padding-global">
       <div class="w-layout-blockcontainer container w-container">
         <div class="footer-component">
-          <div data-w-id="93f4457d-ec22-3c66-b213-0b7ef6a67132" class="footer-heading">
-            <img 
-              loading="lazy" src="https://cdn.tensor-fusion.ai/tensor-fusion.png" class="logo-responsive"
-              alt="Tensor Fusion Logo" />
-          </div>
           <div data-w-id="93f4457d-ec22-3c66-b213-0b7ef6a67134" class="w-layout-grid footer-grid" style="margin-top: 60px;">
             <div id="w-node-_93f4457d-ec22-3c66-b213-0b7ef6a67135-f6a6712e" class="footer-grid-wrap">
               <div class="text-size-large text-weight-medium">Explore</div>
               <div class="footer-links-wrapper"><a href="/" aria-current="page" class="footer-link w--current">Home</a>
-              </div><a href="/about" class="footer-link">Pricing</a><a href="/features" class="footer-link">Features</a>
+              </div><a href="/pricing" class="footer-link">Pricing</a><a href="/features" class="footer-link">Features</a>
             </div>
             <div class="footer-grid-wrap">
               <div class="text-size-large text-weight-medium">Learn</div>

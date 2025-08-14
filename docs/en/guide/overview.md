@@ -68,8 +68,8 @@ TensorFusion is the only solution that can deliver the following features in one
 
 TensorFusion community version is free for small teams, and a paid commercial version that charges below any other commercial solutions such as Run.AI, NVIDIA vGPU, and VirtAI OrionX etc.
 
-- For users with up to 10 GPUs, **TensorFusion community version is free**
-- For users with more than 10 GPUs, TensorFusion charges **below 4% of the computing cost**, while achieving more than 50% savings, far below the prices of Run.AI, NVIDIA vGPU, and VirtAI OrionX
+- For users with GPU cluster less than 800 FP16 TFlops (for example, 12 NVIDIA T4 GPUs / 4 RTX 4090 Ti GPUs / 6 L4 GPUs / 2 A100 GPUs), **TensorFusion community version is totally free**
+- For users with GPU cluster more than 800 FP16 TFlops, TensorFusion charges **below 4% of the computing cost**, while achieving more than **50% savings and far more than 2500% ROI**.
 
 #### Other Differences
 
