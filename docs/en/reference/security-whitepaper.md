@@ -202,7 +202,7 @@ Malicious processes may attempt to hijack or eavesdrop on inter-process communic
 ```mermaid
 graph LR
     subgraph "Node"
-        Hypervisor["Hypervisor<br/>(PTRACE privileged container)"]
+        Hypervisor["Hypervisor<br/>(PTRACE container)"]
         Worker1["Worker 1"]
         Worker2["Worker 2"] 
         SharedMem["/run/tensor-fusion/<br/>pod-uid/shm<br/>Shared Memory<br/><br/>"]
