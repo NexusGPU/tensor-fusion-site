@@ -7,6 +7,7 @@
 - [GPUPool](/reference/schema/gpupool.md)
 - [GPUNode](/reference/schema/gpunode.md)
 - [GPU](/reference/schema/gpu.md)
+- [GPUResourceQuota](/reference/schema/gpuresource-quota.md)
 
 ## Application Related Custom Resource Definitions
 

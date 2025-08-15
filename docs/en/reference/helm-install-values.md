@@ -457,8 +457,8 @@ Alerting rules
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-severity-details')">severity</b> | string |   | Severity for the alerting rule |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-evaluationInterval-details')">evaluationInterval</b> | string |   | Evaluation interval for the alerting rule |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-consecutiveCount-details')">consecutiveCount</b> | integer |   | Consecutive count for the alerting rule |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-summary-details')">summary</b> | string |   | Summary for the alerting rule, can use $labels to access labels, eg. {{ .pool }} {{ .worker }} {{ .Threshold }} |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-description-details')">description</b> | string |   | Description for the alerting rule, can use $labels to access labels, eg. {{ .pool }} {{ .worker }} {{ .Threshold }} |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-summary-details')">summary</b> | string |   | Summary for the alerting rule, can use $labels to access labels, eg. &#123;&#123; .pool &#125;&#125; &#123;&#123; .worker &#125;&#125; &#123;&#123; .Threshold &#125;&#125; |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-description-details')">description</b> | string |   | Description for the alerting rule, can use $labels to access labels, eg. &#123;&#123; .pool &#125;&#125; &#123;&#123; .worker &#125;&#125; &#123;&#123; .Threshold &#125;&#125; |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-alertTargetInstance-details')">alertTargetInstance</b> | string |   | Alert target instance for the alerting rule |
 
 </div>

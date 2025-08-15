@@ -6,6 +6,7 @@
 - [GPUPool](/zh/reference/schema/gpupool.md)
 - [GPUNode](/zh/reference/schema/gpunode.md)
 - [GPU](/zh/reference/schema/gpu.md)
+- [GPUResourceQuota](/zh/reference/schema/gpuresource-quota.md)
 
 ## AI应用相关资源
 

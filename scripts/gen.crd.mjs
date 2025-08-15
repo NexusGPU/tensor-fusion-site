@@ -19,10 +19,12 @@ function escapeHtml(text) {
         '|': '&#124;',
         '`': '&#96;',
         '*': '&#42;',
-        '_': '&#95;'
+        '_': '&#95;',
+        '{': '&#123;',
+        '}': '&#125;',
     }
 
-    return text.replace(/[&<>"'|`*_]/g, char => escapeMap[char])
+    return text.replace(/[&<>"'|`*_{}]/g, char => escapeMap[char])
         .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
             // Preserve markdown links
             return `[${escapeHtml(text)}](${url})`

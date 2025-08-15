@@ -108,9 +108,6 @@ Real-time worker resource usage from hypervisor.
 | `compute_tflops` | float64 | Actual TFLOPS usage |
 | `memory_percentage` | float64 | VRAM utilization percentage |
 | `memory_bytes` | uint64 | VRAM usage in bytes |
-| `compute_throttled_cnt` | int64 | Compute throttling events |
-| `vram_freezed_cnt` | int64 | VRAM freeze events |
-| `vram_resumed_cnt` | int64 | VRAM resume events |
 | `ts` | timestamp | Record timestamp |
 
 ## GPU Usage Metrics
