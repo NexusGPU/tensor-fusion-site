@@ -14,7 +14,14 @@ TensorFusion consists of three layers:
 
 Here is the overall system architecture:
 
-![](https://cdn.tensor-fusion.ai/tf-architecture.png)
+#### When Run Workload on Local GPU (Embedded vGPU mode)
+
+![](https://cdn.tensor-fusion.ai/tf-architecture-ngpu.png)
+
+#### When Sharing GPU over IP/IB Network (Remote vGPU mode)
+
+![](https://cdn.tensor-fusion.ai/tf-architecture-remote.png)
+
 
 ## Core Concepts
 

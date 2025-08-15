@@ -39,6 +39,8 @@ GPUStatus defines the observed state of GPU.
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-message-details')">message</b><span class="required-tag"></span> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-nodeSelector-details')">nodeSelector</b><span class="required-tag"></span> | object |   | The host match selector to schedule worker pods |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-phase-details')">phase</b><span class="required-tag"></span> | string |  <span class="enum-tag">Pending</span> <span class="enum-tag">Provisioning</span> <span class="enum-tag">Running</span> <span class="enum-tag">Unknown</span> <span class="enum-tag">Destroying</span> <span class="enum-tag">Migrating</span> |  Default: `Pending` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-runningApps-details')">runningApps</b> <span id="property-gpu-runningApps" class="expandable-property" data-uid="property-gpu-runningApps" @click="toggleExpand('property-gpu-runningApps-details')">↓</span> | array |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-usedBy-details')">usedBy</b> | string |  <span class="enum-tag">tensor-fusion</span> <span class="enum-tag">nvidia-device-plugin</span> | GPU is used by tensor-fusion or nvidia-operator<br />This is the key to be compatible with nvidia-device-plugin to avoid resource overlap<br />Hypervisor will watch kubelet device plugin to report all GPUs already used by nvidia-device-plugin<br />GPUs will be grouped by usedBy to be used by different Pods,<br />tensor-fusion annotation or nvidia-device-plugin resource block |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-uuid-details')">uuid</b><span class="required-tag"></span> | string |   |  |
 
 <div id="property-gpu-available-details" class="nested-properties expanded">
@@ -64,6 +66,20 @@ GPUStatus defines the observed state of GPU.
 |----------|------|------------|-------------|
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-capacity-tflops-details')">tflops</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-capacity-vram-details')">vram</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
+
+</div>
+
+<div id="property-gpu-runningApps-details" class="nested-properties expanded">
+
+### runningApps (items) {#property-gpu-runningApps-heading-items}
+
+### Properties {#properties-gpu-runningApps-items}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-runningApps-items-count-details')">count</b><span class="required-tag"></span> | integer |   | Worker count |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-runningApps-items-name-details')">name</b> | string |   | Workload name namespace |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpu-runningApps-items-namespace-details')">namespace</b> | string |   |  |
 
 </div>
 

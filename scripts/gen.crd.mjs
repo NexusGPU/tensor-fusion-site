@@ -19,10 +19,12 @@ function escapeHtml(text) {
         '|': '&#124;',
         '`': '&#96;',
         '*': '&#42;',
-        '_': '&#95;'
+        '_': '&#95;',
+        '{': '&#123;',
+        '}': '&#125;',
     }
 
-    return text.replace(/[&<>"'|`*_]/g, char => escapeMap[char])
+    return text.replace(/[&<>"'|`*_{}]/g, char => escapeMap[char])
         .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
             // Preserve markdown links
             return `[${escapeHtml(text)}](${url})`
@@ -81,6 +83,12 @@ const schemaList = [
         name: 'TensorFusionWorkload',
         url: `${PREFIX}/config/crd/bases/tensor-fusion.ai_tensorfusionworkloads.yaml`,
         file: 'workload-profile.json',
+    },
+
+    {
+        name: 'GPUResourceQuota',
+        url: `${PREFIX}/config/crd/bases/tensor-fusion.ai_gpuresourcequotas.yaml`,
+        file: 'gpu-resource-quota.json',
     },
 ]
 

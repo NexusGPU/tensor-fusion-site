@@ -35,9 +35,7 @@ TensorFusionClusterSpec defines the desired state of TensorFusionCluster.
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-computingVendor-details')">computingVendor</b> <span id="property-tensor-fusion-cluster-computingVendor" class="expandable-property" data-uid="property-tensor-fusion-cluster-computingVendor" @click="toggleExpand('property-tensor-fusion-cluster-computingVendor-details')">↓</span> | object |   | ComputingVendorConfig defines the Cloud vendor connection such as AWS, GCP, Azure etc. |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-details')">dataPipelines</b> <span id="property-tensor-fusion-cluster-dataPipelines" class="expandable-property" data-uid="property-tensor-fusion-cluster-dataPipelines" @click="toggleExpand('property-tensor-fusion-cluster-dataPipelines-details')">↓</span> | object |   | DataPipelinesConfig defines the aggregation jobs that can make statistics on the data and then report to cloud if configured. |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-details')">gpuPools</b> <span id="property-tensor-fusion-cluster-gpuPools" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-details')">↓</span> | array |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-storageVendor-details')">storageVendor</b> <span id="property-tensor-fusion-cluster-storageVendor" class="expandable-property" data-uid="property-tensor-fusion-cluster-storageVendor" @click="toggleExpand('property-tensor-fusion-cluster-storageVendor-details')">↓</span> | object |   | StorageVendorConfig defines Postgres database with extensions for timeseries storage and other resource aggregation results, system events and diagnostics reports etc. |
 
 <div id="property-tensor-fusion-cluster-computingVendor-details" class="nested-properties expanded">
 
@@ -53,7 +51,7 @@ ComputingVendorConfig defines the Cloud vendor connection such as AWS, GCP, Azur
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-computingVendor-enable-details')">enable</b> | boolean |   |  Default: `true` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-computingVendor-name-details')">name</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-computingVendor-params-details')">params</b> <span id="property-tensor-fusion-cluster-computingVendor-params" class="expandable-property" data-uid="property-tensor-fusion-cluster-computingVendor-params" @click="toggleExpand('property-tensor-fusion-cluster-computingVendor-params-details')">↓</span> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-computingVendor-type-details')">type</b> | string |  <span class="enum-tag">aws</span> <span class="enum-tag">lambda-labs</span> <span class="enum-tag">gcp</span> <span class="enum-tag">azure</span> <span class="enum-tag">oracle-oci</span> <span class="enum-tag">ibm</span> <span class="enum-tag">openshift</span> <span class="enum-tag">vultr</span> <span class="enum-tag">together-ai</span> <span class="enum-tag">alibaba</span> <span class="enum-tag">nvidia</span> <span class="enum-tag">tencent</span> <span class="enum-tag">runpod</span> <span class="enum-tag">mock</span> | support popular cloud providers |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-computingVendor-type-details')">type</b> | string |  <span class="enum-tag">aws</span> <span class="enum-tag">lambda-labs</span> <span class="enum-tag">gcp</span> <span class="enum-tag">azure</span> <span class="enum-tag">oracle-oci</span> <span class="enum-tag">ibm</span> <span class="enum-tag">openshift</span> <span class="enum-tag">vultr</span> <span class="enum-tag">together-ai</span> <span class="enum-tag">alibaba</span> <span class="enum-tag">nvidia</span> <span class="enum-tag">tencent</span> <span class="enum-tag">runpod</span> <span class="enum-tag">karpenter</span> <span class="enum-tag">mock</span> | support popular cloud providers |
 
 <div id="property-tensor-fusion-cluster-computingVendor-params-details" class="nested-properties expanded">
 
@@ -74,77 +72,6 @@ ComputingVendorConfig defines the Cloud vendor connection such as AWS, GCP, Azur
 
 </div>
 
-<div id="property-tensor-fusion-cluster-dataPipelines-details" class="nested-properties expanded">
-
-### dataPipelines {#property-tensor-fusion-cluster-dataPipelines-heading}
-
-DataPipelinesConfig defines the aggregation jobs that can make statistics on the data and then report to cloud if configured.
-
-### Properties {#properties-tensor-fusion-cluster-dataPipelines}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-resources-details')">resources</b> <span id="property-tensor-fusion-cluster-dataPipelines-resources" class="expandable-property" data-uid="property-tensor-fusion-cluster-dataPipelines-resources" @click="toggleExpand('property-tensor-fusion-cluster-dataPipelines-resources-details')">↓</span> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-timeseries-details')">timeseries</b> <span id="property-tensor-fusion-cluster-dataPipelines-timeseries" class="expandable-property" data-uid="property-tensor-fusion-cluster-dataPipelines-timeseries" @click="toggleExpand('property-tensor-fusion-cluster-dataPipelines-timeseries-details')">↓</span> | object |   |  |
-
-<div id="property-tensor-fusion-cluster-dataPipelines-resources-details" class="nested-properties expanded">
-
-### resources {#property-tensor-fusion-cluster-dataPipelines-resources-heading}
-
-#### Properties {#properties-tensor-fusion-cluster-dataPipelines-resources}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-resources-syncPeriod-details')">syncPeriod</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-resources-syncToCloud-details')">syncToCloud</b> | boolean |   |  |
-
-</div>
-
-<div id="property-tensor-fusion-cluster-dataPipelines-timeseries-details" class="nested-properties expanded">
-
-### timeseries {#property-tensor-fusion-cluster-dataPipelines-timeseries-heading}
-
-#### Properties {#properties-tensor-fusion-cluster-dataPipelines-timeseries}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-timeseries-aggregationDataRetention-details')">aggregationDataRetention</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-timeseries-aggregationPeriods-details')">aggregationPeriods</b> | array |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-timeseries-rawDataRetention-details')">rawDataRetention</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-details')">remoteWrite</b> <span id="property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite" class="expandable-property" data-uid="property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite" @click="toggleExpand('property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-details')">↓</span> | object |   | RemoteWriteConfig represents the configuration for remote write. |
-
-<div id="property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-details" class="nested-properties expanded">
-
-### remoteWrite {#property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-heading}
-
-RemoteWriteConfig represents the configuration for remote write.
-
-##### Properties {#properties-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-connection-details')">connection</b> <span id="property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-connection" class="expandable-property" data-uid="property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-connection" @click="toggleExpand('property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-connection-details')">↓</span> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-metrics-details')">metrics</b> | array |   |  |
-
-<div id="property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-connection-details" class="nested-properties expanded">
-
-### connection {#property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-connection-heading}
-
-###### Properties {#properties-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-connection}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-connection-type-details')">type</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-dataPipelines-timeseries-remoteWrite-connection-url-details')">url</b> | string |   |  |
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 <div id="property-tensor-fusion-cluster-gpuPools-details" class="nested-properties expanded">
 
 ### gpuPools (items) {#property-tensor-fusion-cluster-gpuPools-heading-items}
@@ -153,6 +80,7 @@ RemoteWriteConfig represents the configuration for remote write.
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-isDefault-details')">isDefault</b> | boolean |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-name-details')">name</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-details')">specTemplate</b><span class="required-tag"></span> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-details')">↓</span> | object |   | GPUPoolSpec defines the desired state of GPUPool. |
 
@@ -169,9 +97,7 @@ GPUPoolSpec defines the desired state of GPUPool.
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-capacityConfig-details')">capacityConfig</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-capacityConfig" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-capacityConfig" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-capacityConfig-details')">↓</span> | object |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-details')">componentConfig</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-details')">↓</span> | object |   | Customize system components for seamless onboarding. |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-details')">nodeManagerConfig</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-details')">↓</span> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-details')">observabilityConfig</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-details')">↓</span> | object |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-details')">qosConfig</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-details')">↓</span> | object |   | Define different QoS and their price. |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-details')">schedulingConfig</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-details')">↓</span> | object |   | Place the workload to right nodes and scale smart. |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfigTemplate-details')">schedulingConfigTemplate</b> | string |   |  |
 
 <div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-capacityConfig-details" class="nested-properties expanded">
@@ -271,9 +197,13 @@ Customize system components for seamless onboarding.
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-client-embeddedModeImage-details')">embeddedModeImage</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-client-operatorEndpoint-details')">operatorEndpoint</b> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-client-patchEmbeddedWorkerToPod-details')">patchEmbeddedWorkerToPod</b> | object |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-client-patchToContainer-details')">patchToContainer</b> | object |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-client-patchToEmbeddedWorkerContainer-details')">patchToEmbeddedWorkerContainer</b> | object |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-client-patchToPod-details')">patchToPod</b> | object |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-client-remoteModeImage-details')">remoteModeImage</b> | string |   |  |
 
 </div>
 
@@ -285,7 +215,11 @@ Customize system components for seamless onboarding.
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-hypervisor-enableVector-details')">enableVector</b> | boolean |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-hypervisor-image-details')">image</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-hypervisor-podTemplate-details')">podTemplate</b> | object |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-hypervisor-portNumber-details')">portNumber</b> | integer&lt;int32&gt; | <span class="constraint-tag">min: 0</span> <span class="constraint-tag">max: 65535</span>  |  Default: `8000` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-hypervisor-vectorImage-details')">vectorImage</b> | string |   |  |
 
 </div>
 
@@ -297,6 +231,7 @@ Customize system components for seamless onboarding.
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-nodeDiscovery-image-details')">image</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-nodeDiscovery-podTemplate-details')">podTemplate</b> | object |   |  |
 
 </div>
@@ -309,6 +244,7 @@ Customize system components for seamless onboarding.
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-worker-image-details')">image</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-componentConfig-worker-podTemplate-details')">podTemplate</b> | object |   |  |
 
 </div>
@@ -327,7 +263,7 @@ Customize system components for seamless onboarding.
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodePoolRollingUpdatePolicy-details')">nodePoolRollingUpdatePolicy</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodePoolRollingUpdatePolicy" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodePoolRollingUpdatePolicy" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodePoolRollingUpdatePolicy-details')">↓</span> | object |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-details')">nodeProvisioner</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-details')">↓</span> | object |   | NodeProvisioner or NodeSelector, they are exclusive.<br />NodeSelector is for existing GPUs, NodeProvisioner is for Karpenter-like auto management. |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeSelector-details')">nodeSelector</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeSelector" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeSelector" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeSelector-details')">↓</span> | object |   | A node selector represents the union of the results of one or more label queries<br />over a set of nodes; that is, it represents the OR of the selectors represented<br />by the node selector terms. |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-provisioningMode-details')">provisioningMode</b> | string |  <span class="enum-tag">Provisioned</span> <span class="enum-tag">AutoSelect</span> |  Default: `AutoSelect` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-provisioningMode-details')">provisioningMode</b> | string |  <span class="enum-tag">Provisioned</span> <span class="enum-tag">AutoSelect</span> <span class="enum-tag">Karpenter</span> |  Default: `AutoSelect` |
 
 <div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeCompaction-details" class="nested-properties expanded">
 
@@ -383,11 +319,12 @@ NodeProvisioner or NodeSelector, they are exclusive.<br />NodeSelector is for ex
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuNodeLabels-details')">cpuNodeLabels</b> | object |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuRequirements-details')">cpuRequirements</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuRequirements" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuRequirements" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuRequirements-details')">↓</span> | array |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuTaints-details')">cpuTaints</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuTaints" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuTaints" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuTaints-details')">↓</span> | array |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuNodeAnnotations-details')">gpuNodeAnnotations</b> | object |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuNodeLabels-details')">gpuNodeLabels</b> | object |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuRequirements-details')">gpuRequirements</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuRequirements" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuRequirements" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuRequirements-details')">↓</span> | array |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuTaints-details')">gpuTaints</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuTaints" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuTaints" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuTaints-details')">↓</span> | array |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-mode-details')">mode</b> | string |  <span class="enum-tag">Native</span> <span class="enum-tag">Karpenter</span> | Mode could be Karpenter or Native, for Karpenter mode, node provisioner will start dummy nodes to provision and warmup GPU nodes, do nothing for CPU nodes, for Native mode, provisioner will create or compact GPU &amp; CPU nodes based on current pods Default: `Native` |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-nodeClass-details')">nodeClass</b> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef-details')">karpenterNodeClassRef</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef-details')">↓</span> | object |   | Karpenter NodeClass name |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-nodeClass-details')">nodeClass</b> | string |   | TensorFusion GPUNodeClass name |
 
 <div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-budget-details" class="nested-properties expanded">
 
@@ -414,7 +351,7 @@ NodeProvisioner will start an virtual billing based on public pricing or customi
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuRequirements-items-key-details')">key</b> | string |  <span class="enum-tag">node.kubernetes.io/instance-type</span> <span class="enum-tag">kubernetes.io/arch</span> <span class="enum-tag">kubernetes.io/os</span> <span class="enum-tag">topology.kubernetes.io/region</span> <span class="enum-tag">topology.kubernetes.io/zone</span> <span class="enum-tag">karpenter.sh/capacity-type</span> <span class="enum-tag">tensor-fusion.ai/gpu-arch</span> <span class="enum-tag">tensor-fusion.ai/gpu-instance-family</span> <span class="enum-tag">tensor-fusion.ai/gpu-instance-size</span> |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuRequirements-items-key-details')">key</b> | string |  <span class="enum-tag">node.kubernetes.io/instance-type</span> <span class="enum-tag">kubernetes.io/arch</span> <span class="enum-tag">kubernetes.io/os</span> <span class="enum-tag">topology.kubernetes.io/region</span> <span class="enum-tag">topology.kubernetes.io/zone</span> <span class="enum-tag">karpenter.sh/capacity-type</span> <span class="enum-tag">tensor-fusion.ai/gpu-vendor</span> <span class="enum-tag">tensor-fusion.ai/gpu-instance-family</span> <span class="enum-tag">tensor-fusion.ai/gpu-instance-size</span> |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuRequirements-items-operator-details')">operator</b> | string |  <span class="enum-tag">In</span> <span class="enum-tag">Exists</span> <span class="enum-tag">DoesNotExist</span> <span class="enum-tag">Gt</span> <span class="enum-tag">Lt</span> | A node selector operator is the set of operators that can be used in<br />a node selector requirement. Default: `In` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-cpuRequirements-items-values-details')">values</b> | array |   |  |
 
@@ -442,7 +379,7 @@ NodeProvisioner will start an virtual billing based on public pricing or customi
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuRequirements-items-key-details')">key</b> | string |  <span class="enum-tag">node.kubernetes.io/instance-type</span> <span class="enum-tag">kubernetes.io/arch</span> <span class="enum-tag">kubernetes.io/os</span> <span class="enum-tag">topology.kubernetes.io/region</span> <span class="enum-tag">topology.kubernetes.io/zone</span> <span class="enum-tag">karpenter.sh/capacity-type</span> <span class="enum-tag">tensor-fusion.ai/gpu-arch</span> <span class="enum-tag">tensor-fusion.ai/gpu-instance-family</span> <span class="enum-tag">tensor-fusion.ai/gpu-instance-size</span> |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuRequirements-items-key-details')">key</b> | string |  <span class="enum-tag">node.kubernetes.io/instance-type</span> <span class="enum-tag">kubernetes.io/arch</span> <span class="enum-tag">kubernetes.io/os</span> <span class="enum-tag">topology.kubernetes.io/region</span> <span class="enum-tag">topology.kubernetes.io/zone</span> <span class="enum-tag">karpenter.sh/capacity-type</span> <span class="enum-tag">tensor-fusion.ai/gpu-vendor</span> <span class="enum-tag">tensor-fusion.ai/gpu-instance-family</span> <span class="enum-tag">tensor-fusion.ai/gpu-instance-size</span> |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuRequirements-items-operator-details')">operator</b> | string |  <span class="enum-tag">In</span> <span class="enum-tag">Exists</span> <span class="enum-tag">DoesNotExist</span> <span class="enum-tag">Gt</span> <span class="enum-tag">Lt</span> | A node selector operator is the set of operators that can be used in<br />a node selector requirement. Default: `In` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuRequirements-items-values-details')">values</b> | array |   |  |
 
@@ -459,6 +396,23 @@ NodeProvisioner will start an virtual billing based on public pricing or customi
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuTaints-items-effect-details')">effect</b> | string |  <span class="enum-tag">NoSchedule</span> <span class="enum-tag">NoExecute</span> <span class="enum-tag">PreferNoSchedule</span> |  Default: `NoSchedule` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuTaints-items-key-details')">key</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-gpuTaints-items-value-details')">value</b> | string |   |  |
+
+</div>
+
+<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef-details" class="nested-properties expanded">
+
+### karpenterNodeClassRef {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef-heading}
+
+Karpenter NodeClass name
+
+###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef-group-details')">group</b><span class="required-tag"></span> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef-kind-details')">kind</b><span class="required-tag"></span> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef-name-details')">name</b><span class="required-tag"></span> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-nodeManagerConfig-nodeProvisioner-karpenterNodeClassRef-version-details')">version</b><span class="required-tag"></span> | string |   |  |
 
 </div>
 
@@ -527,43 +481,6 @@ A list of node selector requirements by node&#39;s fields.
 
 </div>
 
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-details" class="nested-properties expanded">
-
-### observabilityConfig {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-heading}
-
-##### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-alert-details')">alert</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-alert" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-alert" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-alert-details')">↓</span> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-monitor-details')">monitor</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-monitor" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-monitor" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-monitor-details')">↓</span> | object |   |  |
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-alert-details" class="nested-properties expanded">
-
-### alert {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-alert-heading}
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-alert}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-alert-expression-details')">expression</b> | object |   |  |
-
-</div>
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-monitor-details" class="nested-properties expanded">
-
-### monitor {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-monitor-heading}
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-monitor}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-observabilityConfig-monitor-interval-details')">interval</b> | string |   |  |
-
-</div>
-
-</div>
-
 <div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-details" class="nested-properties expanded">
 
 ### qosConfig {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-heading}
@@ -600,7 +517,7 @@ Define different QoS and their price.
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-pricing-items-limitsOverRequests-details')">limitsOverRequests</b> | string |   | Default requests and limitsOverRequests are same, indicates normal on-demand serverless GPU usage, in hands-on lab low QoS case, limitsOverRequests should be cheaper, for example Low QoS, ratio should be 0.5 Default: `1` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-pricing-items-limitsOverRequests-details')">limitsOverRequests</b> | string |   | Default requests and limitsOverRequests are same, indicates normal on-demand serverless GPU usage, in hands-on lab low QoS case, limitsOverRequests should be lower, so that user can get burstable GPU resources with very low cost Default: `1` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-pricing-items-qos-details')">qos</b> | string |  <span class="enum-tag">low</span> <span class="enum-tag">medium</span> <span class="enum-tag">high</span> <span class="enum-tag">critical</span> |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-pricing-items-requests-details')">requests</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-pricing-items-requests" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-pricing-items-requests" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-qosConfig-pricing-items-requests-details')">↓</span> | object |   | The default pricing based on second level pricing from https://modal.com/pricing<br />with Tensor/CUDA Core : HBM = 2:1 |
 
@@ -623,277 +540,7 @@ The default pricing based on second level pricing from https://modal.com/pricing
 
 </div>
 
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-details" class="nested-properties expanded">
-
-### schedulingConfig {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-heading}
-
-Place the workload to right nodes and scale smart.
-
-##### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-details')">autoScaling</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-details')">↓</span> | object |   | scale the workload based on the usage and traffic |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-details')">hypervisor</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-details')">↓</span> | object |   | single GPU device multi-process queuing and fair scheduling with QoS constraint |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-details')">placement</b><span class="required-tag"></span> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-details')">↓</span> | object |   | place the client or worker to best matched nodes |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-details')">reBalancer</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-details')">↓</span> | object |   | avoid hot GPU devices and continuously balance the workload<br />implemented by trigger a simulation scheduling and advise better GPU nodes for scheduler |
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-details" class="nested-properties expanded">
-
-### autoScaling {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-heading}
-
-scale the workload based on the usage and traffic
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-details')">autoSetLimits</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-details')">↓</span> | object |   | layer 1 vertical auto-scaling, turbo burst to existing GPU cards quickly |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-details')">autoSetReplicas</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-details')">↓</span> | object |   | layer 2 horizontal auto-scaling, scale up to more GPU cards if max limits threshold hit |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-details')">autoSetRequests</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-details')">↓</span> | object |   | layer 3 adjusting, to match the actual usage in the long run |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-details')">scaleToZero</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-details')">↓</span> | object |   | additional layer to save VRAM, auto-freeze memory and cool down to RAM and Disk |
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-details" class="nested-properties expanded">
-
-### autoSetLimits {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-heading}
-
-layer 1 vertical auto-scaling, turbo burst to existing GPU cards quickly
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-evaluationPeriod-details')">evaluationPeriod</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-extraTFlopsBufferRatio-details')">extraTFlopsBufferRatio</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-ignoredDeltaRange-details')">ignoredDeltaRange</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-maxRatioToRequests-details')">maxRatioToRequests</b> | string |   | the multiplier of requests, to avoid limit set too high, like 5.0 |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction-details')">prediction</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction-details')">↓</span> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-scaleUpStep-details')">scaleUpStep</b> | string |   |  |
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction-details" class="nested-properties expanded">
-
-### prediction {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction-heading}
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction-enable-details')">enable</b> | boolean |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction-historyDataPeriod-details')">historyDataPeriod</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction-model-details')">model</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetLimits-prediction-predictionPeriod-details')">predictionPeriod</b> | string |   |  |
-
 </div>
-
-</div>
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-details" class="nested-properties expanded">
-
-### autoSetReplicas {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-heading}
-
-layer 2 horizontal auto-scaling, scale up to more GPU cards if max limits threshold hit
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-enable-details')">enable</b> | boolean |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-evaluationPeriod-details')">evaluationPeriod</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-scaleDownCoolDownTime-details')">scaleDownCoolDownTime</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-scaleDownStep-details')">scaleDownStep</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-scaleUpCoolDownTime-details')">scaleUpCoolDownTime</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-scaleUpStep-details')">scaleUpStep</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetReplicas-targetTFlopsOfLimits-details')">targetTFlopsOfLimits</b> | string |   |  |
-
-</div>
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-details" class="nested-properties expanded">
-
-### autoSetRequests {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-heading}
-
-layer 3 adjusting, to match the actual usage in the long run
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-aggregationPeriod-details')">aggregationPeriod</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-evaluationPeriod-details')">evaluationPeriod</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-extraBufferRatio-details')">extraBufferRatio</b> | string |   | the request buffer ratio, for example actual usage is 1.0, 10% buffer will be 1.1 as final preferred requests |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-percentileForAutoRequests-details')">percentileForAutoRequests</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction-details')">prediction</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction-details')">↓</span> | object |   |  |
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction-details" class="nested-properties expanded">
-
-### prediction {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction-heading}
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction-enable-details')">enable</b> | boolean |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction-historyDataPeriod-details')">historyDataPeriod</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction-model-details')">model</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-autoSetRequests-prediction-predictionPeriod-details')">predictionPeriod</b> | string |   |  |
-
-</div>
-
-</div>
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-details" class="nested-properties expanded">
-
-### scaleToZero {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-heading}
-
-additional layer to save VRAM, auto-freeze memory and cool down to RAM and Disk
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze-details')">autoFreeze</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze-details')">↓</span> | array |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup-details')">intelligenceWarmup</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup-details')">↓</span> | object |   |  |
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze-details" class="nested-properties expanded">
-
-### autoFreeze (items) {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze-heading-items}
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze-items}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze-items-enable-details')">enable</b> | boolean |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze-items-freezeToDiskTTL-details')">freezeToDiskTTL</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze-items-freezeToMemTTL-details')">freezeToMemTTL</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-autoFreeze-items-qos-details')">qos</b> | string |  <span class="enum-tag">low</span> <span class="enum-tag">medium</span> <span class="enum-tag">high</span> <span class="enum-tag">critical</span> |  |
-
-</div>
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup-details" class="nested-properties expanded">
-
-### intelligenceWarmup {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup-heading}
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup-enable-details')">enable</b> | boolean |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup-historyDataPeriod-details')">historyDataPeriod</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup-model-details')">model</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-autoScaling-scaleToZero-intelligenceWarmup-predictionPeriod-details')">predictionPeriod</b> | string |   |  |
-
-</div>
-
-</div>
-
-</div>
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-details" class="nested-properties expanded">
-
-### hypervisor {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-heading}
-
-single GPU device multi-process queuing and fair scheduling with QoS constraint
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing-details')">multiProcessQueuing</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing-details')">↓</span> | object |   |  |
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing-details" class="nested-properties expanded">
-
-### multiProcessQueuing {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing-heading}
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing-enable-details')">enable</b> | boolean |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing-interval-details')">interval</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-hypervisor-multiProcessQueuing-queueLevelTimeSlices-details')">queueLevelTimeSlices</b> | array |   |  |
-
-</div>
-
-</div>
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-details" class="nested-properties expanded">
-
-### placement {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-heading}
-
-place the client or worker to best matched nodes
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-allowUsingLocalGPU-details')">allowUsingLocalGPU</b> | boolean |   |  Default: `true` |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-gpuFilters-details')">gpuFilters</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-gpuFilters" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-gpuFilters" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-gpuFilters-details')">↓</span> | array |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-mode-details')">mode</b><span class="required-tag"></span> | string |  <span class="enum-tag">CompactFirst</span> <span class="enum-tag">LowLoadFirst</span> |  Default: `CompactFirst` |
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-gpuFilters-details" class="nested-properties expanded">
-
-### gpuFilters (items) {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-gpuFilters-heading-items}
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-gpuFilters-items}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-gpuFilters-items-params-details')">params</b> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-placement-gpuFilters-items-type-details')">type</b> | string |   |  |
-
-</div>
-
-</div>
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-details" class="nested-properties expanded">
-
-### reBalancer {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-heading}
-
-avoid hot GPU devices and continuously balance the workload<br />implemented by trigger a simulation scheduling and advise better GPU nodes for scheduler
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-internal-details')">internal</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-reBalanceCoolDownTime-details')">reBalanceCoolDownTime</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-threshold-details')">threshold</b> <span id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-threshold" class="expandable-property" data-uid="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-threshold" @click="toggleExpand('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-threshold-details')">↓</span> | object |   |  |
-
-<div id="property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-threshold-details" class="nested-properties expanded">
-
-### threshold {#property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-threshold-heading}
-
-###### Properties {#properties-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-threshold}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-gpuPools-items-specTemplate-schedulingConfig-reBalancer-threshold-matchAny-details')">matchAny</b> | object |   |  |
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="property-tensor-fusion-cluster-storageVendor-details" class="nested-properties expanded">
-
-### storageVendor {#property-tensor-fusion-cluster-storageVendor-heading}
-
-StorageVendorConfig defines Postgres database with extensions for timeseries storage and other resource aggregation results, system events and diagnostics reports etc.
-
-### Properties {#properties-tensor-fusion-cluster-storageVendor}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-storageVendor-image-details')">image</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-storageVendor-installCloudNativePGOperator-details')">installCloudNativePGOperator</b> | boolean |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-storageVendor-mode-details')">mode</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-storageVendor-pgClusterTemplate-details')">pgClusterTemplate</b> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-storageVendor-pgExtensions-details')">pgExtensions</b> | array |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-storageVendor-storageClass-details')">storageClass</b> | string |   |  |
 
 </div>
 
@@ -903,7 +550,7 @@ TensorFusionClusterStatus defines the observed state of TensorFusionCluster.
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-allocatedTFlopsPercent-details')">allocatedTFlopsPercent</b> | string |   | updated with interval |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-allocatedTFlopsPercent-details')">allocatedTFlopsPercent</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-allocatedVRAMPercent-details')">allocatedVRAMPercent</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-availableTFlops-details')">availableTFlops</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-availableVRAM-details')">availableVRAM</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
@@ -914,13 +561,13 @@ TensorFusionClusterStatus defines the observed state of TensorFusionCluster.
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-potentialSavingsPerMonth-details')">potentialSavingsPerMonth</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-readyGPUPools-details')">readyGPUPools</b> | array |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-retryCount-details')">retryCount</b><span class="required-tag"></span> | integer&lt;int64&gt; |   |  Default: `0` |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-savedCostsPerMonth-details')">savedCostsPerMonth</b> | string |   | aggregated with interval |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-savedCostsPerMonth-details')">savedCostsPerMonth</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-totalGPUs-details')">totalGPUs</b><span class="required-tag"></span> | integer&lt;int32&gt; |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-totalNodes-details')">totalNodes</b><span class="required-tag"></span> | integer&lt;int32&gt; |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-totalPools-details')">totalPools</b><span class="required-tag"></span> | integer&lt;int32&gt; |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-totalTFlops-details')">totalTFlops</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-totalVRAM-details')">totalVRAM</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-utilizedTFlopsPercent-details')">utilizedTFlopsPercent</b> | string |   | calculated every 5m average |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-utilizedTFlopsPercent-details')">utilizedTFlopsPercent</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-utilizedVRAMPercent-details')">utilizedVRAMPercent</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-virtualAvailableTFlops-details')">virtualAvailableTFlops</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-cluster-virtualAvailableVRAM-details')">virtualAvailableVRAM</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |

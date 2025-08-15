@@ -14,7 +14,15 @@ TensorFusion由三个部分组成，分别是：
 
 整体系统架构如下：
 
-![](https://cdn.tensor-fusion.ai/tf-architecture.png)
+#### 本地GPU运行 (内嵌vGPU模式)
+
+![](https://cdn.tensor-fusion.ai/tf-architecture-ngpu.png)
+
+#### IP/IB网络共享GPU (远程vGPU模式)
+
+![](https://cdn.tensor-fusion.ai/tf-architecture-remote.png)
+
+
 
 ## 核心概念
 

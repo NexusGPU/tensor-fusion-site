@@ -27,6 +27,8 @@ Schema for the values.yaml file for the tensor-fusion Helm chart
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-greptime-details')">greptime</b> <span id="property-helm-values-greptime" class="expandable-property" data-uid="property-helm-values-greptime" @click="toggleExpand('property-helm-values-greptime-details')">↓</span> | object |   | Configuration for GreptimeDB integration |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-agent-details')">agent</b> <span id="property-helm-values-agent" class="expandable-property" data-uid="property-helm-values-agent" @click="toggleExpand('property-helm-values-agent-details')">↓</span> | object |   | Configuration for the tensor-fusion agent component |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-cloudVendorCredentials-details')">cloudVendorCredentials</b> <span id="property-helm-values-cloudVendorCredentials" class="expandable-property" data-uid="property-helm-values-cloudVendorCredentials" @click="toggleExpand('property-helm-values-cloudVendorCredentials-details')">↓</span> | object |   | Cloud vendor credentials for pools running in Provisioned mode without IRSA or zero-credential auth |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-details')">alert</b> <span id="property-helm-values-alert" class="expandable-property" data-uid="property-helm-values-alert" @click="toggleExpand('property-helm-values-alert-details')">↓</span> | object |   | Configuration for alerting |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-details')">dynamicConfig</b> <span id="property-helm-values-dynamicConfig" class="expandable-property" data-uid="property-helm-values-dynamicConfig" @click="toggleExpand('property-helm-values-dynamicConfig-details')">↓</span> | object |   | Dynamic configuration for alerting |
 
 <div id="property-helm-values-imagePullSecrets-details" class="nested-properties expanded">
 
@@ -70,6 +72,7 @@ Configuration for the tensor-fusion controller component
 |----------|------|------------|-------------|
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-controller-replicaCount-details')">replicaCount</b> | integer | <span class="constraint-tag">min: 1</span>  | Number of replicas for the controller deployment Default: `1` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-controller-image-details')">image</b><span class="required-tag"></span> <span id="property-helm-values-controller-image" class="expandable-property" data-uid="property-helm-values-controller-image" @click="toggleExpand('property-helm-values-controller-image-details')">↓</span> | object |   | Container image configuration for the controller |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-controller-vectorAgentImage-details')">vectorAgentImage</b> | string |   | Tag for the vector agent, for collecting metrics to TSDB Default: `docker.io/timberio/vector:latest-alpine` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-controller-podAnnotations-details')">podAnnotations</b> | object |   | Annotations to add to the controller pods |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-controller-tolerations-details')">tolerations</b> | array |   | Tolerations for the controller pods |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-controller-affinity-details')">affinity</b> | object |   | Affinity rules for the controller pods |
@@ -264,7 +267,7 @@ Configuration for the tensor-fusion agent component
 |----------|------|------------|-------------|
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-agent-enrollToken-details')">enrollToken</b><span class="required-tag"></span> | string |   | Token used for agent enrollment with the cloud service Default: `token-from-cloud` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-agent-agentId-details')">agentId</b><span class="required-tag"></span> | string |   | Unique identifier for the agent in the format &#39;org:env&#39; Default: `org-from-cloud:env` |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-agent-cloudEndpoint-details')">cloudEndpoint</b><span class="required-tag"></span> | string |   | WebSocket endpoint for cloud communication Default: `wss://app.tensor-fusion.ai/&#95;ws` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-agent-cloudEndpoint-details')">cloudEndpoint</b><span class="required-tag"></span> | string |   | WebSocket endpoint for cloud communication Default: `wss://app.tensor-fusion.ai` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-agent-image-details')">image</b><span class="required-tag"></span> <span id="property-helm-values-agent-image" class="expandable-property" data-uid="property-helm-values-agent-image" @click="toggleExpand('property-helm-values-agent-image-details')">↓</span> | object |   | Container image configuration for the agent |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-agent-resources-details')">resources</b> <span id="property-helm-values-agent-resources" class="expandable-property" data-uid="property-helm-values-agent-resources" @click="toggleExpand('property-helm-values-agent-resources-details')">↓</span> | object |   | Resource requirements for the agent |
 
@@ -342,6 +345,123 @@ Cloud vendor credentials for pools running in Provisioned mode without IRSA or z
 |----------|------|------------|-------------|
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-cloudVendorCredentials-accessKey-details')">accessKey</b><span class="required-tag"></span> | string |   | Access key for cloud vendor authentication Default: `dummy` |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-cloudVendorCredentials-secretKey-details')">secretKey</b><span class="required-tag"></span> | string |   | Secret key for cloud vendor authentication Default: `dummy` |
+
+</div>
+
+<div id="property-helm-values-alert-details" class="nested-properties expanded">
+
+### alert {#property-helm-values-alert-heading}
+
+Configuration for alerting
+
+### Properties {#properties-helm-values-alert}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-enabled-details')">enabled</b> | boolean |   | Enable alerting Default: `false` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-image-details')">image</b> <span id="property-helm-values-alert-image" class="expandable-property" data-uid="property-helm-values-alert-image" @click="toggleExpand('property-helm-values-alert-image-details')">↓</span> | object |   | Image for alerting |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-replicaCount-details')">replicaCount</b> | integer |   | Number of replicas for alerting Default: `1` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-resources-details')">resources</b> <span id="property-helm-values-alert-resources" class="expandable-property" data-uid="property-helm-values-alert-resources" @click="toggleExpand('property-helm-values-alert-resources-details')">↓</span> | object |   | Resource requirements for alerting |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-alertManagerConfig-details')">alertManagerConfig</b> | object |   | Alertmanager configuration |
+
+<div id="property-helm-values-alert-image-details" class="nested-properties expanded">
+
+### image {#property-helm-values-alert-image-heading}
+
+Image for alerting
+
+#### Properties {#properties-helm-values-alert-image}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-image-repository-details')">repository</b><span class="required-tag"></span> | string |   | Repository for the alerting image Default: `dummy` |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-image-tag-details')">tag</b> | string |   | Tag for the alerting image Default: `dummy` |
+
+</div>
+
+<div id="property-helm-values-alert-resources-details" class="nested-properties expanded">
+
+### resources {#property-helm-values-alert-resources-heading}
+
+Resource requirements for alerting
+
+#### Properties {#properties-helm-values-alert-resources}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-resources-requests-details')">requests</b> <span id="property-helm-values-alert-resources-requests" class="expandable-property" data-uid="property-helm-values-alert-resources-requests" @click="toggleExpand('property-helm-values-alert-resources-requests-details')">↓</span> | object |   | Resource requests for alerting |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-resources-limits-details')">limits</b> <span id="property-helm-values-alert-resources-limits" class="expandable-property" data-uid="property-helm-values-alert-resources-limits" @click="toggleExpand('property-helm-values-alert-resources-limits-details')">↓</span> | object |   | Resource limits for alerting |
+
+<div id="property-helm-values-alert-resources-requests-details" class="nested-properties expanded">
+
+### requests {#property-helm-values-alert-resources-requests-heading}
+
+Resource requests for alerting
+
+##### Properties {#properties-helm-values-alert-resources-requests}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-resources-requests-cpu-details')">cpu</b> | string |   | CPU request for alerting |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-resources-requests-memory-details')">memory</b> | string |   | Memory request for alerting |
+
+</div>
+
+<div id="property-helm-values-alert-resources-limits-details" class="nested-properties expanded">
+
+### limits {#property-helm-values-alert-resources-limits-heading}
+
+Resource limits for alerting
+
+##### Properties {#properties-helm-values-alert-resources-limits}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-resources-limits-cpu-details')">cpu</b> | string |   | CPU limit for alerting |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-alert-resources-limits-memory-details')">memory</b> | string |   | Memory limit for alerting |
+
+</div>
+
+</div>
+
+</div>
+
+<div id="property-helm-values-dynamicConfig-details" class="nested-properties expanded">
+
+### dynamicConfig {#property-helm-values-dynamicConfig-heading}
+
+Dynamic configuration for alerting
+
+### Properties {#properties-helm-values-dynamicConfig}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-metricsTTL-details')">metricsTTL</b> | string |   | Metrics and Logs Retention Period, default to 30d |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-metricsFormat-details')">metricsFormat</b> | string |   | Metrics format, default to &#39;influx&#39;, could be &#39;json&#39; or &#39;otel&#39; |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-metricsExtraPodLabels-details')">metricsExtraPodLabels</b> | array |   | Extra pod labels to be added to metrics |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-details')">alertRules</b> <span id="property-helm-values-dynamicConfig-alertRules" class="expandable-property" data-uid="property-helm-values-dynamicConfig-alertRules" @click="toggleExpand('property-helm-values-dynamicConfig-alertRules-details')">↓</span> | array |   | Alerting rules |
+
+<div id="property-helm-values-dynamicConfig-alertRules-details" class="nested-properties expanded">
+
+### alertRules (items) {#property-helm-values-dynamicConfig-alertRules-heading-items}
+
+Alerting rules
+
+#### Properties {#properties-helm-values-dynamicConfig-alertRules-items}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-name-details')">name</b> | string |   | Name of the alerting rule |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-query-details')">query</b> | string |   | Query for the alerting rule |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-threshold-details')">threshold</b> | number |   | Threshold for the alerting rule |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-severity-details')">severity</b> | string |   | Severity for the alerting rule |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-evaluationInterval-details')">evaluationInterval</b> | string |   | Evaluation interval for the alerting rule |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-consecutiveCount-details')">consecutiveCount</b> | integer |   | Consecutive count for the alerting rule |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-summary-details')">summary</b> | string |   | Summary for the alerting rule, can use $labels to access labels, eg. &#123;&#123; .pool &#125;&#125; &#123;&#123; .worker &#125;&#125; &#123;&#123; .Threshold &#125;&#125; |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-description-details')">description</b> | string |   | Description for the alerting rule, can use $labels to access labels, eg. &#123;&#123; .pool &#125;&#125; &#123;&#123; .worker &#125;&#125; &#123;&#123; .Threshold &#125;&#125; |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-helm-values-dynamicConfig-alertRules-items-alertTargetInstance-details')">alertTargetInstance</b> | string |   | Alert target instance for the alerting rule |
+
+</div>
 
 </div>
 
