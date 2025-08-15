@@ -383,6 +383,13 @@ export const Reference = (lang: string) => [
         }),
         link: 'support-matrix'
       },
+      {
+        text: match(lang, {
+          en: 'Security Whitepaper',
+          zh: '安全白皮书'
+        }),
+        link: 'security-whitepaper'
+      }
     ]
   },
   {

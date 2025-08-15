@@ -1,277 +1,358 @@
 # TensorFusion Security Whitepaper
 
-## Executive Summary
-
-TensorFusion is a GPU virtualization and pooling solution that enables fractional GPU allocation, remote GPU sharing, and resource management in Kubernetes environments. This whitepaper analyzes the security posture of the TensorFusion system, identifies potential threats, maps vulnerabilities to the OWASP Top 10, and provides evidence-based security recommendations.
-
 ## 1. System Overview and Architecture
 
-TensorFusion operates as a distributed system with multiple components managing GPU resources across Kubernetes clusters. The core architecture includes:
+### 1.1 System Architecture
 
-- **Controller/Manager**: Central orchestration component managing GPU resources and scheduling [1](#0-0) 
-- **Hypervisor**: Node-level component handling GPU virtualization [2](#0-1) 
-- **Worker**: Pod-level component providing GPU access to applications [3](#0-2) 
-- **API Server**: REST endpoints for resource management and connection routing [4](#0-3) 
-- **Admission Webhooks**: Kubernetes resource validation and mutation
+#### Architecture Diagram of Embedded vGPU Mode
+
+![](https://cdn.tensor-fusion.ai/tf-architecture-ngpu.png)
+
+#### Architecture Diagram of Remote vGPU Mode
+
+![](https://cdn.tensor-fusion.ai/tf-architecture-remote.png)
+
+The architecture diagrams above illustrate the high-level architecture of TensorFusion services, including the components that comprise TensorFusion, trust boundaries, and communication paths.
+
+**Scope**: This threat model covers only TensorFusion services. Related components such as time-series databases, AI models, and frameworks are outside the scope of this assessment.
+
+**Objective**: This assessment aims to identify potential threats to TensorFusion services that could be exploited by external attackers to compromise or infiltrate customer cloud environments or data centers.
+
+### 1.2 System Components
+
+TensorFusion's core components include:
+
+- **TensorFusion Operator**: Central orchestration component for managing and scheduling GPU resources, running in-process submodules including Controller, AdmissionWebhook, Scheduler, AlertEvaluator, MetricsRecorder, and Scaler. It also starts one-time NodeDiscovery Job to report GPU nodes
+- **Hypervisor**: Node-level component handling GPU virtualization, managing time-slice allocation, status monitoring, and performance statistics for multiple vGPU Workers on GPU nodes
+- **vGPU Worker**: Provides user-space vGPU implementation for applications, offering GPU access interfaces and handling GPU system calls. In Local vGPU mode, the Worker runs as a dynamic library embedded in user processes
+- **vGPU Client Stub**: Present only in Remote vGPU mode, embedded as a dynamic library in user processes, working with Worker to provide GPU access interfaces and handle GPU system calls
+
+### 1.3 System Permissions
+
+TensorFusion is a distributed system involving multiple trust boundaries, including Kubernetes clusters, Kubernetes nodes, Pod networks, and Pod container runtime environments. The following are all permissions required for system operation:
+
+**Operator Component Kubernetes Permissions**:
+- TensorFusion custom resource permissions: For TensorFusion core functionalities
+- Read/write permissions for Kubernetes native workload and configuration resources (excluding Secret permissions): For TensorFusion core functionalities
+- Query and create permissions for Karpenter custom resources: For creating cloud provider nodes during Karpenter integration (removable when not using Karpenter)
+- Kubernetes TokenReview permissions: For validating requests from vGPU Stub to obtain vGPU Worker connection information
+- Pod/bind subresource permissions: For TensorFusion custom GPU scheduler to bind Kubernetes nodes
+- Pod/exec subresource permissions: For ClusterAgent to forward console WebShell requests (removable when not using WebShell)
+- Lease read/write permissions: For Controller leader election
+
+Reference: https://github.com/NexusGPU/tensor-fusion/blob/main/charts/tensor-fusion/templates/rbac.yaml
+
+**Hypervisor Component Kubernetes Permissions**:
+- Kubernetes TokenReview permissions: For validating requests from vGPU Worker to obtain quota information
+- Read-only permissions for Node/Pod/Namespace resources: For obtaining Pod information on GPU nodes
+- Query permissions for GPU/GPUNode custom resources: For obtaining and updating GPU information
+
+Reference: https://github.com/NexusGPU/tensor-fusion/blob/main/charts/tensor-fusion/templates/rbac-hypervisor.yaml
+
+**Pod Container Runtime Permissions**:
+- NodeDiscovery/Hypervisor component access to all GPU devices on nodes: Through NVIDIA_VISIBLE_DEVICES=all environment variable, enabling NVIDIA Container Toolkit-configured CRI Hooks to inject device file descriptors and modify cgroup restrictions for accessing all GPU devices on nodes
+- Worker component similarly mounts all GPU devices through this environment variable, but through libcuda_limiter.so injection into all processes, can only access scheduler-allocated GPUs
+- Hypervisor component's Init Container runs in privileged mode for one-time initialization of tmpfs shared memory mount points on nodes, used for inter-process communication between Hypervisor and Worker
+- Hypervisor component's main container has SYS_PTRACE system call capability for reading vGPU Worker-related information in /proc filesystem
+- Other workloads have no additional permissions
+
+Reference: https://github.com/NexusGPU/tensor-fusion/blob/main/internal/utils/compose.go#L452
+
+### 1.4 System Configuration
+
+1. ConfigMap/tensor-fusion-sys-config/config/scheduler-config.yaml: Includes scheduler-related configuration with data structure [identical to Kubernetes Scheduler](https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1/#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration)
+2. ConfigMap/tensor-fusion-sys-config/config/dynamic-config.yaml: Includes [other dynamic configurations](./helm-install-values.md#properties-helm-values-dynamicConfig) for system operation, such as monitoring and alerting configurations
+3. ConfigMap/tensor-fusion-sys-public-gpu-info/gpu-info.yaml: Enumerates mainstream GPU models and performance benchmarks for GPU resource identification
+4. MutatingWebhookConfiguration/tensor-fusion-sys-mutating-webhook
+5. Secret/tensor-fusion-webhook-secret: TLS certificate for AdmissionWebhook HTTPS server, generated by temporary Job (kube-webhook-certgen) during Helm installation and automatically deleted after completion
+
+### 1.5 Implemented Security Controls
+
+#### Core GPU Virtualization Layer
+
+1. Both Local/Remote vGPU modes implement memory address isolation and fault isolation to prevent vGPU privilege escalation risks (memory address isolation not provided when running only open-source vgpu.rs component; memory isolation provided by proprietary tensor-fusion-worker component)
+2. For Remote vGPU client connection requests, uses Kubernetes ServiceAccount mechanism for authentication and authorization to prevent forged requests causing GPU resource abuse (Remote vGPU Stub is proprietary component)
+3. Worker and Hypervisor inter-process communication through shared memory uses Kubernetes ServiceAccount mechanism for authentication and authorization to prevent request forgery and privilege escalation
+
+#### Orchestration and Scheduling Layer
+
+1. Provides namespace-level quota limitation functionality to reduce GPU resource abuse risks
+2. TLS encryption for Kubernetes API and AdmissionWebhook
+3. TensorFusion components implement principle of least privilege
+4. All critical components deployed privately to reduce attack surface
+
+#### Cloud Console
+
+1. Authentication, authorization, and TLS encryption between cloud console and Cluster Agent
+2. Cloud console and ClusterAgent serve only as request proxies without data storage; ClusterAgent component can be removed for complete intranet mode operation to reduce data leakage risks
+3. Cloud console integrates with secure and reliable PaaS/SaaS service providers, such as: Cloudflare for DDoS and WAF protection; Clerk user system for authentication and authorization; Supabase/Upstash for secure database and cache access; Pulumi for secure key management and infrastructure automation
 
 ## 2. Threat Model Analysis
 
-### 2.1 Trust Boundaries
+### 2.1 Asset Classification
 
-The system operates across multiple trust boundaries:
-- **Cluster-level**: Controller components with elevated Kubernetes privileges
-- **Node-level**: Hypervisor components with direct GPU hardware access
-- **Pod-level**: Worker components with limited, isolated access
-- **Network-level**: API communications between distributed components
+**Critical Assets and Data:**
+- A1: GPU hardware resources and allocation status
+- A2: Authentication tokens used for remote GPU sharing
+- A3: Kubernetes cluster API Server access credentials
+- A4: User workloads in Kubernetes clusters managed by TensorFusion
+- A5: TensorFusion component configuration information
+- A6: System monitoring metrics and performance data
+- A7: Cloud console login session information
+- A8: Authentication tokens for communication between cloud console and ClusterAgent
 
-### 2.2 Asset Classification
+### 2.2 Potential Threat Actors
 
-**Critical Assets:**
-- GPU hardware resources and allocation state
-- Authentication tokens and service account credentials
-- Kubernetes cluster access and RBAC permissions [5](#0-4) 
-- AI workload data and model information
+- **External Attackers**: Exploit exposed system APIs to abuse GPU resources or steal sensitive data from AI workloads
+- **Malicious Insiders**: Leverage legitimate cluster access permissions to escalate privileges or abuse GPU resources
+- **Supply Chain Attacks**: Exploit compromised dependencies or container images to inject malicious code, abuse GPU resources, or steal sensitive data from AI workloads
 
-**Sensitive Data:**
-- GPU utilization metrics and performance data
-- Pod and container metadata
-- Network connection information
+### 2.3 STRIDE Threat Classification Reference
 
-### 2.3 Threat Actors
+|Threat Type|Desired Property|Threat Definition|
+|---|---|---|
+|Spoofing|Authenticity|Impersonating another identity or entity|
+|Tampering|Integrity|Modifying data on disk, network, memory, or other locations|
+|Repudiation|Non-repudiation|Claiming not to have performed an action or denying responsibility; may be honest or false|
+|Information Disclosure|Confidentiality|Unauthorized access to information|
+|Denial of Service|Availability|Exhausting resources required to provide service|
+|Elevation of Privilege|Authorization|Allowing execution of unauthorized operations|
 
-- **External Attackers**: Targeting exposed APIs or network services
-- **Malicious Insiders**: Users with legitimate cluster access attempting privilege escalation
-- **Compromised Components**: Rogue or compromised pods attempting resource abuse
-- **Supply Chain Attacks**: Compromised dependencies or container images
+### 2.4 Security Threat Analysis
 
-## 3. OWASP Top 10 Security Analysis
+#### TM01: Cross-Tenant vGPU Memory Privilege Escalation (Tampering, Information Disclosure, Elevation of Privilege)
 
-### 3.1 A01: Broken Access Control
+Malicious users may attempt to access other tenants' GPU memory data through GPU memory address manipulation, causing data leakage or privilege escalation. Attackers may exploit GPU memory management vulnerabilities to bypass virtualization isolation mechanisms and read or modify GPU memory content of other workloads.
 
-**Risk Level**: High
-
-The system implements comprehensive RBAC controls with extensive permissions for cluster resources. However, the broad permissions scope presents risk: [6](#0-5) 
-
-**Mitigations Implemented:**
-- Fine-grained RBAC permissions for TensorFusion custom resources [7](#0-6) 
-- Service account token validation using Kubernetes TokenReview API [8](#0-7) 
-- JWT token authentication with LRU caching for performance [9](#0-8) 
-
-### 3.2 A02: Cryptographic Failures
-
-**Risk Level**: Medium
-
-**Current Protection:**
-- TLS encryption supported for metrics endpoints and webhook communications [10](#0-9) 
-- Certificate-based authentication for admission webhooks
-
-**Gaps Identified:**
-- Connection authentication can be disabled via environment variable [11](#0-10) 
-
-### 3.3 A03: Injection Attacks
-
-**Risk Level**: Low
-
-The system primarily uses Kubernetes API interactions rather than traditional SQL or command injection vectors. However, resource validation is implemented through admission webhooks. [12](#0-11) 
-
-### 3.4 A04: Insecure Design
-
-**Risk Level**: Medium
-
-**Security-by-Design Elements:**
-- Admission webhook validation for resource integrity
-- Service account isolation between components
-- Environment variable-based feature toggles for security controls [13](#0-12) 
-
-### 3.5 A05: Security Misconfiguration
-
-**Risk Level**: High
-
-**Risk Factors:**
-- Multiple environment variables can disable security features [14](#0-13) 
-- Broad wildcard permissions in RBAC configuration [6](#0-5) 
-
-### 3.6 A06: Vulnerable Components
-
-**Risk Level**: Medium
-
-The system includes dependencies on Kubernetes APIs, container runtimes, and GPU drivers, all potential sources of vulnerabilities.
-
-### 3.7 A07: Identification and Authentication Failures
-
-**Risk Level**: Medium
-
-**Current Controls:**
-- JWT token validation with pod UID verification [15](#0-14) 
-- Service account token caching to prevent replay attacks [16](#0-15) 
-
-### 3.8 A08: Software and Data Integrity Failures
-
-**Risk Level**: Medium
-
-**Mitigations:**
-- Admission webhooks provide resource validation
-- RBAC controls prevent unauthorized resource modifications
-
-### 3.9 A09: Security Logging and Monitoring Failures
-
-**Risk Level**: Medium
-
-**Current Logging:**
-- Authentication events are logged with connection context [17](#0-16) 
-- Token validation failures are logged [18](#0-17) 
-
-### 3.10 A10: Server-Side Request Forgery (SSRF)
-
-**Risk Level**: Low
-
-Limited external API interactions reduce SSRF risk, though Kubernetes API access could present potential vectors.
-
-## 4. Data Flow Security Analysis
-
-### 4.1 Authentication Flow
+**Mitigations**:
+1. Implement memory address isolation mechanisms to ensure complete memory space isolation between different vGPU instances
+2. Implement fault isolation to prevent errors in one vGPU instance from affecting other instances
+3. Use VRAM manager to control memory allocation and access permissions
 
 ```mermaid
 sequenceDiagram
-    participant Pod as "Client Pod"
-    participant API as "TensorFusion API"
-    participant K8s as "Kubernetes API"
+    participant UP as User Process
+    participant CRA as CUDA Runtime API
+    participant CDA as CUDA Driver API Stub
+    participant CL as TensorFusion GPU Limiter(OSS)
+    participant VR as TensorFusion vGPU Worker(Non-OSS)
+    participant UDA as User-space CUDA Driver API
+    participant DDA as Kernel-space Device Driver API
+
+    Note over CDA: TensorFusion forces priority loading of Stub via ld.so.preload mechanism
+    Note over CL: Limits GPU resource access and API call frequency
+    Note over VR: Local dynamic library or remote vGPU Worker<br/>isolates device memory address space
+
+    UP->>CRA: GPU operation request
+    CRA->>CDA: CUDA API call
+    CDA->>CL: Resource access check
+    CL->>VR: Virtualization processing
+    VR->>UDA: Actual CUDA call
+    UDA->>DDA: Kernel driver call
     
-    Pod->>API: Request with Bearer Token
-    API->>API: Check Token Cache
-    alt Cache Miss
-        API->>K8s: TokenReview Request
-        K8s->>API: Token Validation Result
-        API->>API: Cache Result
+    DDA-->>UDA: Return result
+    UDA-->>VR: Return result
+    VR-->>CL: Return result
+    CL-->>CDA: Return result
+    CDA-->>CRA: Return result
+    CRA-->>UP: Return result
+```
+
+**Status**: Partially mitigated in Local vGPU mode; mitigated in Remote vGPU mode and VM mode.
+
+**Note**:
+- In Local vGPU mode, Stub and Worker run in the same process as user processes, making it impossible to completely prevent untrusted users from bypassing Stub to directly access GPU devices by modifying GPU quota information in shared memory
+- In Worker independent process mode, vGPU access control for untrusted tenants is secure and effective, including:
+  - VM mode in non-container environments: Worker runs on Host, communicating with Stub in virtual machines through shared memory devices
+  - Remote vGPU mode: Stub and Worker run in independent containers, communicating via TCP/IP or IB networks
+
+#### TM02: Remote vGPU Connection Request Forgery (Spoofing, Elevation of Privilege)
+
+Unauthorized clients may forge ServiceAccount tokens or bypass authentication mechanisms to gain connection permissions to GPU Workers, leading to resource abuse and unauthorized access.
+
+```mermaid
+sequenceDiagram
+    participant Client as vGPU Stub
+    participant Operator as TensorFusion Operator
+    participant K8s as Kubernetes API Server
+    participant Worker as vGPU Worker
+
+    Client->>Operator: Request connection info (Bearer Token)
+    Operator->>K8s: TokenReview request to validate token
+    K8s->>Operator: Return token validation result
+    alt Token valid and Pod UID matches
+        Operator->>Client: Return Worker connection URL
+        Client->>Worker: Establish GPU connection
+    else Token invalid or UID mismatch  
+        Operator->>Client: Return 401 Unauthorized
     end
-    API->>Pod: Connection URL or 401
-``` [19](#0-18) 
+```
 
-### 4.2 GPU Resource Allocation Flow
+**Mitigations**:
+1. Use Kubernetes ServiceAccount mechanism for client authentication
+2. Verify Pod UID in token matches Owner Reference of connection resource
+3. Implement token caching mechanism to reduce API Server load and improve validation efficiency
 
-The system manages GPU resources through Kubernetes custom resources with RBAC-protected operations. [20](#0-19) 
+**Status**: Mitigated
 
-### 4.3 Network Communication Security
+#### TM03: Hypervisor-Worker IPC Communication Hijacking (Spoofing, Tampering, Information Disclosure)
 
-- API endpoints use bearer token authentication
-- TLS encryption available for sensitive communications
-- Port allocation managed through cluster coordination [21](#0-20) 
+Malicious processes may attempt to hijack or eavesdrop on inter-process communication between Hypervisor and Worker through shared memory channels to obtain GPU quota information or inject malicious commands.
 
-## 5. Privacy and PII Considerations
+```mermaid
+graph LR
+    subgraph "Node"
+        Hypervisor["Hypervisor<br/>(PTRACE privileged container)"]
+        Worker1["Worker 1"]
+        Worker2["Worker 2"] 
+        SharedMem["/dev/shm<br/>Shared Memory"]
+        MaliciousProc["Malicious Process<br/>(Threat)"]
+    end
+    
+    Hypervisor <-->|"Auth+IPC"| SharedMem
+    Worker1 <-->|"Auth+IPC"| SharedMem  
+    Worker2 <-->|"Auth+IPC"| SharedMem
+    MaliciousProc -.->|"Attempted unauthorized access"| SharedMem
+```
 
-### 5.1 Data Classification
+**Mitigation Measures**:
+1. ServiceAccount token validation before Worker-Hypervisor communication
+2. Use privileged init container to configure shared memory mount points with proper access permissions
+3. Hypervisor container gains SYS_PTRACE capability to monitor related process status
 
-**Non-PII Technical Data:**
-- GPU utilization metrics
-- Resource allocation states
-- Performance counters
+**Status**: Mitigated
 
-**Potentially Sensitive Metadata:**
-- Pod names and namespaces (may contain organizational information)
-- Container image references
-- Network connection details
+#### TM04: Unauthorized Kubernetes API Access (Spoofing, Elevation of Privilege)
 
-### 5.2 Data Retention
+Attackers may attempt to exploit over-privileged ServiceAccount permissions to perform operations beyond component responsibilities, such as accessing cluster-sensitive resources or modifying critical configurations.
 
-The system maintains LRU caches for authentication tokens with 30-minute expiration. [22](#0-21) 
+**Mitigation Measures**:
+1. Implement principle of least privilege with dedicated RBAC permissions for each component
+2. Hypervisor component only receives necessary TokenReview and resource query permissions
+3. Remove unnecessary permissions such as WebShell and Karpenter permissions when not in use
 
-## 6. Security Controls and Mitigations
+**Status**: Mitigated
 
-### 6.1 Access Controls
+#### TM05: AdmissionWebhook Tampering (Tampering, Elevation of Privilege)
 
-**RBAC Implementation:**
-- Comprehensive cluster role definitions [23](#0-22) 
-- Separate hypervisor RBAC with limited permissions
-- TokenReview API integration for authentication [24](#0-23) 
+Malicious users may attempt to modify MutatingWebhookConfiguration to bypass Pod injection controls or insert malicious code into workloads.
 
-### 6.2 Network Security
+**Mitigation**:
+1. Use TLS encryption to protect AdmissionWebhook communication
+2. Manage Webhook TLS certificates through dedicated Secret
+3. Implement admission controller authentication to ensure only authorized Webhooks can modify Pod specifications
+4. Cluster admin controls Webhook configuration and make sure only authorized Webhooks can be added
 
-**Controls Implemented:**
-- Bearer token authentication for API access
-- Port allocation coordination to prevent conflicts
-- Service account isolation
+**Status**: Mitigated
 
-**Recommendations:**
-- Implement network policies to restrict inter-component communication
-- Enable TLS for all internal communications
-- Regular certificate rotation
+#### TM06: GPU Resource Quota Bypass (Denial of Service, Elevation of Privilege)
 
-### 6.3 Operational Security
+Malicious users may attempt to request excessive GPU resources, preventing other users from obtaining resources or degrading system performance.
 
-**Current Practices:**
-- Security policy documentation [25](#0-24) 
-- Vulnerability reporting process [26](#0-25) 
-- Response timeline commitments [27](#0-26) 
+**Mitigation**:
+1. Implement namespace-level quota limitation functionality to prevent resource abuse
+2. Use QoS system to provide tiered service quality guarantees
+3. Monitor resource usage through monitoring and alerting mechanisms
 
-## 7. Deployment Security Requirements
+**Status**: Mitigated
 
-### 7.1 Kubernetes Security
+#### TM07: Inter-Component Communication Eavesdropping (Information Disclosure)
 
-**Required Controls:**
-- Pod Security Standards implementation
-- Network policy enforcement
-- RBAC least-privilege principles [28](#0-27) 
+Network attackers may attempt to intercept communication between TensorFusion components to obtain sensitive authentication tokens or workload metadata.
 
-### 7.2 Enterprise Features
+**Mitigations**:
+1. Use TLS encryption for all cloud console API access
+2. Support complete intranet mode deployment, removing external communication dependencies
 
-**Enhanced Security (Licensed):**
-- Encryption at rest for GPU context data
-- SSO/SAML integration
-- Advanced audit capabilities
-- SOC2 compliance features [29](#0-28) 
+**Status**: Partially mitigated. Kubernetes intranet communication between Remote vGPU Stub/Worker is not encrypted at application layer, relying on user's Kubernetes CNI network configuration for traffic encryption.
 
-## 8. Security Recommendations
+#### TM08: Supply Chain Attacks (Tampering, Elevation of Privilege)
 
-### 8.1 Immediate Actions
+Attackers may inject malicious code into TensorFusion components through compromised container images or dependencies to gain system control privileges.
 
-1. **Remove Security Bypass Options**: Eliminate environment variables that disable security features in production [30](#0-29) 
+**Mitigations**:
+TensorFusion's development process and DevOps pipeline adopt security best practices recommended for GitHub open-source projects, continuously optimizing software supply chain security. Implemented security controls include but are not limited to:
 
-2. **Implement Least Privilege**: Reduce wildcard permissions in RBAC configurations [31](#0-30) 
+1. Use secure container image build artifacts
+2. Enable Dependabot for regular dependency updates and security patches
+3. Use CodeQL for code security scanning
+4. Use FOSSA Scan for open-source dependency compliance and license validation
+5. Team GitHub accounts enable MFA, following principle of least privilege
+6. CI/CD pipeline secrets managed through GitHub Secrets
 
-3. **Enable Mandatory TLS**: Make TLS encryption mandatory for all API communications
+![OSS Security Controls](/svc-controls.png)
 
-### 8.2 Medium-term Improvements
+**Status**: Partially mitigated, continuously improving.
 
-1. **Enhanced Authentication**: Implement certificate-based mutual authentication
-2. **Network Segmentation**: Deploy network policies for component isolation
-3. **Security Monitoring**: Implement comprehensive audit logging
-4. **Vulnerability Management**: Establish automated security scanning
+## 3. Data Privacy
 
-### 8.3 Long-term Strategy
+### 3.1 Fully Private Deployment Mode
 
-1. **Zero Trust Architecture**: Implement identity-based access controls
-2. **Compliance Framework**: Achieve SOC2 and other regulatory compliance
-3. **Threat Detection**: Deploy runtime security monitoring
-4. **Incident Response**: Establish security incident response procedures
+TensorFusion supports fully private deployment mode, significantly reducing the risk of external data leakage. The data plane Worker components process GPU system calls in memory in real-time. Local GPU mode has no cross-process transmission, Remote GPU mode only transmits binary data, and only monitoring data is persisted to disk, eliminating customer data leakage risks.
 
-## 9. Operational Impact Assessment
+### 3.2 Cloud Console + Core Component Private Deployment Mode
 
-### 9.1 Performance Impact
+When the cloud console is enabled, users authenticate through Clerk and can access Kubernetes cluster metadata, monitoring/alerting/logging/diagnostic reports, and other observability data within their organization based on role permissions.
 
-- JWT token caching reduces authentication overhead [9](#0-8) 
-- LRU cache implementation minimizes API server load
+The cloud access flow is as follows:
 
-### 9.2 Compatibility Considerations
+```mermaid
+sequenceDiagram
+    participant User as User
+    participant Console as TensorFusion Console
+    participant Clerk as Clerk Auth Service
+    participant Supabase as Supabase Permission Metadata
+    participant Proxy as Cluster Proxy
+    participant Agent as Cluster Agent
+    participant K8sAPI as Kubernetes API Server
+    participant GreptimeDB as GreptimeDB Time Series Database
+   
+    Note over User, Supabase: Identity Authentication & Permission Verification
+    User->>+Console: 1. Access console
+    Console->>+Clerk: 2. Authentication request
+    Clerk-->>-Console: 3. Authentication success (JWT Token)
+    Console->>+Supabase: 4. Query user permissions
+    Note right of Supabase: Verify organization and environment access permissions
+    Supabase-->>-Console: 5. Return authorized environment list
 
-- Security features may require specific Kubernetes versions
-- TokenReview API dependency on cluster configuration
+    Note over Console, K8sAPI: 🔧 User Internal Network Kubernetes Cluster Data Access
+    Console->>+Proxy: 6a. Request cluster data (HTTPS/TLS)
+    Note right of Proxy: Find target cluster Agent connection
+    Proxy->>+Agent: 7a. Forward request (WSS encrypted connection)
+    Note right of Agent: Use ServiceAccount authentication
+    Agent->>+K8sAPI: 8a. API request (Bearer Token)
+    K8sAPI-->>-Agent: 9a. Return cluster metadata
+    Agent-->>-Proxy: 10a. Return data (WSS)
+    Proxy-->>-Console: 11a. Return data (HTTPS)
+    Console-->>User: 12a. Display cluster status
+    
+    Note over Console, GreptimeDB: 📊 Observability Data Access
+    Console->>+Proxy: 6b. Request monitoring data (HTTPS/TLS)
+    Proxy->>+Agent: 7b. Forward request (WSS encrypted connection)
+    Note right of Agent: Use database connection pool
+    Agent->>+GreptimeDB: 8b. Query request (PostgreSQL/MySQL Protocol)
+    Note right of GreptimeDB: Monitoring/alerting/logging/diagnostic data
+    GreptimeDB-->>-Agent: 9b. Return time series data
+    Agent-->>-Proxy: 10b. Return data (WSS)
+    Proxy-->>-Console: 11b. Return data (HTTPS)
+    Console-->>User: 12b. Display monitoring dashboard
+```
 
-### 9.3 Monitoring and Observability
+The interaction flow between the cloud console and ClusterAgent components implements several key security features:
+- TLS encryption
+- Principle of least privilege
+- No data persistence
+- Zero-trust architecture
 
-Current logging provides authentication audit trails with room for enhancement in comprehensive security monitoring.
+Therefore, TensorFusion console design significantly mitigates data leakage risks and ensures user data privacy.
 
-## 10. Conclusion
+## Conclusion
 
-TensorFusion demonstrates a solid foundation for GPU virtualization security with Kubernetes-native authentication and authorization. However, several areas require attention:
+TensorFusion adopts best security practices from cloud-native and virtualization domains, ensuring secure design by default in vGPU Host/Guest isolation, system authentication and authorization, resource management, data privacy, and software supply chain. Key implemented security controls include:
+- Multiple vGPU isolation solutions ensuring resource quota security for multiple untrusted tenants, mitigating compute resource abuse risks, while appropriately reducing isolation in trusted tenant scenarios to balance performance
+- Kubernetes RBAC and AdmissionWebhook principle of least privilege ensuring secure distributed component interactions
+- All core components deployed privately ensuring data privacy and significantly mitigating availability risks
+- Optional cloud console with limited encrypted data transmission and no data persistence ensuring secure control plane access
+- Development processes and CI/CD pipelines adopting GitHub open-source project security practices, enhancing software supply chain security
 
-- **Critical**: Remove production security bypasses
-- **High Priority**: Implement network security controls and mandatory TLS
-- **Medium Priority**: Enhance monitoring and audit capabilities
-
-The system's architecture supports secure multi-tenant GPU sharing when properly configured, but requires careful attention to deployment security practices and ongoing security maintenance.
-
-## Notes
-
-This analysis is based on the open-source components of TensorFusion. Enterprise features may provide additional security controls not covered in this assessment. Organizations should conduct thorough security reviews specific to their deployment environments and threat models.
-
-The security recommendations provided are based on evidence from the codebase and should be implemented as part of a comprehensive security strategy that includes regular security assessments, penetration testing, and compliance validation.
+In summary, TensorFusion's system architecture, when properly configured, supports secure multi-tenant virtual GPU sharing and large-scale GPU pool management and scheduling. Continuous attention to deployment security practices, enhanced defense in depth, and ongoing security improvements are required.

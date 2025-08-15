@@ -4,225 +4,355 @@
 
 ### 1.1 系统架构
 
-![Architecture](./images/architecture.png)
+#### 内嵌vGPU模式运行架构
 
-The above diagram describes the high level architecture of the TensorFusion service, including the components, trust boundaries, and communication paths that make up the TensorFusion service. Some communication paths on duplicated components were removed to simplify the diagram.
+![](https://cdn.tensor-fusion.ai/tf-architecture-ngpu.png)
 
-Scope: Only the TensorFusion service is in scope for this threat modeling, all other components, such as <XYZ> and <ABC>, are out of scope for this review.
+#### 远程vGPU模式运行架构
 
-Goals: The goal of this review is to find potential threats around the TensorFusion service, which can be utilized by external attackers to attack or to penetrate customer's cloud or data center.
+![](https://cdn.tensor-fusion.ai/tf-architecture-remote.png)
+
+上述架构图描述了TensorFusion服务的高层架构，包括组成TensorFusion服务的组件、信任边界和通信路径。
+
+**范围**：本威胁建模仅涵盖TensorFusion服务，其他相关组件，如时序数据库、AI模型和框架等不在本次评估范围内。
+
+**目标**：本评估旨在识别TensorFusion服务的潜在威胁，这些威胁可能被外部攻击者利用来攻击或渗透客户的云环境或数据中心。
 
 ### 1.2 系统组件
 
 TensorFusion的核心组件包括：
 
-- **控制器/管理器Operator**：管理和调度GPU资源的中央编排组件，在进程内运行了Controller、AdmissionWebhook、Scheduler、AlertEvaluator、MetricsRecorder、Scaler等子模块
+- **控制器Operator**：管理和调度GPU资源的中央编排组件，在进程内运行了Controller、AdmissionWebhook、Scheduler、AlertEvaluator、MetricsRecorder、Scaler等子模块. Operator也负责启动一个一次性的NodeDiscovery Job用于上报GPU节点信息
 - **虚拟化管理器Hypervisor**：处理GPU虚拟化的节点级组件，处理GPU节点上多个vGPU Worker的时间片分配、状态监控、性能统计等
-- **工作节点vGPU Worker/Client**：为应用程序提供用户态的vGPU实现，提供GPU访问接口，处理GPU系统调用，
+- **工作节点vGPU Worker**：为应用程序提供用户态的vGPU实现，提供GPU访问接口，处理GPU系统调用，当运行在Local vGPU模式时，Worker的运行形态是嵌入用户进程的动态链接库
+- **客户端vGPU Stub**：仅当运行在Remote vGPU模式时才会有此组件，作为动态链接库嵌入用户进程，配合Worker提供GPU访问接口，处理GPU系统调用
 
 ### 1.3 系统权限
 
-系统分布式运行，涉及多种类型的信任边界，包括 Kubernetes集群、Kubernetes节点、Pod网络、Pod内部容器运行时环境。
+TensorFusion是一个分布式系统，涉及多种信任边界，包括Kubernetes集群、Kubernetes节点、Pod网络和Pod内部容器运行时环境。以下是系统运行所需的所有权限：
 
-Operator组件的Kubernetes权限：
-- 
-- 
-- https://github.com/NexusGPU/tensor-fusion/blob/main/charts/tensor-fusion/templates/rbac.yaml
+**Operator组件的Kubernetes权限**：
+- TensorFusion自定义资源权限：用于TensorFusion相关的各项核心功能
+- Kubernetes原生工作负载和配置资源的读写权限（不包括Secret权限）：用于TensorFusion的各项核心功能
+- Karpenter自定义资源的查询和创建权限：用于Karpenter集成时创建云服务商节点（不使用Karpenter时可删除）
+- Kubernetes TokenReview权限：用于验证来自vGPU Stub获取vGPU Worker连接信息的请求
+- Pod/bind子资源权限：用于TensorFusion自定义GPU调度器绑定Kubernetes节点
+- Pod/exec子资源权限：用于ClusterAgent转发控制台WebShell请求（不使用WebShell时可删除）
+- Lease读写权限：用于Controller选主
 
-Hypervisor组件的Kubernetes权限：
-- https://github.com/NexusGPU/tensor-fusion/blob/main/charts/tensor-fusion/templates/rbac-hypervisor.yaml
+参考：https://github.com/NexusGPU/tensor-fusion/blob/main/charts/tensor-fusion/templates/rbac.yaml
 
+**Hypervisor组件的Kubernetes权限**：
+- Kubernetes TokenReview权限：用于验证来自vGPU Worker获取自身配额信息的请求
+- Node/Pod/Namespace资源的只读权限：用于获取所在GPU节点的Pod信息
+- GPU/GPUNode自定义资源的查询权限：用于获取和更新GPU信息
 
+参考：https://github.com/NexusGPU/tensor-fusion/blob/main/charts/tensor-fusion/templates/rbac-hypervisor.yaml
 
-节点权限：
+**Pod容器运行时权限**：
+- NodeDiscovery/Hypervisor组件对节点上所有GPU设备的访问权限：通过设置NVIDIA_VISIBLE_DEVICES=all环境变量，使NVIDIA Container Toolkit配置的CRI Hooks注入设备文件描述符，修改cgroup限制以访问节点上所有GPU设备
+- Worker组件同样通过该环境变量挂载所有GPU设备，但通过向所有进程注入libcuda_limiter.so，实际只能访问调度器分配的GPU
+- Hypervisor组件的Init Container以特权模式运行，用于一次性初始化节点上的tmpfs共享内存挂载点，该共享内存用于Hypervisor与Worker的进程间通信
+- Hypervisor组件的主容器增加了SYS_PTRACE系统调用能力，用于读取/proc文件系统中vGPU Worker相关信息
+- 其他工作负载无额外权限
 
-Pod内部容器运行时权限：
+参考：https://github.com/NexusGPU/tensor-fusion/blob/main/internal/utils/compose.go#L452
 
 ### 1.4 系统配置项
 
+1. ConfigMap/tensor-fusion-sys-config/config/scheduler-config.yaml: 包括调度器相关配置，数据结构[与Kubernetes Scheduler相同](https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1/#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration)
+2. ConfigMap/tensor-fusion-sys-config/config/dynamic-config.yaml：包括系统运行的[其他动态配置](./helm-install-values.md#properties-helm-values-dynamicConfig)，比如监控告警相关配置
+3. ConfigMap/tensor-fusion-sys-public-gpu-info/gpu-info.yaml：枚举主流GPU型号和算力基准，用于GPU资源识别
+4. MutatingWebhookConfiguration/tensor-fusion-sys-mutating-webhook
+5. Secret/tensor-fusion-webhook-secret：AdmissionWebhook启动HTTPS服务器使用的TLS证书，由临时Job（kube-webhook-certgen）在Helm安装时生成，安装完成后自动删除
+
 ### 1.5 已实施的安全保障措施
 
+#### 核心GPU虚拟化层
+
+1. Local/Remote vGPU模式均实现显存地址隔离和故障隔离，避免vGPU越权访问风险（仅运行开源vgpu.rs组件时不提供显存地址隔离，显存隔离由非开源组件tensor-fusion-worker提供）
+2. 对Remote vGPU客户端连接请求，使用Kubernetes ServiceAccount机制进行认证授权，避免伪造请求造成GPU资源滥用（Remote vGPU Stub为非开源组件）
+3. Worker与Hypervisor通过共享内存进行跨进程通信前，基于Kubernetes ServiceAccount机制进行认证授权，避免请求伪造和越权访问
+
+#### 编排调度层
+
+1. 提供Namespace级的整体配额限制功能，减少GPU资源滥用风险
+2. Kubernetes API、AdmissionWebhook TLS加密
+3. TensorFusion组件实施最小化权限原则
+4. 关键组件全部私有化部署，减小攻击面
+
+#### 云端控制台
+
+1. 云端控制台与Cluster Agent的认证授权、TLS加密
+2. 云端控制台和ClusterAgent仅作请求代理，不存储数据，也可移除ClusterAgent组件，完全在内网模式运行，降低数据泄露风险
+3. 云端控制台接入安全可靠的PaaS/SaaS服务提供商，如：接入Cloudflare实现DDoS和WAF防护；接入Clerk用户系统实现认证授权；接入Supabase/Upstash实现数据库和缓存的安全访问；接入Pulumi实现安全的密钥管理和基础设施自动化等。
 
 ## 2. 威胁模型分析
 
 ### 2.1 资产分类
 
-**关键资产：**
-- A1: GPU 硬件资源和分配状态
-- A2: 认证令牌和服务账户凭据
-- A3: Kubernetes 集群访问和 RBAC 权限 
-- A4: AI 工作负载数据和模型信息
-
-**敏感数据：**
-- S1: GPU 利用率指标和性能数据
-- S2: Pod 和容器元数据
-- S3: 网络连接信息
+**关键资产和数据：**
+- A1: GPU硬件资源和分配状态
+- A2: 远程共享GPU时使用的认证令牌
+- A3: Kubernetes集群API Server访问凭据
+- A4: TensorFusion所管理的Kubernetes集群中的用户工作负载
+- A5: TensorFusion组件的配置信息
+- A6: 系统监控指标和性能数据
+- A7: 云端控制台的登录Session信息
+- A8: 云端控制台与ClusterAgent通信的认证令牌
 
 ### 2.2 潜在威胁行为者
 
-- **外部攻击者**：针对暴露的API或网络服务，试图滥用资源
-- **恶意内部人员**：具有合法集群访问权限，但试图提升权限的用户
-- **供应链攻击**：受损的依赖项或容器镜像
+- **外部攻击者**：利用系统暴露的API，试图滥用GPU资源或窃取AI工作负载中的敏感数据
+- **恶意内部人员**：利用合法的集群访问权限，试图提升权限或滥用GPU资源
+- **供应链攻击**：利用受损的依赖项或容器镜像，试图植入恶意代码、滥用GPU资源、窃取AI工作负载中的敏感数据
 
 ### 2.3 STRIDE威胁分类参考
 
-|Threat|Desired property|Threat Definition|
+|威胁类型|期望属性|威胁定义|
 |---|---|---|
-|Spoofing|Authenticity|Pretending to be something or someone other than yourself|
-|Tampering|Integrity|Modifying something on disk, network, memory, or elsewhere|
-|Repudiation|Non-repudiability|Claiming that you didn't do something or were not responsible; can be honest or false|
-|Information disclosure|Confidentiality|Someone obtaining information they are not authorized to access|
-|Denial of service|Availability|Exhausting resources needed to provide service|
-|Elevation of privilege|Authorization|Allowing someone to do something they are not authorized to do|
+|身份欺骗(Spoofing)|真实性|冒充其他身份或实体|
+|篡改(Tampering)|完整性|修改磁盘、网络、内存或其他位置的数据|
+|否认(Repudiation)|不可否认性|声称未执行某操作或不承担责任；可能是诚实或虚假的|
+|信息泄露(Information Disclosure)|机密性|未授权获取信息|
+|拒绝服务(Denial of Service)|可用性|耗尽提供服务所需的资源|
+|权限提升(Elevation of Privilege)|授权|允许执行未授权的操作|
 
 ### 2.4 安全威胁分析
 
-#### TM1：访问控制失效
+#### TM01: vGPU跨租户内存越权访问 (Tampering, Information Disclosure, Elevation of Privilege)
 
-访问控制数据流
+恶意用户可能尝试通过GPU显存地址操作，访问其他租户的GPU内存数据，造成数据泄露或权限提升。攻击者可能利用GPU内存管理漏洞，绕过虚拟化隔离机制，读取或修改其他工作负载的GPU内存内容。
+
+**缓解措施**:
+1. 实施显存地址隔离机制，确保不同vGPU实例间的内存空间完全隔离
+2. 实现故障隔离，防止一个vGPU实例的错误影响其他实例
+3. 使用VRAM管理器控制内存分配和访问权限
 
 ```mermaid
 sequenceDiagram
-    participant Pod as "客户端 Pod"
-    participant API as "TensorFusion API"
-    participant K8s as "Kubernetes API"
+    participant UP as User Process
+    participant CRA as CUDA Runtime API
+    participant CDA as CUDA Driver API Stub
+    participant CL as TensorFusion GPU Limiter(OSS)
+    participant VR as TensorFusion vGPU Worker(Non-OSS)
+    participant UDA as User-space CUDA Driver API
+    participant DDA as Kernel-space Device Driver API
+
+    Note over CDA: TensorFusion通过ld.so.preload机制强制优先加载Stub
+    Note over CL: 限制GPU资源访问和API调用频率
+    Note over VR: 本地动态链接库或远程vGPU Worker<br/>隔离设备内存地址空间
+
+    UP->>CRA: GPU操作请求
+    CRA->>CDA: CUDA API调用
+    CDA->>CL: 资源访问检查
+    CL->>VR: 虚拟化处理
+    VR->>UDA: 实际CUDA调用
+    UDA->>DDA: 内核驱动调用
     
-    Pod->>API: 携带 Bearer Token 的请求
-    API->>API: 检查令牌缓存
-    alt 缓存未命中
-        API->>K8s: TokenReview 请求
-        K8s->>API: 令牌验证结果
-        API->>API: 缓存结果
-    end
-    API->>Pod: 连接 URL 或 401
+    DDA-->>UDA: 返回结果
+    UDA-->>VR: 返回结果
+    VR-->>CL: 返回结果
+    CL-->>CDA: 返回结果
+    CDA-->>CRA: 返回结果
+    CRA-->>UP: 返回结果
 ```
 
-**风险级别**：高
+**状态**：在Local vGPU模式下部分缓解；在Remote vGPU模式和VM模式下已缓解。
 
-系统实现了全面的 RBAC 控制，对集群资源具有广泛权限。然而，广泛的权限范围存在风险：
+**注意**：
+- 在Local vGPU模式下，Stub和Worker与用户进程为同一进程，无法完全避免非可信用户通过修改共享内存中的GPU配额信息，绕过Stub直接访问GPU设备
+- 在Worker运行为独立进程模式下，非可信租户的vGPU访问控制安全有效，包括：
+  - 非容器环境的VM模式：Worker运行在Host上，通过共享内存设备与虚拟机中的Stub通信
+  - Remote vGPU模式：Stub和Worker运行在独立容器中，通过TCP/IP或IB网络通信
 
-**已实施的缓解措施：**
-- TensorFusion 自定义资源的细粒度 RBAC 权限 
-- 使用 Kubernetes TokenReview API 进行服务账户令牌验证 
-- 带有 LRU 缓存的 JWT 令牌认证以提升性能 
+#### TM02: Remote vGPU连接请求伪造 (Spoofing, Elevation of Privilege)
 
-#### TM2：加密失效风险
+未授权的客户端可能伪造ServiceAccount令牌或绕过认证机制，获得对GPU Worker的连接权限，导致资源滥用和未授权访问。
 
+```mermaid
+sequenceDiagram
+    participant Client as "vGPU Stub"
+    participant Operator as "TensorFusion Operator"
+    participant K8s as "Kubernetes API Server"
+    participant Worker as "vGPU Worker"
 
+    Client->>Operator: 请求连接信息 (Bearer Token)
+    Operator->>K8s: TokenReview请求验证令牌
+    K8s->>Operator: 返回令牌验证结果
+    alt 令牌有效且Pod UID匹配
+        Operator->>Client: 返回Worker连接URL
+        Client->>Worker: 建立GPU连接
+    else 令牌无效或UID不匹配  
+        Operator->>Client: 返回401 Unauthorized
+    end
+```
 
-**缓解措施：**
-- 支持指标端点和 webhook 通信的 TLS 加密 
-- 准入 webhook 的基于证书的认证
-
-**已识别的缺口：**
-- 可通过环境变量禁用连接认证 
+**缓解措施**:
+1. 使用Kubernetes ServiceAccount机制进行客户端身份认证
+2. 验证令牌中的Pod UID与连接资源的Owner Reference匹配
+3. 实施令牌缓存机制减少API Server负载，提高验证效率
 
 **状态**：已缓解
 
-#### TM3：注入攻击
+#### TM03: Hypervisor-Worker IPC通信劫持 (Spoofing, Tampering, Information Disclosure)
 
-**风险级别**：低
+恶意进程可能尝试通过共享内存通道劫持或窃听Hypervisor与Worker之间的进程间通信，获取GPU配额信息或注入恶意指令。
 
-系统主要使用 Kubernetes API 交互，而非传统的 SQL 或命令注入向量。但是，资源验证通过准入 webhook 实现。
+```mermaid
+graph LR
+    subgraph "Node"
+        Hypervisor["Hypervisor<br/>(PTRACE权限容器)"]
+        Worker1["Worker 1"]
+        Worker2["Worker 2"] 
+        SharedMem["/dev/shm<br/>共享内存"]
+        MaliciousProc["恶意进程<br/>(威胁)"]
+    end
+    
+    Hypervisor <-->|"认证+IPC"| SharedMem
+    Worker1 <-->|"认证+IPC"| SharedMem  
+    Worker2 <-->|"认证+IPC"| SharedMem
+    MaliciousProc -.->|"尝试未授权访问"| SharedMem
+```
 
-TSDB组件使用了GreptimeDB，通过Vector采集指标数据。
+**缓解措施**:
+1. Worker与Hypervisor通信前进行ServiceAccount令牌验证
+2. 使用特权初始化容器配置共享内存挂载点，确保正确的访问权限
+3. Hypervisor容器获得SYS_PTRACE能力监控相关进程状态
 
-GreptimeDB默认的Standalone模式部署无秘钥可访问，需要在部署时考虑GreptimeDB的最佳安全实践，或使用GreptimeDB的云服务。
+**状态**：已缓解
 
-### 3.4 A04：不安全设计
+#### TM04: Kubernetes API未授权访问 (Spoofing, Elevation of Privilege)
 
-**风险级别**：中等
+攻击者可能尝试利用过度授权的ServiceAccount权限，执行超出组件职责范围的操作，如访问集群敏感资源或修改关键配置。
 
-**安全设计元素：**
-- 准入 webhook 验证资源完整性
-- 组件间的服务账户隔离
-- 基于环境变量的安全控制功能开关 
+**缓解措施**:
+1. 实施最小权限原则，为每个组件配置专用的RBAC权限
+2. Hypervisor组件仅获得必要的TokenReview和资源查询权限
+3. 移除不必要的权限，如WebShell和Karpenter权限可在不使用时删除
 
-### 3.5 A05：安全配置错误
+**状态**：已缓解
 
-**风险级别**：高
+#### TM05: AdmissionWebhook篡改 (Tampering, Elevation of Privilege)
 
-**风险因素：**
-- 多个环境变量可以禁用安全功能 
-- RBAC 配置中的广泛通配符权限 
+恶意用户可能尝试修改MutatingWebhookConfiguration，绕过Pod注入控制或插入恶意代码到工作负载中。
 
-### 3.9 A09：安全日志和监控失效
+**缓解措施**:
+1. 使用TLS加密保护AdmissionWebhook通信
+2. 通过专用Secret管理Webhook TLS证书
+3. 实施准入控制器身份验证，确保只有授权的Webhook能修改Pod规格
+4. 集群管理员控制Webhook配置，确保只有授权的Webhook能被添加
 
-**风险级别**：中等
+**状态**：已缓解
 
-**当前日志记录：**
-- 认证事件与连接上下文一起记录 
-- 令牌验证失败被记录 
+#### TM06: GPU资源配额绕过 (Denial of Service, Elevation of Privilege)
 
-#### TM9：安全日志和监控失效
+恶意用户可能尝试请求过量GPU资源，导致其他用户无法获得资源或系统性能下降。
 
-**风险级别**：中等
+**缓解措施**:
+1. 实施Namespace级整体配额限制功能，防止资源滥用
+2. 使用QoS系统提供分级服务质量保证
+3. 通过监控告警机制监控资源使用情况
 
-有限的外部 API 交互降低了 SSRF 风险，尽管 Kubernetes API 访问可能存在潜在向量。
+**状态**：已缓解
 
-## 4. 数据流安全分析
+#### TM07: 组件间通信窃听 (Information Disclosure)
 
-### 4.1 认证流程
+网络攻击者可能尝试拦截TensorFusion组件间的通信，获取敏感的认证令牌或工作负载元数据。
 
+**缓解措施**:
+1. 所有涉及云端控制台的API访问使用TLS加密传输
+2. 支持完全内网模式部署，移除外部通信依赖
 
+**状态**：部分缓解。Remote vGPU Stub/Worker间的Kubernetes内网通信未在应用层加密，依赖用户的Kubernetes CNI网络配置实现流量加密。
 
-### 4.2 GPU 资源分配流程
+#### TM08: 供应链攻击 (Tampering, Elevation of Privilege)
 
-系统通过受 RBAC 保护的操作管理 Kubernetes 自定义资源中的 GPU 资源。
+攻击者可能通过受损的容器镜像或依赖项，在TensorFusion组件中植入恶意代码，获取系统控制权限。
 
-### 4.3 网络通信安全
+**缓解措施**:
+TensorFusion的开发流程和DevOps管线采用GitHub开源项目推荐的各项安全实践，不断优化软件供应链安全。已实现的安全控制措施包括但不限于：
 
-- API 端点使用 Bearer 令牌认证
-- 敏感通信可使用 TLS 加密
-- 通过集群协调管理端口分配
+1. 使用安全的容器镜像构建制品
+2. 开启Dependabot，定期更新依赖项和安全补丁 
+3. 使用CodeQL进行代码安全扫描
+4. 使用FOSSA Scan扫描开源依赖的合规性和许可证合法性
+5. 团队GitHub账号开启MFA，遵循最小权限原则
+6. CI/CD管线的密钥使用GitHub Secrets管理
+
+![OSS Security Controls](/svc-controls.png)
+
+**状态**：部分缓解，持续优化中。
 
 ## 3. 数据隐私
 
 ### 3.1 完全私有化部署模式
 
-TensorFusion的部署模式为私有化部署，在完全私有化部署模式下，所有数据无外泄风险。
-
-数据面的Worker组件在内存中即时处理GPU系统调用，若为LocalGPU模式无跨进程的传输，若运行为RemoteGPU模式，二进制数据， 只有监控数据落盘，无客户数据泄露风险。
+TensorFusion支持完全私有化部署模式，极大降低数据外网泄露风险。数据面的Worker组件在内存中即时处理GPU系统调用，LocalGPU模式无跨进程传输，RemoteGPU模式仅传输二进制数据，只有监控数据落盘，无客户数据泄露风险。
 
 ### 3.2 云端管控台+核心组件私有化部署模式
 
-若启用云端管控台，当用户通过Clerk进行用户认证后，用户可根据其角色权限，访问其组织内的Kubernetes集群元数据、监控/告警/日志/诊断报告等可观测性数据。
+若启用云端管控台，用户通过Clerk进行身份认证后，可根据角色权限访问其组织内的Kubernetes集群元数据、监控/告警/日志/诊断报告等可观测性数据。
 
-访问的数据流如下：
+云端访问流程如下：
 
+```mermaid
+sequenceDiagram
+    participant User as 用户
+    participant Console as TensorFusion Console
+    participant Clerk as Clerk 认证服务
+    participant Supabase as Supabase 权限元数据
+    participant Proxy as Cluster Proxy
+    participant Agent as Cluster Agent
+    participant K8sAPI as Kubernetes API Server
+    participant GreptimeDB as GreptimeDB 时序数据库
 
+    Note over User, Supabase: 身份认证与权限验证
+    User->>+Console: 1. 访问管控台
+    Console->>+Clerk: 2. 身份认证请求
+    Clerk-->>-Console: 3. 认证成功 (JWT Token)
+    Console->>+Supabase: 4. 查询用户权限
+    Note right of Supabase: 验证组织和环境访问权限
+    Supabase-->>-Console: 5. 返回授权环境列表
 
-当用户通过ClusterAgent组件作为代理，使用HTTPS加密网络传输到云端，仅用作管控台前端显示，数据即用即丢，不存在云端数据落盘导致数据泄露的风险。
+    Note over Console, K8sAPI: 🔧 用户内部网络的Kubernetes 集群数据访问
+    Console->>+Proxy: 6a. 请求集群数据 (HTTPS/TLS)
+    Note right of Proxy: 查找目标集群的 Agent 连接
+    Proxy->>+Agent: 7a. 转发请求 (WSS 加密连接)
+    Note right of Agent: 使用 ServiceAccount 认证
+    Agent->>+K8sAPI: 8a. API 请求 (Bearer Token)
+    K8sAPI-->>-Agent: 9a. 返回集群元数据
+    Agent-->>-Proxy: 10a. 返回数据 (WSS)
+    Proxy-->>-Console: 11a. 返回数据 (HTTPS)
+    Console-->>User: 12a. 显示集群状态
+    
+    Note over Console, GreptimeDB: 📊 可观测性数据访问
+    Console->>+Proxy: 6b. 请求监控数据 (HTTPS/TLS)
+    Proxy->>+Agent: 7b. 转发请求 (WSS 加密连接)
+    Note right of Agent: 使用数据库连接池
+    Agent->>+GreptimeDB: 8b. 查询请求 (PostgreSQL/MySQL Protocol)
+    Note right of GreptimeDB: 监控/告警/日志/诊断数据
+    GreptimeDB-->>-Agent: 9b. 返回时序数据
+    Agent-->>-Proxy: 10b. 返回数据 (WSS)
+    Proxy-->>-Console: 11b. 返回数据 (HTTPS)
+    Console-->>User: 12b. 显示监控面板
+```
 
-**非 PII 技术数据：**
-- GPU利用率指标
-- 资源分配状态
+云端控制台和ClusterAgent组件的交互流程实现了几个关键的安全特性：
+- TLS 加密
+- 最小权限原则
+- 数据不落盘
+- 零信任架构
 
-**潜在敏感元数据：**
-- Pod 名称和命名空间（可能包含组织信息）
-- 容器镜像引用
-- 网络连接详情
-
-## 4. 软件供应链安全
-
-TensorFusion的开发流程、DevOps管线采用Github开源项目的推荐的各项安全实践，不断优化软件供应链安全。
-
-- CodeQL
-- FOSSA Scan 合规
-- 团队Github账号开启MFA，最小权限原则
-- CI/CD管线的秘钥使用Github Secrets管理
-- 持续的依赖更新和安全扫描 DependentBot
-
-![OSS Security Controls](/svc-controls.png)
+因此，TensorFusion控制台的设计显著缓解了数据泄露风险，保障了用户的数据隐私。
 
 ## 结论
 
-TensorFusion通过采纳云原生最佳安全实践，在虚拟化GPU的Host/Guest隔离、系统认证授权、资源管控、数据隐私、软件供应链等方面确保了默认配置下的安全设计。
+TensorFusion通过采纳云原生和虚拟化领域的最佳安全实践，在vGPU的Host/Guest隔离、系统认证授权、资源管控、数据隐私、软件供应链等方面确保了默认配置下的安全设计。实施的主要安全控制措施包括：
+- 实现多种vGPU隔离方案，确保多个非可信租户使用时的资源配额安全性，缓解计算资源滥用风险，并在可信租户场景下适当减弱隔离性以权衡性能
+- 通过Kubernetes RBAC和AdmissionWebhook的最小权限原则，确保分布式组件交互的安全性
+- 核心组件全部私有化部署，确保数据隐私，显著缓解可用性风险
+- 可选的云端管控台通过有限的加密数据传输、无数据落盘等措施，保障控制面的安全访问
+- 开发流程和CI/CD管线采纳GitHub开源项目的安全实践，增强软件供应链安全
 
-- 通过Kubernetes RBAC和AdmissionWebhook最小权限原则，确保了分布式组件交互的安全性
-- 实现了多种虚拟GPU隔离方案，确保了多个非可信租户使用时资源配额安全性，缓解计算资源滥用风险，以及在可信租户使用时通过LocalGPU模式减少隔离程度提升性能
-- 核心组件全部私有化部署，确保了数据隐私、显著缓解了可用性风险
-- 可选的云端管控台通过有限的、加密的数据传输，无数据落盘等措施，保障了控制面的安全访问
-- 开发流程和CI/CD管线采纳Github的推荐安全实践，保障了软件供应链安全
-
-因此，TensorFusion的系统架构在正确配置时，支持安全的多租户虚拟GPU共享、大规模GPU池的管理和调度，但需要仔细关注部署安全实践和持续的安全维护。
+总之，TensorFusion的系统架构在正确配置时，支持安全的多租户虚拟GPU共享和大规模GPU池的管理调度，需要持续关注部署安全实践，增强纵深防御，持续提升安全性。

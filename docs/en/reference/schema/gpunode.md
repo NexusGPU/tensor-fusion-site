@@ -45,12 +45,11 @@ GPUNodeStatus defines the observed state of GPUNode.
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-details')">allocationDetails</b> <span id="property-gpunode-allocationDetails" class="expandable-property" data-uid="property-gpunode-allocationDetails" @click="toggleExpand('property-gpunode-allocationDetails-details')">↓</span> | array |   | Allocation details is for node compaction, and calculate used apps |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-availableTFlops-details')">availableTFlops</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-availableVRAM-details')">availableVRAM</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationInfo-details')">allocationInfo</b> <span id="property-gpunode-allocationInfo" class="expandable-property" data-uid="property-gpunode-allocationInfo" @click="toggleExpand('property-gpunode-allocationInfo-details')">↓</span> | array |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-availableTFlops-details')">availableTFlops</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-availableVRAM-details')">availableVRAM</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-conditions-details')">conditions</b> <span id="property-gpunode-conditions" class="expandable-property" data-uid="property-gpunode-conditions" @click="toggleExpand('property-gpunode-conditions-details')">↓</span> | array |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-hypervisorStatus-details')">hypervisorStatus</b> <span id="property-gpunode-hypervisorStatus" class="expandable-property" data-uid="property-gpunode-hypervisorStatus" @click="toggleExpand('property-gpunode-hypervisorStatus-details')">↓</span> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-kubernetesNodeName-details')">kubernetesNodeName</b><span class="required-tag"></span> | string |   | the identifier of the kubernetes node, in nodeSelector mode, GPUNode name is the same as kubernetes node name because of it&#39;s owned by the Kubernetes node, while in node provisioning mode owned by the GPUNode, and K8S Node name is uncontrollable |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-loadedModels-details')">loadedModels</b> | array |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-managedGPUDeviceIDs-details')">managedGPUDeviceIDs</b> | array |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-managedGPUs-details')">managedGPUs</b><span class="required-tag"></span> | integer&lt;int32&gt; |   |  |
@@ -62,52 +61,20 @@ GPUNodeStatus defines the observed state of GPUNode.
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-totalVRAM-details')">totalVRAM</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-virtualAvailableTFlops-details')">virtualAvailableTFlops</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-virtualAvailableVRAM-details')">virtualAvailableVRAM</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-virtualTFlops-details')">virtualTFlops</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-virtualVRAM-details')">virtualVRAM</b><span class="required-tag"></span> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-virtualTFlops-details')">virtualTFlops</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-virtualVRAM-details')">virtualVRAM</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
 
-<div id="property-gpunode-allocationDetails-details" class="nested-properties expanded">
+<div id="property-gpunode-allocationInfo-details" class="nested-properties expanded">
 
-### allocationDetails (items) {#property-gpunode-allocationDetails-heading-items}
+### allocationInfo (items) {#property-gpunode-allocationInfo-heading-items}
 
-Allocation details is for node compaction, and calculate used apps
-
-### Properties {#properties-gpunode-allocationDetails-items}
+### Properties {#properties-gpunode-allocationInfo-items}
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-limits-details')">limits</b><span class="required-tag"></span> <span id="property-gpunode-allocationDetails-items-limits" class="expandable-property" data-uid="property-gpunode-allocationDetails-items-limits" @click="toggleExpand('property-gpunode-allocationDetails-items-limits-details')">↓</span> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-namespace-details')">namespace</b><span class="required-tag"></span> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-podID-details')">podID</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-podName-details')">podName</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-qos-details')">qos</b> | string |  <span class="enum-tag">low</span> <span class="enum-tag">medium</span> <span class="enum-tag">high</span> <span class="enum-tag">critical</span> |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-requests-details')">requests</b><span class="required-tag"></span> <span id="property-gpunode-allocationDetails-items-requests" class="expandable-property" data-uid="property-gpunode-allocationDetails-items-requests" @click="toggleExpand('property-gpunode-allocationDetails-items-requests-details')">↓</span> | object |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-workload-details')">workload</b> | string |   |  |
-
-<div id="property-gpunode-allocationDetails-items-limits-details" class="nested-properties expanded">
-
-### limits {#property-gpunode-allocationDetails-items-limits-heading}
-
-#### Properties {#properties-gpunode-allocationDetails-items-limits}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-limits-tflops-details')">tflops</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  | Tera floating point operations per second |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-limits-vram-details')">vram</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  | VRAM is short for Video memory, namely GPU RAM |
-
-</div>
-
-<div id="property-gpunode-allocationDetails-items-requests-details" class="nested-properties expanded">
-
-### requests {#property-gpunode-allocationDetails-items-requests-heading}
-
-#### Properties {#properties-gpunode-allocationDetails-items-requests}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-requests-tflops-details')">tflops</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  | Tera floating point operations per second |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationDetails-items-requests-vram-details')">vram</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  | VRAM is short for Video memory, namely GPU RAM |
-
-</div>
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationInfo-items-count-details')">count</b><span class="required-tag"></span> | integer |   | Worker count |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationInfo-items-name-details')">name</b> | string |   | Workload name namespace |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-allocationInfo-items-namespace-details')">namespace</b> | string |   |  |
 
 </div>
 
@@ -150,19 +117,8 @@ Allocation details is for node compaction, and calculate used apps
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-architecture-details')">architecture</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-dataDiskSize-details')">dataDiskSize</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-gpuCount-details')">gpuCount</b> | integer&lt;int32&gt; |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-gpuDriverVersion-details')">gpuDriverVersion</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-gpuModel-details')">gpuModel</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-hostname-details')">hostname</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-instanceID-details')">instanceID</b> | string |   | only set when node is managed by TensorFusion |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-ip-details')">ip</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-kernelVersion-details')">kernelVersion</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-operatingSystem-details')">operatingSystem</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-osImage-details')">osImage</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-ramSize-details')">ramSize</b> | any | <span class="constraint-tag" title="^(\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))(([KMGTPE]i)&#124;[numkMGTPE]&#124;([eE](\+&#124;-)?(([0-9]+(\.[0-9]&#42;)?)&#124;(\.[0-9]+))))?$">pattern: Regex</span>  | Additional space for L1/L2 VRAM buffer |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-gpunode-nodeInfo-region-details')">region</b> | string |   |  |
 
 </div>
 

@@ -34,6 +34,7 @@ TensorFusionConnectionSpec defines the desired state of TensorFusionConnection.
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-connection-clientPod-details')">clientPod</b><span class="required-tag"></span> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-tensor-fusion-connection-workloadName-details')">workloadName</b><span class="required-tag"></span> | string |   |  |
 
 ## Status

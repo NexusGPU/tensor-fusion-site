@@ -82,6 +82,12 @@ const schemaList = [
         url: `${PREFIX}/config/crd/bases/tensor-fusion.ai_tensorfusionworkloads.yaml`,
         file: 'workload-profile.json',
     },
+
+    {
+        name: 'GPUResourceQuota',
+        url: `${PREFIX}/config/crd/bases/tensor-fusion.ai_gpuresourcequotas.yaml`,
+        file: 'gpu-resource-quota.json',
+    },
 ]
 
 // Create a map of kind to file name for cross-referencing

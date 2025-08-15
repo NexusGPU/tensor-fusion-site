@@ -49,27 +49,28 @@ scale the workload based on the usage and traffic
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-details')">autoSetLimits</b> <span id="property-scheduling-config-template-autoScaling-autoSetLimits" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-autoSetLimits" @click="toggleExpand('property-scheduling-config-template-autoScaling-autoSetLimits-details')">↓</span> | object |   | layer 1 vertical auto-scaling, turbo burst to existing GPU cards quickly |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetReplicas-details')">autoSetReplicas</b> <span id="property-scheduling-config-template-autoScaling-autoSetReplicas" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-autoSetReplicas" @click="toggleExpand('property-scheduling-config-template-autoScaling-autoSetReplicas-details')">↓</span> | object |   | layer 2 horizontal auto-scaling, scale up to more GPU cards if max limits threshold hit |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetRequests-details')">autoSetRequests</b> <span id="property-scheduling-config-template-autoScaling-autoSetRequests" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-autoSetRequests" @click="toggleExpand('property-scheduling-config-template-autoScaling-autoSetRequests-details')">↓</span> | object |   | layer 3 adjusting, to match the actual usage in the long run |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-details')">scaleToZero</b> <span id="property-scheduling-config-template-autoScaling-scaleToZero" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-scaleToZero" @click="toggleExpand('property-scheduling-config-template-autoScaling-scaleToZero-details')">↓</span> | object |   | additional layer to save VRAM, auto-freeze memory and cool down to RAM and Disk |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-details')">autoSetLimits</b> <span id="property-scheduling-config-template-autoScaling-autoSetLimits" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-autoSetLimits" @click="toggleExpand('property-scheduling-config-template-autoScaling-autoSetLimits-details')">↓</span> | object |   | layer 1 vertical auto-scaling, turbo burst to existing GPU cards quickly<br />VPA-like, aggregate metrics data &lt;1m |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetReplicas-details')">autoSetReplicas</b> <span id="property-scheduling-config-template-autoScaling-autoSetReplicas" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-autoSetReplicas" @click="toggleExpand('property-scheduling-config-template-autoScaling-autoSetReplicas-details')">↓</span> | object |   | layer 2 horizontal auto-scaling, scale up to more GPU cards if max limits threshold hit<br />HPA-like, aggregate metrics data 1m-1h (when tf-worker scaled-up, should also trigger client pod&#39;s owner[Deployment etc.]&#39;s replica increasing, check if KNative works) |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetRequests-details')">autoSetRequests</b> <span id="property-scheduling-config-template-autoScaling-autoSetRequests" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-autoSetRequests" @click="toggleExpand('property-scheduling-config-template-autoScaling-autoSetRequests-details')">↓</span> | object |   | layer 3 adjusting, to match the actual usage in the long run, only for N:M remote vGPU mode, not impl yet<br />Adjust baseline requests to match the actual usage in longer period, such as 1day - 2weeks |
 
 <div id="property-scheduling-config-template-autoScaling-autoSetLimits-details" class="nested-properties expanded">
 
 ### autoSetLimits {#property-scheduling-config-template-autoScaling-autoSetLimits-heading}
 
-layer 1 vertical auto-scaling, turbo burst to existing GPU cards quickly
+layer 1 vertical auto-scaling, turbo burst to existing GPU cards quickly<br />VPA-like, aggregate metrics data &lt;1m
 
 #### Properties {#properties-scheduling-config-template-autoScaling-autoSetLimits}
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-enable-details')">enable</b> | boolean |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-evaluationPeriod-details')">evaluationPeriod</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-extraTFlopsBufferRatio-details')">extraTFlopsBufferRatio</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-ignoredDeltaRange-details')">ignoredDeltaRange</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-maxRatioToRequests-details')">maxRatioToRequests</b> | string |   | the multiplier of requests, to avoid limit set too high, like 5.0 |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-prediction-details')">prediction</b> <span id="property-scheduling-config-template-autoScaling-autoSetLimits-prediction" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-autoSetLimits-prediction" @click="toggleExpand('property-scheduling-config-template-autoScaling-autoSetLimits-prediction-details')">↓</span> | object |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-scaleUpStep-details')">scaleUpStep</b> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetLimits-targetResource-details')">targetResource</b> | string |   | target resource to scale limits, such as &quot;tflops&quot;, &quot;vram&quot;, or &quot;all&quot; by default |
 
 <div id="property-scheduling-config-template-autoScaling-autoSetLimits-prediction-details" class="nested-properties expanded">
 
@@ -92,7 +93,7 @@ layer 1 vertical auto-scaling, turbo burst to existing GPU cards quickly
 
 ### autoSetReplicas {#property-scheduling-config-template-autoScaling-autoSetReplicas-heading}
 
-layer 2 horizontal auto-scaling, scale up to more GPU cards if max limits threshold hit
+layer 2 horizontal auto-scaling, scale up to more GPU cards if max limits threshold hit<br />HPA-like, aggregate metrics data 1m-1h (when tf-worker scaled-up, should also trigger client pod&#39;s owner[Deployment etc.]&#39;s replica increasing, check if KNative works)
 
 #### Properties {#properties-scheduling-config-template-autoScaling-autoSetReplicas}
 
@@ -112,17 +113,19 @@ layer 2 horizontal auto-scaling, scale up to more GPU cards if max limits thresh
 
 ### autoSetRequests {#property-scheduling-config-template-autoScaling-autoSetRequests-heading}
 
-layer 3 adjusting, to match the actual usage in the long run
+layer 3 adjusting, to match the actual usage in the long run, only for N:M remote vGPU mode, not impl yet<br />Adjust baseline requests to match the actual usage in longer period, such as 1day - 2weeks
 
 #### Properties {#properties-scheduling-config-template-autoScaling-autoSetRequests}
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetRequests-aggregationPeriod-details')">aggregationPeriod</b> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetRequests-enable-details')">enable</b> | boolean |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetRequests-evaluationPeriod-details')">evaluationPeriod</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetRequests-extraBufferRatio-details')">extraBufferRatio</b> | string |   | the request buffer ratio, for example actual usage is 1.0, 10% buffer will be 1.1 as final preferred requests |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetRequests-percentileForAutoRequests-details')">percentileForAutoRequests</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetRequests-prediction-details')">prediction</b> <span id="property-scheduling-config-template-autoScaling-autoSetRequests-prediction" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-autoSetRequests-prediction" @click="toggleExpand('property-scheduling-config-template-autoScaling-autoSetRequests-prediction-details')">↓</span> | object |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-autoSetRequests-targetResource-details')">targetResource</b> | string |   | target resource to scale requests, such as &quot;tflops&quot;, &quot;vram&quot;, or &quot;all&quot; by default |
 
 <div id="property-scheduling-config-template-autoScaling-autoSetRequests-prediction-details" class="nested-properties expanded">
 
@@ -141,51 +144,6 @@ layer 3 adjusting, to match the actual usage in the long run
 
 </div>
 
-<div id="property-scheduling-config-template-autoScaling-scaleToZero-details" class="nested-properties expanded">
-
-### scaleToZero {#property-scheduling-config-template-autoScaling-scaleToZero-heading}
-
-additional layer to save VRAM, auto-freeze memory and cool down to RAM and Disk
-
-#### Properties {#properties-scheduling-config-template-autoScaling-scaleToZero}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze-details')">autoFreeze</b> <span id="property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze" @click="toggleExpand('property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze-details')">↓</span> | array |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup-details')">intelligenceWarmup</b> <span id="property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup" class="expandable-property" data-uid="property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup" @click="toggleExpand('property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup-details')">↓</span> | object |   |  |
-
-<div id="property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze-details" class="nested-properties expanded">
-
-### autoFreeze (items) {#property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze-heading-items}
-
-##### Properties {#properties-scheduling-config-template-autoScaling-scaleToZero-autoFreeze-items}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze-items-enable-details')">enable</b> | boolean |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze-items-freezeToDiskTTL-details')">freezeToDiskTTL</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze-items-freezeToMemTTL-details')">freezeToMemTTL</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-autoFreeze-items-qos-details')">qos</b> | string |  <span class="enum-tag">low</span> <span class="enum-tag">medium</span> <span class="enum-tag">high</span> <span class="enum-tag">critical</span> |  |
-
-</div>
-
-<div id="property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup-details" class="nested-properties expanded">
-
-### intelligenceWarmup {#property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup-heading}
-
-##### Properties {#properties-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup}
-
-| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
-|----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup-enable-details')">enable</b> | boolean |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup-historyDataPeriod-details')">historyDataPeriod</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup-model-details')">model</b> | string |   |  |
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-autoScaling-scaleToZero-intelligenceWarmup-predictionPeriod-details')">predictionPeriod</b> | string |   |  |
-
-</div>
-
-</div>
-
 </div>
 
 <div id="property-scheduling-config-template-hypervisor-details" class="nested-properties expanded">
@@ -198,11 +156,59 @@ single GPU device multi-process queuing and fair scheduling with QoS constraint
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-multiProcessQueuing-details')">multiProcessQueuing</b> <span id="property-scheduling-config-template-hypervisor-multiProcessQueuing" class="expandable-property" data-uid="property-scheduling-config-template-hypervisor-multiProcessQueuing" @click="toggleExpand('property-scheduling-config-template-hypervisor-multiProcessQueuing-details')">↓</span> | object |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-details')">autoFreezeAndResume</b> <span id="property-scheduling-config-template-hypervisor-autoFreezeAndResume" class="expandable-property" data-uid="property-scheduling-config-template-hypervisor-autoFreezeAndResume" @click="toggleExpand('property-scheduling-config-template-hypervisor-autoFreezeAndResume-details')">↓</span> | object |   | additional layer to save VRAM, auto-freeze memory and cool down to RAM and Disk<br />Hypervisor will monitor and trigger freeze of inactive workers, Operator should mark them as scaled-to-zero and release the GPU pool resources, don&#39;t scale down CPU client part, so that they can continue to serve the traffic or scale down by other auto-scaling solutions like KEDA/KNative |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-multiProcessQueuing-details')">multiProcessQueuing</b> <span id="property-scheduling-config-template-hypervisor-multiProcessQueuing" class="expandable-property" data-uid="property-scheduling-config-template-hypervisor-multiProcessQueuing" @click="toggleExpand('property-scheduling-config-template-hypervisor-multiProcessQueuing-details')">↓</span> | object |   | Hypervisor will move low priority jobs to pending queue if GPU is full<br />This config can adjust hypervisor&#39;s queueing behavior to balance the co-scheduling CUDA calls |
+
+<div id="property-scheduling-config-template-hypervisor-autoFreezeAndResume-details" class="nested-properties expanded">
+
+### autoFreezeAndResume {#property-scheduling-config-template-hypervisor-autoFreezeAndResume-heading}
+
+additional layer to save VRAM, auto-freeze memory and cool down to RAM and Disk<br />Hypervisor will monitor and trigger freeze of inactive workers, Operator should mark them as scaled-to-zero and release the GPU pool resources, don&#39;t scale down CPU client part, so that they can continue to serve the traffic or scale down by other auto-scaling solutions like KEDA/KNative
+
+#### Properties {#properties-scheduling-config-template-hypervisor-autoFreezeAndResume}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze-details')">autoFreeze</b> <span id="property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze" class="expandable-property" data-uid="property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze" @click="toggleExpand('property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze-details')">↓</span> | array |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup-details')">intelligenceWarmup</b> <span id="property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup" class="expandable-property" data-uid="property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup" @click="toggleExpand('property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup-details')">↓</span> | object |   |  |
+
+<div id="property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze-details" class="nested-properties expanded">
+
+### autoFreeze (items) {#property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze-heading-items}
+
+##### Properties {#properties-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze-items}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze-items-enable-details')">enable</b> | boolean |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze-items-freezeToDiskTTL-details')">freezeToDiskTTL</b> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze-items-freezeToMemTTL-details')">freezeToMemTTL</b> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-autoFreeze-items-qos-details')">qos</b> | string |  <span class="enum-tag">low</span> <span class="enum-tag">medium</span> <span class="enum-tag">high</span> <span class="enum-tag">critical</span> |  |
+
+</div>
+
+<div id="property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup-details" class="nested-properties expanded">
+
+### intelligenceWarmup {#property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup-heading}
+
+##### Properties {#properties-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup}
+
+| <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
+|----------|------|------------|-------------|
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup-enable-details')">enable</b> | boolean |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup-historyDataPeriod-details')">historyDataPeriod</b> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup-model-details')">model</b> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-hypervisor-autoFreezeAndResume-intelligenceWarmup-predictionPeriod-details')">predictionPeriod</b> | string |   |  |
+
+</div>
+
+</div>
 
 <div id="property-scheduling-config-template-hypervisor-multiProcessQueuing-details" class="nested-properties expanded">
 
 ### multiProcessQueuing {#property-scheduling-config-template-hypervisor-multiProcessQueuing-heading}
+
+Hypervisor will move low priority jobs to pending queue if GPU is full<br />This config can adjust hypervisor&#39;s queueing behavior to balance the co-scheduling CUDA calls
 
 #### Properties {#properties-scheduling-config-template-hypervisor-multiProcessQueuing}
 
@@ -255,7 +261,8 @@ avoid hot GPU devices and continuously balance the workload<br />implemented by 
 
 | <div style="min-width:110px">Property</div> | Type | <div style="min-width:130px">Constraints</div> | <div style="min-width:125px">Description</div> |
 |----------|------|------------|-------------|
-| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-reBalancer-internal-details')">internal</b> | string |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-reBalancer-enable-details')">enable</b> | boolean |   |  |
+| <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-reBalancer-interval-details')">interval</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-reBalancer-reBalanceCoolDownTime-details')">reBalanceCoolDownTime</b> | string |   |  |
 | <b style="cursor: pointer;" @click="scrollToDetail('property-scheduling-config-template-reBalancer-threshold-details')">threshold</b> <span id="property-scheduling-config-template-reBalancer-threshold" class="expandable-property" data-uid="property-scheduling-config-template-reBalancer-threshold" @click="toggleExpand('property-scheduling-config-template-reBalancer-threshold-details')">↓</span> | object |   |  |
 
