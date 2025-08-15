@@ -17,7 +17,7 @@ hero:
       text: 参考
       link: /zh/reference/cli-params
   image:
-    src: https://cdn.tensor-fusion.ai/logo.svg
+    src: https://cdn.tensor-fusion.ai/logo.round.png
     alt: Tensor Fusion Logo
 features:
   - title: GPU池化和虚拟化

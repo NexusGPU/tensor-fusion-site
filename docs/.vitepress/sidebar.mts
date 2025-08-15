@@ -345,6 +345,13 @@ export const Reference = (lang: string) => [
               zh: 'SchedulingConfigTemplate'
             }),
             link: 'schema/scheduling-config-template.md'
+          },
+          {
+            text: match(lang, {
+              en: 'GPUResourceQuota',
+              zh: 'GPUResourceQuota'
+            }),
+            link: 'schema/gpuresource-quota.md'
           }
         ]
       },
