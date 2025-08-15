@@ -205,13 +205,13 @@ graph LR
         Hypervisor["Hypervisor<br/>(PTRACE privileged container)"]
         Worker1["Worker 1"]
         Worker2["Worker 2"] 
-        SharedMem["/dev/shm<br/>Shared Memory"]
+        SharedMem["/run/tensor-fusion/<br/>pod-uid/shm<br/>Shared Memory<br/><br/>"]
         MaliciousProc["Malicious Process<br/>(Threat)"]
     end
     
-    Hypervisor <-->|"Auth+IPC"| SharedMem
-    Worker1 <-->|"Auth+IPC"| SharedMem  
-    Worker2 <-->|"Auth+IPC"| SharedMem
+    Hypervisor <-->|"Owns"| SharedMem
+    Worker1 <-->|"RW"| SharedMem  
+    Worker2 <-->|"RW"| SharedMem
     MaliciousProc -.->|"Attempted unauthorized access"| SharedMem
 ```
 
