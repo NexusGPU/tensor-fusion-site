@@ -2,158 +2,201 @@
 outline: deep
 ---
 
-# Tensor Fusion Deployment for VM/BareMetal
+# Tensor Fusion Host + VM Deployment Guide
+Run tensor-fusion-worker on the host and deploy tensor-fusion-client inside a virtual machine (VM) to use the host’s physical GPUs from VMs without GPU passthrough.
 
-Note that TensorFusion GPU pool runs on Kubernetes, thus you need to choose one or more servers to install Kubernetes master and add GPU servers as Kubernetes nodes to the cluster, **it won't impact your existing VM/BareMetal environment and existing none containerized services**.
+## Terminology
+1. Tensor-fusion-worker (worker): A standalone binary. You can run multiple worker instances on the same host. It receives compute requests from clients and executes the tasks.
+2. Tensor-fusion-client (client): A set of shared libraries that fully export CUDA and NVML APIs. It runs inside your application environment and forwards compute requests to the worker on the host.
 
-Afterwards, you can migrate existing services to use **Local or Remote** GPU workers created by TensorFusion.
+> [!NOTE]
+> Multiple clients can connect to one worker instance. For production, we recommend one client per worker instance for easier resource isolation and management.
 
 ## Prerequisites
 
-- At least one Linux VM or BareMetal with GPU card mounted.
-- Access to DockerHub
+1. A Linux host with NVIDIA GPUs. Recommended NVIDIA driver version: 570.xx or newer.
+2. One or more VMs (QEMU/MVisor/VMware/Hyper‑V, etc.) that can reach the host either over the network or via shared memory.
+
+## Step 1: Download Tensor Fusion
+
+1. Download the latest release: https://cdn.tensor-fusion.ai/archive-lastest.zip
+2. Unzip the archive:
+```bash
+unzip archive-lastest.zip
+```
+
+## Step 2: Install tensor-fusion-worker on the host
+
+Check the worker binary options:
+```bash
+./build/tensor-fusion-worker -h
+Usage: tensor-fusion-worker [option]
+Options
+  -h, --help            Display this information.
+  -v, --version         Display version information.
+  -n, --net             Specified network protocol.
+  -p, --port            Specified the port for server.
+  -l, --load            Specified the file path of snapshot.
+  -m, --shmem-file      Specified the file path of shared memory.
+  -M, --shmem-size      Specified the size(MB) of shared memory.
+```
 
 > [!NOTE]
-> The installation would take 3-7 minutes to complete.
+> 1) Worker supports two protocols: NATIVE and SHMEM. 
+> 2) NATIVE uses TCP, simple to deploy; recommended when VMs and host are in the same network with ping <= ~0.8 ms. 
+> 3) SHMEM uses shared memory, lowest latency; best for latency-sensitive workloads.
 
-## Step 1. Install K3S Master
+Start with NATIVE protocol on port 12345:
+```bash
+TF_ENABLE_LOG=1 ./build/tensor-fusion-worker -n native -p 12345
+```
 
-Choose one VM/BareMetal to install K3S to offer a simple Kubernetes environment. You can also use other ways to initialize a Kubernetes.
+Start with SHMEM protocol, creating shared memory at /my_shm with size 256 MB:
+```bash
+TF_ENABLE_LOG=1 ./build/tensor-fusion-worker -n shmem -m /my_shm -M 256
+```
+
+> [!NOTE] Environment variables
+> - TF_ENABLE_LOG: Enable logging (default: off)
+> - TF_LOG_LEVEL: trace|debug|info|warn|error (default: info)
+> - TF_LOG_PATH: Log file path (default: empty, i.e., stdout)
+> - TF_CUDA_MEMORY_LIMIT: CUDA memory limit in MB (default: unlimited)
+
+## Step 3: Install tensor-fusion-client in the VM
+
+1. Get the tensor-fusion-client directory from the extracted package.
+
+### Windows
+Place files from tensor-fusion-client/windows (nvcuda.dll, nvml.dll, teleport.dll) either in the system PATH or alongside your application so they can be loaded.
+
+### Linux
+Use LD_LIBRARY_PATH or LD_PRELOAD to inject the shared libraries from tensor-fusion-client/linux (libcuda.so, libnvidia-ml.so, libteleport.so) into your application process.
+
+> [!TIP]
+> OS environments vary. Please ensure the client libraries are actually loaded by your application.
+
+> [!NOTE] Environment variables
+> - TF_ENABLE_LOG: Enable logging (default: off)
+> - TF_LOG_LEVEL: trace|debug|info|warn|error (default: info)
+> - TF_LOG_PATH: Log file path (default: empty; on Linux logs to console, on Windows view with DebugView)
+> - TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL: An HTTP GET endpoint that returns connection info (optional)
+> - TENSOR_FUSION_OPERATOR_CONNECTION_INFO: Connection info in the format protocol+param1+param2+version (version is currently 0)
+
+> [!TIP]
+> You can set the connection info directly via TENSOR_FUSION_OPERATOR_CONNECTION_INFO, or provide a GET endpoint via TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL that returns it.
+
+## Step 4: Verify the setup
+
+We’ll verify inside a Linux VM using Python with PyTorch CUDA.
+
+### Prepare the environment
+Enable logs and inject the client libraries
+```bash
+export TF_ENABLE_LOG=1
+export LD_PRELOAD=/opt/tensor-fusion-client/linux/libteleport.so:/opt/tensor-fusion-client/linux/libcuda.so:/opt/tensor-fusion-client/linux/libnvidia-ml.so
+```
+
+> [!NOTE]
+> Assuming the client is installed under /opt/tensor-fusion-client. Adjust paths as needed.
+
+#### NATIVE protocol
+If the worker runs with NATIVE at host IP 192.168.1.100 and port 12345:
+
+1) Set the connection info (format: native+[host-ip]+[port]+[version]):
+```bash
+export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=native+192.168.1.100+12345+0
+```
+
+> [!TIP]
+> Ensure the VM can reach the host IP and port.
+
+#### SHMEM protocol
+If the worker runs with SHMEM, creates /my_shm and sets size to 256 MB, start your VM with QEMU and attach the shared memory via IVSHMEM:
+
+> [!NOTE] QEMU command example
+> ```bash
+> qemu-system-x86_64 \
+>   -m 8192 \
+>   -hda centos8.4.qcow2 \
+>   -vnc :1 \
+>   -enable-kvm \
+>   -cpu host \
+>   -object memory-backend-file,id=shm0,mem-path=/dev/shm/my_shm,size=256M,share=on \
+>   -device ivshmem-plain,memdev=shm0 \
+>   -smp 4
+> ```
+
+1) Locate the IVSHMEM device inside the VM:
+```bash
+lspci -vv | grep -i Inter-VM
+```
+
+Possible output:
+```bash
+00:04.0 RAM memory: Red Hat, Inc. Inter-VM shared memory (rev 01)
+```
+Hence the device BDF is 00:04.0.
+
+2) Set the connection info. (format: shmem+[resource]+[size]+[version]) Use the device resource file (e.g., resource2), match the size (MB), and version 0:
+```bash
+export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=shmem+/sys/devices/pci0000:00/0000:00:04.0/resource2+256+0
+```
+
+> [!TIP]
+> 1) The shared-memory size must match the worker’s setting. 
+> 2) Root privileges are typically required to mmap the IVSHMEM BAR resource.
+
+### PyTorch validation example
+Once the environment variables are set, run the following (PyTorch + Qwen3‑0.6B) in the VM:
 
 ```bash
-curl -sfL https://get.k3s.io | sh -s - server --tls-san $(curl -s https://ifconfig.me)
-```
+pip install modelscope packaging transformers accelerate
 
-If your K3S master has GPU cards and want the GPU resources to be scheduled by TensorFusion, **complete step 2 on this server first**, and then run the following command
+cat << 'EOF' >> test-qwen.py
+from modelscope import AutoModelForCausalLM, AutoTokenizer
 
-```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true \
-  --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA \
-  --node-label feature.node.kubernetes.io/pci-10de.present=true \
-  --tls-san $(curl -s https://ifconfig.me)" \
-  sh -s - 
-```
+model_name = "Qwen/Qwen3-0.6B"
 
-Then get the token to add more GPU nodes
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+	model_name,
+	torch_dtype="auto",
+	device_map="cuda:0"
+)
 
-```bash
-cat /var/lib/rancher/k3s/server/node-token
-```
+prompt = "Give me a short introduction to large language model."
+messages = [
+	{"role": "user", "content": prompt}
+]
+text = tokenizer.apply_chat_template(
+	messages,
+	tokenize=False,
+	add_generation_prompt=True,
+	enable_thinking=True
+)
+model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
+generated_ids = model.generate(
+	**model_inputs,
+	max_new_tokens=32768
+)
+output_ids = generated_ids[0][len(model_inputs.input_ids[0]):].tolist()
+try:
+	# rindex finding 151668 (</think>)
+	index = len(output_ids) - output_ids[::-1].index(151668)
+except ValueError:
+	index = 0
 
-## Step 2. GPU Node Setup
+thinking_content = tokenizer.decode(output_ids[:index], skip_special_tokens=True).strip("\n")
+content = tokenizer.decode(output_ids[index:], skip_special_tokens=True).strip("\n")
 
-Since TensorFusion system runs in containerized environment, you need configure NVIDIA Container Toolkit before install K3S Agent in GPU Nodes. Refer [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) for more details.
-
-::: code-group 
-
-```bash [Debian/Ubuntu]
-# Just copy all and run them once for each node
-curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
-
-apt-get update
-apt-get install -y nvidia-container-toolkit
-```
-
-```bash [RHEL/CentOS/Fedora/AmazonLinux]
-# Just copy all and run them once for each node
-curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
-sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
-
-sudo dnf install -y nvidia-container-toolkit
-```
-
-:::
-
-Configure NVIDIA container toolkit for K3S
-
-```bash
-mkdir -p /var/lib/rancher/k3s/agent/etc/containerd/
-cat << EOF >> /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
-version = 2
-
-[plugins."io.containerd.internal.v1.opt"]
-  path = "/var/lib/rancher/k3s/agent/containerd"
-[plugins."io.containerd.grpc.v1.cri"]
-  stream_server_address = "127.0.0.1"
-  stream_server_port = "10010"
-  enable_selinux = false
-  enable_unprivileged_ports = true
-  enable_unprivileged_icmp = true
-  device_ownership_from_security_context = false
-  sandbox_image = "rancher/mirrored-pause:3.6"
-
-[plugins."io.containerd.grpc.v1.cri".containerd]
-  snapshotter = "overlayfs"
-  disable_snapshot_annotations = true
-
-[plugins."io.containerd.grpc.v1.cri".cni]
-  bin_dir = "/var/lib/rancher/k3s/data/cni"
-  conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-  runtime_type = "io.containerd.runc.v2"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-  SystemdCgroup = true
-  BinaryName = "/usr/bin/nvidia-container-runtime"
-
-[plugins."io.containerd.grpc.v1.cri".registry]
-  config_path = "/var/lib/rancher/k3s/agent/etc/containerd/certs.d"
+print("thinking content:", thinking_content)
+print("content:", content)
 EOF
+
+python3 test-qwen.py
 ```
 
-## Step 3. Add more GPU Server as K3S Nodes
+Validation criteria:
+- The VM prints normal model outputs.
+- On the host, nvidia-smi shows the corresponding inference process and GPU memory usage.
 
-```bash
-# replace the MASTER_IP, K3S_TOKEN, and run the command on each GPU node
-export MASTER_IP=<master-private-ip-from-step-1-vm>
-export K3S_TOKEN=<k3s-token-from-step-1-cat-command-result>
-
-curl -sfL https://get.k3s.io | K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
-
-# If you encountered container-selinux version issue, run it again with following env variable
-export INSTALL_K3S_SKIP_SELINUX_RPM=true
-```
-
-If there isn't CUDA and NVIDIA driver on the host, eg. no nvidia-smi command or can not run it，install latest [CUDA & NVIDIA Driver here](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=runfile_local)
-
-## Step 4. Verify if all GPU Nodes Added
-
-```bash
-# ssh in master vm/baremetal
-kubectl get nodes --show-labels | grep nvidia.com/gpu.present=true
-```
-
-Expected output:
-
-```bash
-gpu-node-name   Ready   <none>   42h   v1.32.1 beta.kubernetes.io/arch=amd64,...,kubernetes.io/os=linux,nvidia.com/gpu.present=true
-```
-
-## Step 5. Install TensorFusion
-
-You can follow the [Kubernetes Deployment](/guide/getting-started/deployment-k8s.md) to install TensorFusion.
-
-After installation, you can use TensorFusion inside the new created lightweight Kubernetes cluster.
-
-## Uninstall TensorFusion & K3S
-
-Run the following command to uninstall all TensorFusion components and custom resources
-
-```bash
-# export KUBECONFIG if needed
-curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
-```
-
-Run the following command to uninstall all K3S components
-
-```bash
-# on GPU nodes
-/usr/local/bin/k3s-agent-uninstall.sh
-```
-
-```bash
-# on master node
-/usr/local/bin/k3s-uninstall.sh
-```

@@ -22,8 +22,15 @@ export const Guide = (lang: string) => [
       },
       {
         text: match(lang, {
-          en: 'VM/BareMetal Deployment',
-          zh: 'VM/BareMetal部署'
+          en: 'VM Kubernetes Deployment',
+          zh: 'VM Kubernetes部署'
+        }),
+        link: 'getting-started/deployment-vm-k8s'
+      },
+      {
+        text: match(lang, {
+          en: 'VM Deployment',
+          zh: 'VM部署'
         }),
         link: 'getting-started/deployment-vm'
       },
