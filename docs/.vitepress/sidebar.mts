@@ -29,6 +29,13 @@ export const Guide = (lang: string) => [
       },
       {
         text: match(lang, {
+          en: 'VM Deployment',
+          zh: 'VM部署'
+        }),
+        link: 'getting-started/deployment-vm'
+      },
+      {
+        text: match(lang, {
           en: 'TensorFusion Architecture',
           zh: 'TensorFusion架构和原理'
         }),
