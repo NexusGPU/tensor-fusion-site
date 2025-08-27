@@ -29,7 +29,7 @@ unzip archive-lastest.zip
 
 Check the worker binary options:
 ```bash
-./build/tensor-fusion-worker -h
+./tensor-fusion-worker -h
 Usage: tensor-fusion-worker [option]
 Options
   -h, --help            Display this information.
@@ -48,12 +48,12 @@ Options
 
 Start with NATIVE protocol on port 12345:
 ```bash
-TF_ENABLE_LOG=1 ./build/tensor-fusion-worker -n native -p 12345
+TF_ENABLE_LOG=1 ./tensor-fusion-worker -n native -p 12345
 ```
 
 Start with SHMEM protocol, creating shared memory at /my_shm with size 256 MB:
 ```bash
-TF_ENABLE_LOG=1 ./build/tensor-fusion-worker -n shmem -m /my_shm -M 256
+TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 ```
 
 > [!NOTE] Environment variables

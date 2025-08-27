@@ -28,7 +28,7 @@ unzip archive-lastest.zip
 
 从安装文件中获得tensor-fusion-worker
 ```bash
-./build/tensor-fusion-worker -h
+./tensor-fusion-worker -h
 Usage: tensor-fusion-worker [option]
 Options
   -h, --help            Display this information.
@@ -46,12 +46,12 @@ Options
 
 使用NATIVE协议启动，绑定端口号12345：
 ```bash
-TF_ENABLE_LOG=1 ./build/tensor-fusion-worker -n native -p 12345
+TF_ENABLE_LOG=1 ./tensor-fusion-worker -n native -p 12345
 ```
 
-使用SHMEM协议启动，创建共享内存/my_shmem， 并设置共享内存大小为256MB：
+使用SHMEM协议启动，创建共享内存/my_shm， 并设置共享内存大小为256MB：
 ```bash
-TF_ENABLE_LOG=1 ./build/tensor-fusion-worker -n shmem -m /my_shm -M 256
+TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 ```
 
 > [!NOTE]环境变量
