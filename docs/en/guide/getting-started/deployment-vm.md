@@ -81,6 +81,7 @@ Use LD_LIBRARY_PATH or LD_PRELOAD to inject the shared libraries from tensor-fus
 > - TF_LOG_PATH: Log file path (default: empty; on Linux logs to console, on Windows view with DebugView)
 > - TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL: An HTTP GET endpoint that returns connection info (optional)
 > - TENSOR_FUSION_OPERATOR_CONNECTION_INFO: Connection info in the format protocol+param1+param2+version (version is currently 0)
+> - TF_MAX_CACHE_REQUEST_COUNT: Maximum cache request count (default: 100)
 
 > [!TIP]
 > You can set the connection info directly via TENSOR_FUSION_OPERATOR_CONNECTION_INFO, or provide a GET endpoint via TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL that returns it.

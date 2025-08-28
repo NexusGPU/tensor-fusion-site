@@ -55,10 +55,10 @@ TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 ```
 
 > [!NOTE]环境变量
-> 1. TF_ENABLE_LOG: 启用日志记录，默认为禁用
-> 2. TF_LOG_LEVEL: 日志级别，支持值为trace/debug/info/warn/error，默认为info
-> 3. TF_LOG_PATH: 日志文件路径，默认为空（即输出到标准输出）
-> 4. TF_CUDA_MEMORY_LIMIT: CUDA内存限制，单位为MB，默认为不限制
+> - TF_ENABLE_LOG: 启用日志记录，默认为禁用
+> - TF_LOG_LEVEL: 日志级别，支持值为trace/debug/info/warn/error，默认为info
+> - TF_LOG_PATH: 日志文件路径，默认为空（即输出到标准输出）
+> - TF_CUDA_MEMORY_LIMIT: CUDA内存限制，单位为MB，默认为不限制
 
 ## 步骤三：在VM中安装 tensor-fusion-client
 
@@ -71,11 +71,12 @@ TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 > [!TIP]注意: 由于用户操作系统环境复杂，请确保client相关动态链接库被业务进程成功加载并使用
 
 > [!NOTE]环境变量
-> 1. TF_ENABLE_LOG: 启用日志记录，默认为禁用
-> 2. TF_LOG_LEVEL: 日志级别，支持值为trace/debug/info/warn/error，默认为info
-> 3. TF_LOG_PATH: 日志文件路径，默认为空（在Linux环境下输出到控制台，在Windows中可通过DebugView查看）
-> 4. TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL: 获取连接URL，默认为空
-> 5. TENSOR_FUSION_OPERATOR_CONNECTION_INFO: 获取连接调试信息，格式:协议+参数1+参数2+连接版本号(目前固定为0)，默认为空
+> - TF_ENABLE_LOG: 启用日志记录，默认为禁用
+> - TF_LOG_LEVEL: 日志级别，支持值为trace/debug/info/warn/error，默认为info
+> - TF_LOG_PATH: 日志文件路径，默认为空（在Linux环境下输出到控制台，在Windows中可通过DebugView查看）
+> - TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL: 获取连接URL，默认为空
+> - TENSOR_FUSION_OPERATOR_CONNECTION_INFO: 获取连接调试信息，格式:协议+参数1+参数2+连接版本号(目前固定为0)，默认为空
+> - TF_MAX_CACHE_REQUEST_COUNT: 最大缓存请求数量，默认为100
 
 > [!TIP]注意
 > 可以通过TENSOR_FUSION_OPERATOR_CONNECTION_INFO直接设置worker连接信息，也可以在TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL中设置一个GET请求地址，返回连接信息
