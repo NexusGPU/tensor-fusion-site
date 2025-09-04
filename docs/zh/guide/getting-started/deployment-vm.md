@@ -2,269 +2,197 @@
 outline: deep
 ---
 
-# 虚拟机/物理机部署方案
+# Tensor Fusion 宿主机 + 虚拟机部署指南
+在宿主机（Host）运行 tensor-fusion-worker，在虚拟机（VM）内部署tensor-fusion-client，实现无需直通 GPU 的虚拟机使用物理机 GPU 资源。
 
-TensorFusion GPU资源池基于Kubernetes运行，按步骤完成轻量级Kubernetes K3S集群搭建后，将GPU服务器作为节点接入集群即可。**该部署方式不会影响您现有的虚拟机/物理机环境以及非容器化服务**，K3S对现有环境侵入性小，稳定性也满足生产环境需求。
+## 名词解释
+1. Tensor-fusion-worker: 以下简称worker，是一个独立的二进制程序，每台宿主机上可以同时运行多个worker实例，负责接收来自client的计算请求，并执行计算任务。
+2. Tensor-fusion-client: 以下简称client，包含若干相关动态链接库文件，完整导出CUDA和NVML相关API，运行在独立的业务环境内，负责将计算请求发送至宿主机上的worker。
 
+> [!NOTE]注意: 多个client可以连接到同一个worker实例, 但是建议生产环境中每个client对应一个worker实例，便于管理和资源分配。
 
-<!-- TensorFusion提供了一键安装脚本，若由于操作系统差异运行出错，请逐步按照本文档后续内容手动安装。
+## 前提条件
 
-::: code-group
+1. 一台拥有NVIDIA GPU的Linux宿主机，建议GPU驱动版本 570.XX 及以上
+3. 一台或多台虚拟机（QEMU/MVisor/VMware/Hyper-V 等均可），与宿主机能够通过<b>网络或共享内存进行互通</b>
 
-```bash [云端控制台模式]
-# 先注册登录TensorFusion，选择VM部署方式复制命令
-curl -sfL https://download.tensor-fusion.ai/install-vm.sh | \
-  ENROLL_TOKEN="copied-from-tensor-fusion-cloud" \
-  AGENT_ID="copied-from-tensor-fusion-cloud" \
-  sh -
+## 步骤一：下载tensor-fusion
+
+1. 下载最新版本 (https://cdn.tensor-fusion.ai/archive-lastest.zip)
+2. 解压缩后获得安装文件
+```bash
+unzip archive-lastest.zip
 ```
 
-```bash [无控制台模式]
-curl -sfL https://download.tensor-fusion.ai/install-vm.sh | sh -
+## 步骤二：在宿主机安装 tensor-fusion-worker
+
+从安装文件中获得tensor-fusion-worker
+```bash
+./tensor-fusion-worker -h
+Usage: tensor-fusion-worker [option]
+Options
+  -h, --help            Display this information.
+  -v, --version         Display version information.
+  -n, --net             Specified network protocol.
+  -p, --port            Specified the port for server.
+  -l, --load            Specified the file path of snapshot.
+  -m, --shmem-file      Specified the file path of shared memory.
+  -M, --shmem-size      Specified the size(MB) of shared memory.
+```
+> [!NOTE]注意
+> 1. 目前worker支持两种协议，分别是NATIVE和SHMEM
+> 2. NATIVE: 直接通过tcp网络进行通信，部署简单，建议在内网并且ping值保持在0.8ms以内时使用
+> 3. SHMEM: 通过共享内存进行通信，效率最高，适合对延迟敏感的场景。
+
+使用NATIVE协议启动，绑定端口号12345：
+```bash
+TF_ENABLE_LOG=1 ./tensor-fusion-worker -n native -p 12345
 ```
 
-```bash [私有化部署控制台模式]
-curl -sfL https://download.tensor-fusion.ai/install-vm.sh | \
-  ENROLL_TOKEN="copied-from-tensor-fusion-cloud" \
-  AGENT_ID="copied-from-tensor-fusion-cloud" \
-  CLOUD_ENDPOINT="your-own.domain" \
-  sh -
+使用SHMEM协议启动，创建共享内存/my_shm， 并设置共享内存大小为256MB：
+```bash
+TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 ```
 
-::: -->
+> [!NOTE]环境变量
+> - TF_ENABLE_LOG: 启用日志记录，默认为禁用
+> - TF_LOG_LEVEL: 日志级别，支持值为trace/debug/info/warn/error，默认为info
+> - TF_LOG_PATH: 日志文件路径，默认为空（即输出到标准输出）
+> - TF_CUDA_MEMORY_LIMIT: CUDA内存限制，单位为MB，默认为不限制
 
-## 手动部署前置条件
+## 步骤三：在VM中安装 tensor-fusion-client
 
-- 至少一台运行Linux的虚拟机或物理机，已安装GPU
-- 访问DockerHub网络，或每台机器用以下命令提前设置容器镜像仓库的拉取地址
+1. 从安装文件中获得tensor-fusion-client目录
+### Windows 系统
+将tensor-fusion-client/windows目录下的文件（nvcuda.dll、nvml.dll、teleport.dll）放置在系统路径中，或与业务程序在同一目录下，确保业务程序能正常引用。
+### Linux 系统
+将tensor-fusion-client/linux目录下的文件（libcuda.so、libnvidia-ml.so、libteleport.so）通过LD_LIBRARY_PATH或LD_PRELOAD将动态链接库文件注入到业务程序中。
+
+> [!TIP]注意: 由于用户操作系统环境复杂，请确保client相关动态链接库被业务进程成功加载并使用
+
+> [!NOTE]环境变量
+> - TF_ENABLE_LOG: 启用日志记录，默认为禁用
+> - TF_LOG_LEVEL: 日志级别，支持值为trace/debug/info/warn/error，默认为info
+> - TF_LOG_PATH: 日志文件路径，默认为空（在Linux环境下输出到控制台，在Windows中可通过DebugView查看）
+> - TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL: 获取连接URL，默认为空
+> - TENSOR_FUSION_OPERATOR_CONNECTION_INFO: 获取连接调试信息，格式:协议+参数1+参数2+连接版本号(目前固定为0)，默认为空
+> - TF_MAX_CACHE_REQUEST_COUNT: 最大缓存请求数量，默认为100
+
+> [!TIP]注意
+> 可以通过TENSOR_FUSION_OPERATOR_CONNECTION_INFO直接设置worker连接信息，也可以在TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL中设置一个GET请求地址，返回连接信息
+
+## 步骤四：验证
+
+我们可以使用python结合pytorch-cuda在Linux VM中进行验证。
+
+### 准备
+
+设置基础环境变量，用于打开日志和注入client
+```bash
+export TF_ENABLE_LOG=1
+export LD_PRELOAD=/opt/tensor-fusion-client/linux/libteleport.so:/opt/tensor-fusion-client/linux/libcuda.so:/opt/tensor-fusion-client/linux/libnvidia-ml.so
+```
+> [!NOTE]注意: 假设tensor-fusion-client路径为/opt/tensor-fusion-client，可根据实际情况进行调整
+
+#### NATIVE协议
+如果worker以NATIVE协议启动，所在宿主机IP地址192.168.1.100，绑定端口号12345；
+
+1. 设置worker连接信息，格式：native+[宿主机IP地址]+[端口号]+[连接版本号]
+```bash
+export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=native+192.168.1.100+12345+0
+```
+
+> [!TIP]注意: 确保VM中能够正常访问宿主机的IP地址和端口
+
+#### SHMEM协议
+如果worker以SHMEM协议启动，创建共享内存/my_shm，并设置共享内存大小为256MB：
 
 > [!NOTE]
-> 指南中的安装过程大约需要3-7分钟完成
+> QEMU启动VM命令并连接共享内存的示例：
+> ```bash
+> qemu-system-x86_64   \
+>    -m 8192   \
+>    -hda centos8.4.qcow2   \
+>    -vnc :1   \
+>    -enable-kvm   \
+>    -cpu host   \
+>    -object memory-backend-file,id=shm0,mem-path=/dev/shm/my_shm,size=256M  \
+>    -device ivshmem-plain,memdev=shm0   \
+>    -smp 4
+> ```
 
-执行以下命令配置中国大陆网络环境镜像加速（可选）
+1. 在VM中找到IVSHMEM设备地址
+```bash
+lspci -vv | grep -i Inter-VM
+```
+
+可能得到的输出如下：
+```bash 
+00:04.0 RAM memory: Red Hat, Inc. Inter-VM shared memory (rev 01)
+```
+可以得出ivshmem设备地址是<b>00:04.0</b>
+
+2. 设置worker连接信息，格式：shmem+[ivshmem设备地址]+[共享内存大小(MB)]+[连接版本号]
+```bash
+export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=shmem+/sys/devices/pci0000:00/0000:00:04.0/resource2+256+0
+```bash
+export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=shmem+/sys/devices/pci0000:00/0000:00:04.0/resource2+256+0
+```
+> [!TIP]注意
+> 1. 设置的共享内存大小必须与worker保持一致
+> 2. 需要root权限才能成功映射ivshmem设备提供的共享内存
+
+### PyTorch 验证示例
+成功设置环境变量后，输入以下代码（PyTorch + Qwen3 0.6B）进行验证
 
 ```bash
-mkdir -p /etc/rancher/k3s/
-cat > /etc/rancher/k3s/registries.yaml << 'EOF'
-mirrors:
-  docker.io:
-    endpoint:
-      - "https://docker.m.daocloud.io"
-      - "https://docker.1ms.run"
-  gcr.io:
-    endpoint:
-      - "https://gcr.m.daocloud.io"
-  ghcr.io:
-    endpoint:
-      - "https://ghcr.m.daocloud.io"
-  k8s.gcr.io:
-    endpoint:
-      - "https://k8s-gcr.m.daocloud.io"
-  registry.k8s.io:
-    endpoint:
-      - "https://k8s.m.daocloud.io"
-  mcr.microsoft.com:
-    endpoint:
-      - "https://mcr.m.daocloud.io"
-  nvcr.io:
-    endpoint:
-      - "https://nvcr.m.daocloud.io"
-  quay.io:
-    endpoint:
-      - "https://quay.m.daocloud.io"
-  docker.elastic.co:
-    endpoint:
-      - "https://elastic.m.daocloud.io"
-  registry.ollama.ai:
-    endpoint:
-      - "https://ollama.m.daocloud.io"
-configs:
-  "docker.io":
-    auth: {}
-    tls: {}
-    rewrite:
-      "^docker.io/tensorfusion/(.*)": "registry.cn-hangzhou.aliyuncs.com/tensorfusion/$1"
+pip config set global.index-url https://pypi.mirrors.ustc.edu.cn/simple
+pip install modelscope packaging transformers accelerate
+
+cat << 'EOF' >> test-qwen.py
+from modelscope import AutoModelForCausalLM, AutoTokenizer
+
+model_name = "Qwen/Qwen3-0.6B"
+
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype="auto",
+    device_map="cuda:0"
+)
+
+prompt = "Give me a short introduction to large language model."
+messages = [
+    {"role": "user", "content": prompt}
+]
+text = tokenizer.apply_chat_template(
+    messages,
+    tokenize=False,
+    add_generation_prompt=True,
+    enable_thinking=True
+)
+model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
+generated_ids = model.generate(
+    **model_inputs,
+    max_new_tokens=32768
+)
+output_ids = generated_ids[0][len(model_inputs.input_ids[0]):].tolist() 
+try:
+    # rindex finding 151668 (</think>)
+    index = len(output_ids) - output_ids[::-1].index(151668)
+except ValueError:
+    index = 0
+
+thinking_content = tokenizer.decode(output_ids[:index], skip_special_tokens=True).strip("\n")
+content = tokenizer.decode(output_ids[index:], skip_special_tokens=True).strip("\n")
+
+print("thinking content:", thinking_content)
+print("content:", content)
 EOF
+
+python3 test-qwen.py
 ```
 
-## 步骤1：安装K3S控制节点
-
-
-选择一台VM/BareMetal来安装K3S，以提供一个简单的Kubernetes环境。您也可以使用其他方式来初始化Kubernetes。
-
-
-::: code-group
-
-```bash [中国大陆网络]
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - server --tls-san $(curl -s https://ifconfig.me)
-```
-
-```bash [国际网络]
-curl -sfL https://get.k3s.io | sh -s - server --tls-san $(curl -s https://ifconfig.me)
-```
-
-:::
-
-如果K3S Control Plane节点也有GPU设备，并且希望TensorFusion纳管，请**在先完成第二步**, 再来运行以下命令
-
-::: code-group
-
-```bash [中国大陆网络]
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true --tls-san $(curl -s https://ifconfig.me)" sh -s - 
-```
-
-```bash [国际网络]
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true --tls-san $(curl -s https://ifconfig.me)" sh -s - 
-```
-
-:::
-
-然后获取并保存token，用于后续添加GPU节点
-
-```bash
-cat /var/lib/rancher/k3s/server/node-token
-```
-
-运行完成后，执行`kubectl get no`命令预期可以看到一个Control Plane节点， 若输出不符预期，可能遇到的问题和解决方案如下：
-
-```bash
-# 如果遇到安装container-selinux依赖的错误，在命令中添加以下环境变量重新运行上述命令
-export INSTALL_K3S_SKIP_SELINUX_RPM=true
-```
-
-## 步骤2：配置GPU节点
-
-由于TensorFusion系统运行在容器化环境中，您需要在GPU节点上配置NVIDIA Container Toolkit，然后安装K3S Agent。
-
-对于国内用户，推荐使用中科大镜像源，安装方法参考[NVIDIA Container 运行时库安装](https://mirrors.ustc.edu.cn/help/libnvidia-container.html)。有国际网络的用户可参考NVIDIA官方[安装指南](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)。
-
-::: code-group 
-
-```bash [Debian/Ubuntu]
-# 在每台GPU服务器上运行一次即可
-curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-  && curl -s -L https://mirrors.ustc.edu.cn/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
-    sed 's#deb https://nvidia.github.io#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://mirrors.ustc.edu.cn#g' | \
-    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-apt update
-apt install -y nvidia-container-toolkit
-```
-
-```bash [RHEL/CentOS/Fedora/AlibabaLinux]
-# 在每台GPU服务器上运行一次即可
-curl -s -L https://mirrors.ustc.edu.cn/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
-  sed 's#nvidia.github.io/libnvidia-container/stable/#mirrors.ustc.edu.cn/libnvidia-container/stable/#g' |
-  sed 's#nvidia.github.io/libnvidia-container/experimental/#mirrors.ustc.edu.cn/libnvidia-container/experimental/#g' |
-  sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
-
-sudo dnf install -y nvidia-container-toolkit
-# if dnf command not found, try `sudo yum install -y nvidia-container-toolkit`
-```
-
-:::
-
-每台GPU服务器执行以下命令，添加Container Toolkit配置：
-
-```bash
-# sudo su -
-mkdir -p /var/lib/rancher/k3s/agent/etc/containerd/
-cat << EOF >> /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
-version = 2
-
-[plugins."io.containerd.internal.v1.opt"]
-  path = "/var/lib/rancher/k3s/agent/containerd"
-[plugins."io.containerd.grpc.v1.cri"]
-  stream_server_address = "127.0.0.1"
-  stream_server_port = "10010"
-  enable_selinux = false
-  enable_unprivileged_ports = true
-  enable_unprivileged_icmp = true
-  device_ownership_from_security_context = false
-  sandbox_image = "rancher/mirrored-pause:3.6"
-
-[plugins."io.containerd.grpc.v1.cri".containerd]
-  snapshotter = "overlayfs"
-  disable_snapshot_annotations = true
-
-[plugins."io.containerd.grpc.v1.cri".cni]
-  bin_dir = "/var/lib/rancher/k3s/data/cni"
-  conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-  runtime_type = "io.containerd.runc.v2"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-  SystemdCgroup = true
-  BinaryName = "/usr/bin/nvidia-container-runtime"
-
-[plugins."io.containerd.grpc.v1.cri".registry]
-  config_path = "/var/lib/rancher/k3s/agent/etc/containerd/certs.d"
-EOF
-```
-
-## 步骤3：将GPU服务器加入K3S集群
-
-::: code-group
-
-``` bash [中国大陆网络]
-export MASTER_IP=<master-private-ip-from-step-1-vm>
-export K3S_TOKEN=<k3s-token-from-step-1-cat-command-result>
-
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_SKIP_SELINUX_RPM=true INSTALL_K3S_MIRROR=cn K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
-```
-
-```bash [国际网络]
-# 替换MASTER_IP和K3S_TOKEN，然后在每台GPU服务器上运行
-export MASTER_IP=<master-private-ip-from-step-1-vm>
-export K3S_TOKEN=<k3s-token-from-step-1-cat-command-result>
-
-curl -sfL https://get.k3s.io | K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN INSTALL_K3S_EXEC="--node-label nvidia.com/gpu.present=true --node-label feature.node.kubernetes.io/cpu-model.vendor_id=NVIDIA --node-label feature.node.kubernetes.io/pci-10de.present=true" sh -s -
-```
-
-:::
-
-# 如果遇到安装container-selinux依赖的错误，在命令中添加以下环境变量重新运行上述命令
-export INSTALL_K3S_SKIP_SELINUX_RPM=true
-```
-
-如果没有安装CUDA和NVIDIA驱动（缺少nvidia-smi命令或无法运行），从这里下载并运行最新版本的[CUDA & NVIDIA Driver](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=runfile_local)
-
-## 步骤4：验证GPU节点是否添加成功
-
-```bash
-# ssh in master vm/baremetal
-kubectl get nodes --show-labels | grep nvidia.com/gpu.present=true
-```
-
-预期输出：
-
-```bash
-gpu-node-name   Ready   <none>   42h   v1.32.1 beta.kubernetes.io/arch=amd64,...,kubernetes.io/os=linux,nvidia.com/gpu.present=true
-```
-
-## 步骤5：安装TensorFusion
-
-您可以按照[Kubernetes部署](/zh/guide/getting-started/deployment-k8s.md)来安装和验证TensorFusion。
-
-## 卸载TensorFusion和K3S
-
-运行如下命令一键卸载所有TensorFusion组件
-
-```bash
-# 可指定 KUBECONFIG 环境变量
-curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
-```
-
-运行命令卸载K3S所有组件
-
-```bash
-# 在GPU节点上运行
-/usr/local/bin/k3s-agent-uninstall.sh
-```
-
-```bash
-# 在Master节点上运行
-/usr/local/bin/k3s-uninstall.sh
-```
-
-
+验证方式：
+- 在 VM 内看到模型正常生成输出
+- 在宿主机上运行 `nvidia-smi` 可以看到对应的推理进程与显存占用
