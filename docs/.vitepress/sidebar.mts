@@ -385,6 +385,13 @@ export const Reference = (lang: string) => [
       },
       {
         text: match(lang, {
+          en: 'Kubernetes Events',
+          zh: 'Kubernetes事件'
+        }),
+        link: 'events'
+      },
+      {
+        text: match(lang, {
           en: 'Benchmark Report',
           zh: '性能测试报告'
         }),

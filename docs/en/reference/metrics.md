@@ -143,3 +143,33 @@ Detailed GPU hardware metrics from hypervisor.
 | `nvlink_rx` | float64 | NVLink receive throughput |
 | `nvlink_tx` | float64 | NVLink transmit throughput |
 | `ts` | timestamp | Record timestamp |
+
+## Pool Metrics
+
+**Measurement:** `tf_pool_metrics`
+
+Pool level metrics and capacity summary
+
+#### Tags
+
+| Tag | Description |
+|-------|-------------|
+| `pool` | GPU pool identifier |
+| `phase` | Pool phase/status |
+
+#### Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `allocated_tflops` | float64 | Total Allocated(Requested) TFLOPs |
+| `allocated_tflops_percent` | float64 | Allocated(Requested) TFLOPs percentage to total capacity |
+| `allocated_tflops_percent_virtual` | float64 | Allocated(Requested) TFLOPs percentage to virtual capacity |
+| `allocated_vram_bytes` | float64 | Total Allocated(Requested) VRAM in bytes |
+| `allocated_vram_percent` | float64 | Allocated(Requested) VRAM percentage to total capacity |
+| `allocated_vram_percent_virtual` | float64 | Allocated(Requested) VRAM percentage to virtual capacity |
+| `limited_tflops` | float64 | Total Limited TFLOPs |
+| `limited_vram_bytes` | float64 | Total Limited VRAM in bytes |
+| `limited_tflops_percent_virtual` | float64 | Limited TFLOPs percentage to virtual capacity |
+| `limited_vram_percent_virtual` | float64 | Limited VRAM percentage to virtual capacity |
+| `gpu_count` | int | Number of GPUs of the pool |
+| `ts` | timestamp | Record timestamp |

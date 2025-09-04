@@ -91,6 +91,7 @@ Use LD_LIBRARY_PATH or LD_PRELOAD to inject the shared libraries from tensor-fus
 We’ll verify inside a Linux VM using Python with PyTorch CUDA.
 
 ### Prepare the environment
+
 Enable logs and inject the client libraries
 ```bash
 export TF_ENABLE_LOG=1
@@ -148,6 +149,7 @@ export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=shmem+/sys/devices/pci0000:00/0000
 > 2) Root privileges are typically required to mmap the IVSHMEM BAR resource.
 
 ### PyTorch validation example
+
 Once the environment variables are set, run the following (PyTorch + Qwen3‑0.6B) in the VM:
 
 ```bash

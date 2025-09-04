@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-# Tensor Fusion Deployment for VM/BareMetal
+# Tensor Fusion Deployment for VM/BareMetal (K3S)
 
 Note that TensorFusion GPU pool runs on Kubernetes, thus you need to choose one or more servers to install Kubernetes master and add GPU servers as Kubernetes nodes to the cluster, **it won't impact your existing VM/BareMetal environment and existing none containerized services**.
 
