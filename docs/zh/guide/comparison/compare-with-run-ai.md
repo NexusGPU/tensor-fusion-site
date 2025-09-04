@@ -31,6 +31,8 @@ TensorFusion 开源了大部分代码，为AI Infra团队提供端到端的GPU�
 | 云端控制台 | ✅ | ✅ |
 | 支持非英伟达 GPU | 🚧 | ❌ |
 | **企业级功能** |  |  |
+| Windows/Linux虚拟机vGPU | ✅ | ❌ |
+| OpenGL/Vulkan虚拟化 | ✅ | ❌ |
 | GPU实时迁移 | 🚧 | ❌ |
 | CUDA调用链追踪分析 | 🚧 | ❌ |
 | AI模型预加载 | 🚧 | ❌ |

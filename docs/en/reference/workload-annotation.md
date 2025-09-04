@@ -27,6 +27,7 @@ Add the following annotations to your Pod metadata to configure GPU workload req
 | Annotation | Description | Example Value |
 |------------|-------------|---------------|
 | `tensor-fusion.ai/gpu-model` | Specifies the GPU/NPU model | `A100` `H100` `L4` `L40s` |
+| `tensor-fusion.ai/dedicated-gpu` | Use along with `tensor-fusion.ai/gpu-model` annotation, occupancy whole GPU for this workload | `'true'` |
 | `tensor-fusion.ai/workload` | TensorFusionWorkload name, if exists, will share the same vGPU workers | `pytorch-example` |
 | `tensor-fusion.ai/workload-profile` | Reference to a WorkloadProfile to reuse pre-defined parameters | `default-profile` |
 | `tensor-fusion.ai/enabled-replicas` | Set to any number less or equal to ReplicaSet replicas, for grey releasing TensorFusion | `'1','42'` |
@@ -34,7 +35,8 @@ Add the following annotations to your Pod metadata to configure GPU workload req
 | `tensor-fusion.ai/auto-limits` | Auto set vram and/or tflops `limits` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
 | `tensor-fusion.ai/auto-replicas` | Auto set vGPU worker `replicas` based on workload historical metrics, for detail settings please use `WorkloadProfile` custom resource | `'true'` |
 | `tensor-fusion.ai/standalone-worker-mode` | When `is-local-gpu` is true, this option is false, it means vGPU worker will be injected into init container, not running standalone vGPU worker, to achieve best performance, the trade-off is user might bypass vGPU worker and directly use physical GPU, when `is-local-gpu` is false, this option is invalid | `'true'` |
-| `tensor-fusion.ai/disable-features` | Killer switch to disable tensor fusion built-in features partially, could be comma split format for multiple features | `'gpu-limiter, gpu-opt, mem-manager'` |
+| `tensor-fusion.ai/disable-features` | Killer switch to disable tensor fusion built-in features partially, could be comma split format for multiple features | `'gpu-limiter,gpu-opt,mem-manager'` |
+
 
 ### Example Config
 

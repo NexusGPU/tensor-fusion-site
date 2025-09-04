@@ -27,6 +27,7 @@
 | 注解 | 描述 | 示例值 |
 |------------|-------------|---------------|
 | `tensor-fusion.ai/gpu-model` | 指定GPU/NPU型号 | `A100` `H100` `L4` `L40s` |
+| `tensor-fusion.ai/dedicated-gpu` | 与 `tensor-fusion.ai/gpu-model` 注解一起使用，独占所分配的物理GPU设备 | `'true'` |
 | `tensor-fusion.ai/workload` | TensorFusionWorkload名称，如果存在，将共享相同的vGPU workers | `pytorch-example` |
 | `tensor-fusion.ai/workload-profile` | 引用WorkloadProfile以重用预定义参数 | `default-profile` |
 | `tensor-fusion.ai/enabled-replicas` | 设置为小于或等于ReplicaSet副本数的任何数字，用于TensorFusion的灰度发布 | `'1','42'` |

@@ -29,10 +29,11 @@ TensorFusion offers end-to-end GPU virtualization, pooling solution, support alm
 | Request Multiple vGPUs | ✅ | ❌ |
 | GPU Node Auto Provisioning/Termination | ✅ | ❌ |
 | GPU Compaction/Bin-packing | 🚧 | ❌ |
-| IDE Extensions & Plugins | 🚧 | ❌ |
 | Centralized Dashboard & Control Plane | ✅ | ❌ |
 | Support None-Nvidia GPU | 🚧 | ❌ |
 | <b>Enterprise Features</b> |  |  |
+| Windows/Linux VM vGPU | ✅ | ✅ |
+| OpenGL Virtualization  | ✅ | ✅ |
 | GPU Live Migration | 🚧 | ❌ |
 | Advanced observability, CUDA Call Profiling/Tracing | 🚧 | ❌ |
 | AI Model Preloading | 🚧 | ❌ |

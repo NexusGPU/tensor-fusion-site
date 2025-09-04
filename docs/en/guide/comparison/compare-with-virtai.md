@@ -22,16 +22,17 @@ TensorFusion has similar features with VirtAI OrionX, but the implementation and
 | Monitoring & Alert | ✅ | ✅ |
 | GPU Resource Oversubscription | ✅ | ✅ |
 | GPU VRAM Expansion and hot/warm/cold tiering | ✅ | ✅ |
-| GPU-first Autoscaling Policies | ✅ | ❌ |
+| GPU-first Autoscaling Policies | ✅ | ❓ |
 | Support different QoS levels | ✅ | ❓ |
 | Request Multiple vGPUs | ✅ | ✅ |
 | GPU Node Auto Provisioning/Termination | ✅ | ❌ |
 | GPU Compaction/Bin-packing | 🚧 | ✅ |
 | Dynamic MIG(Multi-instance GPU) | 👋 | 👋 |
-| IDE Extensions & Plugins | 🚧 | ❌ |
 | Centralized Dashboard & Control Plane | ✅ | ✅ |
-| Support None-Nvidia GPU | 🚧 | ❌ |
+| Support None-Nvidia GPU | 🚧 | ✅ |
 | <b>Enterprise Features</b> |  |  |
+| Windows/Linux VM vGPU | ✅ | ❓ |
+| OpenGL Virtualization  | ✅ | ❓ |
 | GPU Live Migration | 🚧 | ❌ |
 | Advanced observability, CUDA Call Profiling/Tracing | 🚧 | ❌ |
 | AI Model Preloading | 🚧 | ❌ |

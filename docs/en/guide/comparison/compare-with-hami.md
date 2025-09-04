@@ -20,7 +20,7 @@ Compare to HAMi, TensorFusion not only offers fractional GPU, but also offers re
 | <b>Advanced Features</b> |  |  |
 | Seamless Onboarding for Existing Workloads | ✅ | ✅ |
 | Monitoring & Alert | ✅ | ✅ |
-| GPU Resource Oversubscription | ✅ | 🚧 |
+| GPU Resource Oversubscription | ✅ | ✅ |
 | GPU VRAM Expansion and hot/warm/cold tiering | ✅ | ❌ |
 | GPU-first Autoscaling Policies | ✅ | ❌ |
 | Support different QoS levels | ✅ | ❌ |
@@ -29,8 +29,10 @@ Compare to HAMi, TensorFusion not only offers fractional GPU, but also offers re
 | GPU Compaction/Bin-packing | 🚧 | 🚧 |
 | Dynamic MIG(Multi-instance GPU) | 👋 | ✅ |
 | Centralized Dashboard & Control Plane | ✅ | ✅ |
-| Support Non-NVIDIA GPU | 🚧 | ❌ |
+| Support Non-NVIDIA GPU | 🚧 | ✅ |
 | <b>Enterprise Features</b> |  |  |
+| Windows/Linux VM vGPU | ✅ | ❌ |
+| OpenGL Virtualization  | ✅ | ❌ |
 | GPU Live Migration | 🚧 | ❌ |
 | Advanced observability, CUDA Call Profiling/Tracing | 🚧 | ❌ |
 | AI Model Preloading | 🚧 | ❌ |
