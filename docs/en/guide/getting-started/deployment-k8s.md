@@ -102,6 +102,8 @@ curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
 
 ## Next Steps
 
-- [Migrate existing AI Workloads to TensorFusion](/guide/recipes/migrate-existing.md)
-- [Customize your cluster and GPU pool settings](/guide/recipes/configure-qos-and-pricing.md)
+<!-- - [Migrate existing AI Workloads to TensorFusion](/guide/recipes/migrate-existing.md)
+- [Customize your cluster and GPU pool settings](/guide/recipes/configure-qos-and-pricing.md) -->
+- [Check All Available Pod Annotations](/reference/workload-annotation.md)
 - [Deploy production grade high availability cluster](/guide/recipes/production-grade-deployment.md)
+- [View Resource Definitions](/reference/crd-schema.md)

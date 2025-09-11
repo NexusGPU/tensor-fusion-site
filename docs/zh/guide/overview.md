@@ -90,9 +90,11 @@ TensorFusion提供免费的社区版和付费的商业版，免费版功能已�
 ## 📚 参考文档
 
 - [Kubernetes Custom Resource详细定义](/zh/reference/crd-schema.md)
-- [性能测试报告](/zh/reference/benchmark.md)
-- [API参考](/zh/reference/api-schema.md)
+- [安全白皮书](/zh/reference/security-whitepaper.md)
+- [Pod模板注解](/zh/reference/workload-annotation.md)
 - [系统指标](/zh/reference/metrics.md)
+<!-- - [性能测试报告](/zh/reference/benchmark.md)
+- [API参考](/zh/reference/api-schema.md) -->
 
 ## ❓ FAQ
 

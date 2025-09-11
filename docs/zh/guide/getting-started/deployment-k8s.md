@@ -150,6 +150,9 @@ curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
 
 ## 后续步骤
 
-- [现有AI工作负载迁移指南](/zh/guide/recipes/migrate-existing.md)
-- [集群与GPU资源池定制配置](/zh/guide/recipes/configure-qos-and-pricing.md)
+<!-- - [现有AI工作负载迁移指南](/zh/guide/recipes/migrate-existing.md)
+- [集群与GPU资源池定制配置](/zh/guide/recipes/configure-qos-and-pricing.md) -->
 - [生产级高可用集群部署方案](/zh/guide/recipes/production-grade-deployment.md)
+- [检查所有的Pod注解](/reference/workload-annotation.md)
+- [查看Kubernetes扩展资源定义](/reference/crd-schema.md)
+

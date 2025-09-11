@@ -88,10 +88,11 @@ TensorFusion community version is free for small teams, and a paid commercial ve
 ## 📚 Reference Documentation
 
 - [Kubernetes Custom Resource Schema](/reference/crd-schema.md)
-- [Performance Test Report](/reference/benchmark.md)
-- [Open API Reference](/reference/api-schema.md)
+- [Security Whitepaper](/reference/security-whitepaper.md)
+- [Pod Template Annotation](/reference/workload-annotation.md)
 - [System Metrics](/reference/metrics.md)
-
+<!-- - [Performance Test Report](/reference/benchmark.md)
+- [Open API Reference](/reference/api-schema.md) -->
 ## ❓ FAQ
 
 **Q: What are the success cases of TensorFusion?**
