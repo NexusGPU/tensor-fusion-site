@@ -74,13 +74,13 @@ spec:
       dnsPolicy: ClusterFirst
 ```
 
-Then, you would see a pytorch pod and the corresponding shadow GPU worker Pod started (Don't worry, it's super lightweight). Run "kubectl exec" into the pytorch pod, you can run nvidia-smi to see the limited GPU memory and utilization.
+Then, you would see a pytorch pod and the corresponding vGPU worker Pod started (Don't worry, it's super lightweight). Run "kubectl exec" into the pytorch pod, you can run nvidia-smi to see the limited GPU memory and utilization.
 
 ```bash
 nvidia-smi
 ```
 
-Finally, and run `python3` to start python REPL console and test a simple Google T5 model inference, the following codes should translate English "Hello" to German "Hallo" in seconds.
+Finally, run `python3` to start python REPL console and test a simple Google T5 model inference, the following codes should translate English "Hello" to German "Hallo" in seconds.
 
 ```python
 from transformers import pipeline

@@ -47,11 +47,77 @@ kubectl get tensorfusionclusters
 # shared-tensor-fusion-cluster          Ready       2m
 ```
 
-Finally, refer to [Deploy and Verify](/zh/guide/getting-started/deployment-k8s#step-3-deploy-and-verify-tensorfusion) for end-to-end testing by running a PyTorch model inference with TensorFusion virtual remote GPU.
+Finally, deploy an application to verify TensorFusion is working. Apply the following YAML to create a simple PyTorch deployment with TensorFusion remote vGPU.
 
-### Potential Issues
+```yaml
+# simple-pytorch.yaml
+# kubectl apply -f simple-pytorch.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pytorch-example
+  namespace: default
+  labels:
+    app: pytorch-example
+    tensor-fusion.ai/enabled: 'true'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pytorch-example
+  template:
+    metadata:
+      labels:
+        app: pytorch-example
+        tensor-fusion.ai/enabled: 'true'
+      annotations:
+        tensor-fusion.ai/inject-container: python
+        tensor-fusion.ai/tflops-limit: '10'
+        tensor-fusion.ai/tflops-request: '20'
+        tensor-fusion.ai/vram-limit: 4Gi
+        tensor-fusion.ai/vram-request: 4Gi
+    spec:
+      containers:
+        - name: python
+          image: pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
+          command:
+            - sh
+            - '-c'
+            - sleep 1d
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 0
+      dnsPolicy: ClusterFirst
+```
 
-If hypervisor Pods are not showing up, check if your GPU nodes has been labeled with `nvidia.com/gpu.present=true`
+Then, you would see a pytorch pod and the corresponding vGPU worker Pod started (Don't worry, it's super lightweight). Run "kubectl exec" into the pytorch pod, you can run nvidia-smi to see the limited GPU memory and utilization.
+
+```bash
+nvidia-smi
+```
+
+Finally, run `python3` to start python REPL console and test a simple Google T5 model inference, the following codes should translate English "Hello" to German "Hallo" in seconds.
+
+```python
+from transformers import pipeline
+pipe = pipeline("translation_en_to_de", model="google-t5/t5-base", device="cuda:0")
+pipe("Hello")
+```
+
+refer to [Deploy and Verify](/zh/guide/getting-started/deployment-k8s#step-3-deploy-and-verify-tensorfusion) for end-to-end testing by running a PyTorch model inference with TensorFusion virtual remote GPU.
+
+### Uninstall TensorFusion
+
+Run the following command to uninstall all components and custom resources
+
+```bash
+# export KUBECONFIG if needed
+curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
+```
+
+
+### Issues and Troubleshooting
+
+If your TensorFusion hypervisor Pods are not showing up, check if your GPU nodes has been labeled with `nvidia.com/gpu.present=true`
 
 ```bash
 kubectl get nodes --show-labels | grep nvidia.com/gpu.present=true
@@ -83,11 +149,3 @@ curl https://app.tensor-fusion.ai/tmpl/tf-cluster > tf-cluster.yaml
 kubectl apply -f tf-cluster.yaml
 ```
 
-## Uninstall TensorFusion
-
-Run the following command to uninstall all components and custom resources
-
-```bash
-# export KUBECONFIG if needed
-curl -sfL https://download.tensor-fusion.ai/uninstall.sh | sh -
-```
