@@ -110,8 +110,8 @@ Yes, TensorFusion open sourced most of the codes, including the core components 
 
 **Q: In what cases is TensorFusion free?**
 
-For users with up to 10 managed GPUs, TensorFusion is completely free for both commercial and non-commercial purposes, unless you need enable enterprise features, which are not important for startups and small teams.
-For users with more than 10 managed GPUs, please [contact us](mailto:support@tensor-fusion.com) to obtain commercial or educational licenses.
+For users managing up to 800 FP16 TFLOPs GPU/NPU cluster (equivalent to 12 NVIDIA T4 GPUs), TensorFusion is completely free for both commercial and non-commercial purposes, unless you need enable enterprise features, which are not important for startups and small teams.
+For more than 800 FP16 TFLOPs cluster, please [contact us](mailto:support@tensor-fusion.com) to obtain commercial or educational licenses.
 
 <br />
 

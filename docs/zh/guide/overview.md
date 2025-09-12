@@ -113,9 +113,9 @@ TensorFusion提供免费的社区版和付费的商业版，免费版功能已�
 
 **Q：TensorFusion在什么情况下免费使用？**
 
-对于管理GPU数量**不超过10**的商业用途、非商业用途用户，都完全免费，除非用到了一般小团队用不到的企业版功能。
+对于管理GPU/NPU算力**不超过800 FP16 TFLOPs**(相当于12个Tesla T4卡)的商业用途、非商业用途用户，都完全免费，除非用到了一般小团队用不到的企业版功能。
 
-管理GPU数量超过10个的客户，请[与我们联系](mailto:support@tensor-fusion.com)获取商业版、教育版许可证。
+管理GPU/NPU算力超过800 FP16 TFLOPs的客户，请[与我们联系](mailto:support@tensor-fusion.com)获取商业版、教育版许可证。
 
 <br>
 
