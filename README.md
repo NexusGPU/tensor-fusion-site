@@ -34,28 +34,6 @@ This repo is for TensorFusion official website and documentation. Check out the 
 - [Getting Started on VM](https://tensor-fusion.ai/guide/getting-started/deployment-vm)
 - [Deploy Self-hosted Community Edition](https://tensor-fusion.ai/guide/recipes/deploy-k8s-local-mode)
 
-### Try it out
-
-- Explore the demo account: [Demo Console - Working in progress](https://app.tensor-fusion.ai?hint=demo)
-
-- Run following command to try TensorFusion out in 3 minutes
-
-```bash
-# Step 1: Install TensorFusion in Kubernetes
-helm install --repo https://nexusgpu.github.io/tensor-fusion/ --create-namespace
-
-# Step 2. Onboard GPU nodes into TensorFusion cluster
-kubectl apply -f https://raw.githubusercontent.com/NexusGPU/tensor-fusion/main/manifests/gpu-node.yaml
-
-# Step 3. Check if cluster and pool is ready
-kubectl get gpupools -o wide && kubectl get gpunodes -o wide
-
-# Step3. Create an inference app using virtual, remote GPU resources in TensorFusion cluster
-kubectl apply -f https://raw.githubusercontent.com/NexusGPU/tensor-fusion/main/manifests/inference-app.yaml
-
-# Then you can forward the port to test inference, or exec shell
-```
-
 ### 💬 Discussion
 
 - Discord channel: [https://discord.gg/2bybv9yQNk](https://discord.gg/2bybv9yQNk)
