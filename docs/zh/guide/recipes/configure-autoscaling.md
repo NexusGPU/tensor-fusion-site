@@ -1,20 +1,88 @@
 # 配置AI应用自动扩缩容
 
-[Under Construction]
+## 开启自动扩缩容
+
+### 添加Pod自动扩缩容注解进行简单配置
 
 ```yaml
-apiVersion: tensor-fusion.ai/v1
-kind: WorkloadProfile
-metadata:
-  name: auto-scale-template
-spec:
-  qos: medium
-  
-  autoRequests: true
-  autoLimits: true
+  # 开启垂直扩缩容
+  autoResources: true
+  # 配置目标资源, 可填all|tflops|vram，若为空则只推荐不更新
+  targetResource: all 
+  # 开启水平扩缩容
   autoReplicas: true
-  
-  # when auto replicas is enabled, this number will be the init replica, 
-  # and won't be changed along with the config, but with the actual load
-  replicas: 2
+```
+
+### 使用工作负载配置文件进行详细配置
+
+```yaml
+autoScalingConfig:
+    # 垂直扩缩容配置
+    autoSetResources:
+      # 是否开启
+      enable: true
+      # 目标资源
+      targetResource: all
+      # 计算TFLOPS目标值百分位数， 默认值：0.9
+      targetTflopsPercentile: 0.9
+      # 计算TFLOPS下边界值百分位数，默认值：0.5
+      lowerBoundTflopsPercentile: 0.5
+      # 计算TFLOPS上边界值百分位数，默认值：0.95
+      upperBoundTflopsPercentile: 0.95
+      # 计算VRAM目标值百分位数，默认值：0.9
+      targetVramPercentile: 0.9
+      # 计算VRAM下边界值百分位数，默认值：0.5
+      lowerBoundVramPercentile: 0.5
+      # 计算VRAM上边界值百分位数，默认值：0.95
+      upperBoundVramPercentile: 0.95
+      # 请求估算值扩大系数 默认值：0.15
+      requestMarginFraction: 0.15
+      # 计算上下边界估算值信心倍数的时间间隔 默认值：24小时
+      confidenceInterval: 24h
+    autoSetReplicas: {}
+    # 定时扩缩容配置
+    cronScalingRules:
+        # 是否启用该规则
+      - enable: True
+        # 规则名称
+        name: "test"
+        # 规则生效起始时间
+        start: "0 0 * * Thu"
+        # 规则生效结束时间
+        end: "59 23 * * Thu"
+        # 期望设置的GPU资源值
+        desiredResources:
+          limits:
+            tflops: "99"
+            vram: 10Gi
+          requests:
+            tflops: "44"
+            vram: 5Gi
+```
+
+## 观测扩缩容状态
+
+### 通过TensorFusionWorkload Status查看GPU资源推荐值
+
+```yaml
+status:
+  conditions:
+    # GPU资源推荐值产生的原因
+    - lastTransitionTime: '2025-10-09T09:16:46Z'
+      message: TFLOPS scaled up due to (1) below lower bound (2)
+      reason: OutOfEstimatedBound
+      status: 'True'
+      type: RecommendationProvided
+  # 当前GPU资源推荐值
+  recommendation:
+    limits:
+      tflops: '13'
+      vram: 1Gi
+    requests:
+      tflops: '13'
+      vram: 1Gi
+  # 当前已应用GPU资源推荐值的副本数
+  appliedRecommendedReplicas: 3
+  # 当前生效的定时扩缩容规则
+  activeCronScalingRule: <...>
 ```

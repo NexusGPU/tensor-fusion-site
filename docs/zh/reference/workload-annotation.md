@@ -31,8 +31,7 @@
 | `tensor-fusion.ai/workload` | TensorFusionWorkload名称，如果存在，将共享相同的vGPU workers | `pytorch-example` |
 | `tensor-fusion.ai/workload-profile` | 引用WorkloadProfile以重用预定义参数 | `default-profile` |
 | `tensor-fusion.ai/enabled-replicas` | 设置为小于或等于ReplicaSet副本数的任何数字，用于TensorFusion的灰度发布 | `'1','42'` |
-| `tensor-fusion.ai/auto-requests` | 根据工作负载历史指标自动设置vram和/或tflops `requests`，详细设置请使用`WorkloadProfile`自定义资源 | `'true'` |
-| `tensor-fusion.ai/auto-limits` | 根据工作负载历史指标自动设置vram和/或tflops `limits`，详细设置请使用`WorkloadProfile`自定义资源 | `'true'` |
+| `tensor-fusion.ai/auto-resources` | 根据工作负载历史指标自动设置vram和/或tflops，详细设置请使用`WorkloadProfile`自定义资源 | `'true'` |
 | `tensor-fusion.ai/auto-replicas` | 根据工作负载历史指标自动设置vGPU worker `replicas`，详细设置请使用`WorkloadProfile`自定义资源 | `'true'` |
 | `tensor-fusion.ai/standalone-worker-mode` | 当`is-local-gpu`为true时，此选项为false，意味着vGPU worker将被注入到init容器中，而不是运行独立的vGPU worker，以实现最佳性能，代价是用户可能绕过vGPU worker直接使用物理GPU，当`is-local-gpu`为false时，此选项无效 | `'true'` |
 | `tensor-fusion.ai/disable-features` | 用于部分禁用tensor fusion内置功能的开关，多个功能可用逗号分隔 | `'gpu-limiter, gpu-opt, mem-manager'` |
