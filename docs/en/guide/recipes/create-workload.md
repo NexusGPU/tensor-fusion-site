@@ -59,4 +59,14 @@ See all configuration options [Workload Configuration](/reference/workload-annot
 
 ## Step 3. Verify the App Status
 
-[WIP]
+1. Check that a new container named ```inject-lib``` appears in your pods
+
+2. Execute into the shell of the tensor-fusion.ai/inject-container and run:
+
+``` nvidia-smi```
+
+3. Verify that:
+
+- The command runs successfully
+
+- The GPU memory quota has been updated to match your ```tensor-fusion.ai/vram-limit``` setting
