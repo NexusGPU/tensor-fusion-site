@@ -90,17 +90,6 @@ Use LD_LIBRARY_PATH or LD_PRELOAD to inject the shared libraries from tensor-fus
 
 We’ll verify inside a Linux VM using Python with PyTorch CUDA.
 
-### Prepare the environment
-
-Enable logs and inject the client libraries
-```bash
-export TF_ENABLE_LOG=1
-export LD_PRELOAD=/opt/tensor-fusion-client/linux/libteleport.so:/opt/tensor-fusion-client/linux/libcuda.so:/opt/tensor-fusion-client/linux/libnvidia-ml.so
-```
-
-> [!NOTE]
-> Assuming the client is installed under /opt/tensor-fusion-client. Adjust paths as needed.
-
 #### NATIVE protocol
 If the worker runs with NATIVE at host IP 192.168.1.100 and port 12345:
 
@@ -147,6 +136,14 @@ export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=shmem+/sys/devices/pci0000:00/0000
 > [!TIP]
 > 1) The shared-memory size must match the worker’s setting. 
 > 2) Root privileges are typically required to mmap the IVSHMEM BAR resource.
+
+### Inject dynamic libraries
+```bash
+export LD_PRELOAD=/opt/tensor-fusion-client/linux/libcuda.so:/opt/tensor-fusion-client/linux/libnvidia-ml.so
+```
+> [!NOTE]
+> Assuming the client is installed under /opt/tensor-fusion-client. Adjust paths as needed.
+
 
 ### PyTorch validation example
 

@@ -85,15 +85,6 @@ TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 
 我们可以使用python结合pytorch-cuda在Linux VM中进行验证。
 
-### 准备
-
-设置基础环境变量，用于打开日志和注入client
-```bash
-export TF_ENABLE_LOG=1
-export LD_PRELOAD=/opt/tensor-fusion-client/linux/libteleport.so:/opt/tensor-fusion-client/linux/libcuda.so:/opt/tensor-fusion-client/linux/libnvidia-ml.so
-```
-> [!NOTE]注意: 假设tensor-fusion-client路径为/opt/tensor-fusion-client，可根据实际情况进行调整
-
 #### NATIVE协议
 如果worker以NATIVE协议启动，所在宿主机IP地址192.168.1.100，绑定端口号12345；
 
@@ -141,6 +132,13 @@ export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=shmem+/sys/devices/pci0000:00/0000
 > [!TIP]注意
 > 1. 设置的共享内存大小必须与worker保持一致
 > 2. 需要root权限才能成功映射ivshmem设备提供的共享内存
+
+### 注入动态链接库
+```bash
+export LD_PRELOAD=/opt/tensor-fusion-client/linux/libcuda.so:/opt/tensor-fusion-client/linux/libnvidia-ml.so
+```
+
+> [!NOTE]注意: 假设tensor-fusion-client路径为/opt/tensor-fusion-client，可根据实际情况进行调整
 
 ### PyTorch 验证示例
 成功设置环境变量后，输入以下代码（PyTorch + Qwen3 0.6B）进行验证
