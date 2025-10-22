@@ -23,7 +23,7 @@ Run tensor-fusion-worker on the host and deploy tensor-fusion-client inside a vi
 -  [libcuda.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libcuda.so)
 -  [libnvidia-ml.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libnvidia-ml.so)
 -  [libteleport.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libteleport.so)
-> [!NOTE] For Windows version, please contact us (support@tensor-fusion.com)
+> [!TIP]TIPS: For Windows version, please contact us (support@tensor-fusion.com)
 
 ### Server
 -  [tensor-fusion-worker](https://cdn.tensor-fusion.ai/archive/tensor-fusion-worker/latest/tensor-fusion-worker)

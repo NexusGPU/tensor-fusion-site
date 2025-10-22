@@ -18,13 +18,11 @@ outline: deep
 
 ## 步骤一：下载tensor-fusion
 
-1. 下载最新版本
-
 ### 客户端
 -  [libcuda.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libcuda.so)
 -  [libnvidia-ml.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libnvidia-ml.so)
 -  [libteleport.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libteleport.so)
-> [!NOTE]注意：如需Windows版本，请联系我们获取（support@tensor-fusion.com）
+> [!TIP]提示：如需Windows版本，请联系我们获取（support@tensor-fusion.com）
 
 ### 服务端
 -  [tensor-fusion-worker](https://cdn.tensor-fusion.ai/archive/tensor-fusion-worker/latest/tensor-fusion-worker)
@@ -71,7 +69,7 @@ TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 ### Linux 系统
 将文件（libcuda.so、libnvidia-ml.so、libteleport.so）通过LD_LIBRARY_PATH或LD_PRELOAD将动态链接库文件注入到业务程序中。
 
-> [!TIP]注意: 由于用户操作系统环境复杂，请确保client相关动态链接库被业务进程成功加载并使用
+> [!TIP]提示: 由于用户操作系统环境复杂，请确保client相关动态链接库被业务进程成功加载并使用
 
 > [!NOTE]环境变量
 > - TF_ENABLE_LOG: 启用日志记录，默认为禁用
