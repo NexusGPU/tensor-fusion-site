@@ -18,15 +18,19 @@ outline: deep
 
 ## 步骤一：下载tensor-fusion
 
-1. 下载最新版本 (https://cdn.tensor-fusion.ai/archive-lastest.zip)
-2. 解压缩后获得安装文件
-```bash
-unzip archive-lastest.zip
-```
+1. 下载最新版本
+
+### 客户端
+-  [libcuda.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libcuda.so)
+-  [libnvidia-ml.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libnvidia-ml.so)
+-  [libteleport.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libteleport.so)
+> [!NOTE]注意：如需Windows版本，请联系我们获取（support@tensor-fusion.com）
+
+### 服务端
+-  [tensor-fusion-worker](https://cdn.tensor-fusion.ai/archive/tensor-fusion-worker/latest/tensor-fusion-worker)
 
 ## 步骤二：在宿主机安装 tensor-fusion-worker
 
-从安装文件中获得tensor-fusion-worker
 ```bash
 ./tensor-fusion-worker -h
 Usage: tensor-fusion-worker [option]
@@ -62,11 +66,10 @@ TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 
 ## 步骤三：在VM中安装 tensor-fusion-client
 
-1. 从安装文件中获得tensor-fusion-client目录
 ### Windows 系统
-将tensor-fusion-client/windows目录下的文件（nvcuda.dll、nvml.dll、teleport.dll）放置在系统路径中，或与业务程序在同一目录下，确保业务程序能正常引用。
+将文件（nvcuda.dll、nvml.dll、teleport.dll）放置在系统路径中，或与业务程序在同一目录下，确保业务程序能正常引用。
 ### Linux 系统
-将tensor-fusion-client/linux目录下的文件（libcuda.so、libnvidia-ml.so、libteleport.so）通过LD_LIBRARY_PATH或LD_PRELOAD将动态链接库文件注入到业务程序中。
+将文件（libcuda.so、libnvidia-ml.so、libteleport.so）通过LD_LIBRARY_PATH或LD_PRELOAD将动态链接库文件注入到业务程序中。
 
 > [!TIP]注意: 由于用户操作系统环境复杂，请确保client相关动态链接库被业务进程成功加载并使用
 

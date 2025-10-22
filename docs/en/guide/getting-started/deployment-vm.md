@@ -19,11 +19,14 @@ Run tensor-fusion-worker on the host and deploy tensor-fusion-client inside a vi
 
 ## Step 1: Download Tensor Fusion
 
-1. Download the latest release: https://cdn.tensor-fusion.ai/archive-lastest.zip
-2. Unzip the archive:
-```bash
-unzip archive-lastest.zip
-```
+### Client
+-  [libcuda.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libcuda.so)
+-  [libnvidia-ml.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libnvidia-ml.so)
+-  [libteleport.so](https://cdn.tensor-fusion.ai/archive/tensor-fusion-client/latest/libteleport.so)
+> [!NOTE] For Windows version, please contact us (support@tensor-fusion.com)
+
+### Server
+-  [tensor-fusion-worker](https://cdn.tensor-fusion.ai/archive/tensor-fusion-worker/latest/tensor-fusion-worker)
 
 ## Step 2: Install tensor-fusion-worker on the host
 
@@ -64,13 +67,11 @@ TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 
 ## Step 3: Install tensor-fusion-client in the VM
 
-1. Get the tensor-fusion-client directory from the extracted package.
-
 ### Windows
-Place files from tensor-fusion-client/windows (nvcuda.dll, nvml.dll, teleport.dll) either in the system PATH or alongside your application so they can be loaded.
+Place files (nvcuda.dll, nvml.dll, teleport.dll) either in the system PATH or alongside your application so they can be loaded.
 
 ### Linux
-Use LD_LIBRARY_PATH or LD_PRELOAD to inject the shared libraries from tensor-fusion-client/linux (libcuda.so, libnvidia-ml.so, libteleport.so) into your application process.
+Use LD_LIBRARY_PATH or LD_PRELOAD to inject the shared libraries (libcuda.so, libnvidia-ml.so, libteleport.so) into your application process.
 
 > [!TIP]
 > OS environments vary. Please ensure the client libraries are actually loaded by your application.
