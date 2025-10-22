@@ -73,8 +73,7 @@ Place files (nvcuda.dll, nvml.dll, teleport.dll) either in the system PATH or al
 ### Linux
 Use LD_LIBRARY_PATH or LD_PRELOAD to inject the shared libraries (libcuda.so, libnvidia-ml.so, libteleport.so) into your application process.
 
-> [!TIP]
-> OS environments vary. Please ensure the client libraries are actually loaded by your application.
+> [!TIP]TIPS: OS environments vary. Please ensure the client libraries are actually loaded by your application.
 
 > [!NOTE] Environment variables
 > - TF_ENABLE_LOG: Enable logging (default: off)
@@ -84,8 +83,7 @@ Use LD_LIBRARY_PATH or LD_PRELOAD to inject the shared libraries (libcuda.so, li
 > - TENSOR_FUSION_OPERATOR_CONNECTION_INFO: Connection info in the format protocol+param1+param2+version (version is currently 0)
 > - TF_MAX_CACHE_REQUEST_COUNT: Maximum cache request count (default: 100)
 
-> [!TIP]
-> You can set the connection info directly via TENSOR_FUSION_OPERATOR_CONNECTION_INFO, or provide a GET endpoint via TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL that returns it.
+> [!TIP]TIPS: You can set the connection info directly via TENSOR_FUSION_OPERATOR_CONNECTION_INFO, or provide a GET endpoint via TENSOR_FUSION_OPERATOR_GET_CONNECTION_URL that returns it.
 
 ## Step 4: Verify the setup
 
@@ -99,8 +97,7 @@ If the worker runs with NATIVE at host IP 192.168.1.100 and port 12345:
 export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=native+192.168.1.100+12345+0
 ```
 
-> [!TIP]
-> Ensure the VM can reach the host IP and port.
+> [!TIP]TIPS: Ensure the VM can reach the host IP and port.
 
 #### SHMEM protocol
 If the worker runs with SHMEM, creates /my_shm and sets size to 256 MB, start your VM with QEMU and attach the shared memory via IVSHMEM:
@@ -134,7 +131,7 @@ Hence the device BDF is 00:04.0.
 export TENSOR_FUSION_OPERATOR_CONNECTION_INFO=shmem+/sys/devices/pci0000:00/0000:00:04.0/resource2+256+0
 ```
 
-> [!TIP]
+> [!TIP]TIPS:
 > 1) The shared-memory size must match the worker’s setting. 
 > 2) Root privileges are typically required to mmap the IVSHMEM BAR resource.
 
