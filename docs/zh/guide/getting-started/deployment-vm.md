@@ -61,6 +61,7 @@ TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 > - TF_LOG_LEVEL: 日志级别，支持值为trace/debug/info/warn/error，默认为info
 > - TF_LOG_PATH: 日志文件路径，默认为空（即输出到标准输出）
 > - TF_CUDA_MEMORY_LIMIT: CUDA内存限制，单位为MB，默认为不限制
+> - TF_CUDA_SM_PERCENT_LIMIT: CUDA流式多处理器（SM）百分比限制，默认为不限制
 
 ## 步骤三：在VM中安装 tensor-fusion-client
 

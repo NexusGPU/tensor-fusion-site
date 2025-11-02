@@ -64,6 +64,7 @@ TF_ENABLE_LOG=1 ./tensor-fusion-worker -n shmem -m /my_shm -M 256
 > - TF_LOG_LEVEL: trace|debug|info|warn|error (default: info)
 > - TF_LOG_PATH: Log file path (default: empty, i.e., stdout)
 > - TF_CUDA_MEMORY_LIMIT: CUDA memory limit in MB (default: unlimited)
+> - TF_CUDA_SM_PERCENT_LIMIT: CUDA streaming multiprocessor (SM) percentage limit (default: unlimited)
 
 ## Step 3: Install tensor-fusion-client in the VM
 
