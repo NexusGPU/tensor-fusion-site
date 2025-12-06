@@ -70,7 +70,7 @@ TensorFusion的虚拟化层，是在rCUDA、GaiaGPU等前辈的学术研究基�
 - TensorFusion调度器同时分配GPU资源，在最合适的GPU主机上启动对应的Worker，实现不同租户资源隔离、函数地址和数据地址隔离
 - 当Pod调用CUDA API时，通过GPU Stub将调用转发到Worker，经过特殊处理和优化后，实现安全的远程或本机共享GPU
 - Worker端运行的ResourceLimiter拦截GPU驱动层函数调用，对内存管理、核函数调用（LaunchKernel）等进行算力、显存资源的灵活控制
-- 在每个GPU主机上云霄的Hypervisor管理正在使用的多个Worker，实现VRAM的冷温热分层、实时监控、GPU上下文热迁移、模型预加载等高级功能。
+- 在每个GPU主机上运行的Hypervisor管理正在使用的多个Worker，实现VRAM的冷温热分层、实时监控、GPU上下文热迁移、模型预加载等高级功能。
 
 ![](https://cdn.tensor-fusion.ai/vgpu-flow-tf.pic.jpg)
 
