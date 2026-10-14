@@ -18,14 +18,29 @@ TensorFusion是一个**先进的GPU虚拟化和池化平台**，旨在最大GPU�
 
 ## 🎬 演示
 
-### GPU虚拟化 & 远程共享 & 分布式调度
+### 端到端演示
 
-<VideoPlayer class="vjs-fluid vjs-16-9" src="https://cdn.tensor-fusion.ai/tensor-fusion-vgpu-allocation-demo.mp4" :controls="true">
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-demo-voiced.mp4" :controls="true">
 </VideoPlayer>
 
-### 一站式AI Infra管控台
+### 按需扩容
 
-<VideoPlayer class="vjs-fluid vjs-16-9" src="https://cdn.tensor-fusion.ai/ai-infra-console-demo.mp4" :controls="true">
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-case-1-scale-on-demand.mp4" :controls="true">
+</VideoPlayer>
+
+### 多个应用共享一张GPU
+
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-case-2-share-one-gpu.mp4" :controls="true">
+</VideoPlayer>
+
+### 限额隔离
+
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-case-3-enforce-the-limit.mp4" :controls="true">
+</VideoPlayer>
+
+### 远程GPU
+
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-case-4-remote-gpu.mp4" :controls="true">
 </VideoPlayer>
 
 ### GPU上下文保存和迁移
