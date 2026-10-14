@@ -84,8 +84,8 @@ TensorFusion提供免费的社区版和付费的商业版，免费版功能已�
 #### 其他不同点
 
 - **代码开源**。TensorFusion的池化、调度、GPU切分等核心代码开源，而NVIDIA vGPU、Run.AI、VirtAI OrionX等商业方案完全闭源
-- **轻量**。容器层不需要Kubernetes Device Plugin、不需要NVIDIA GPU Operator，而包括HAMi在内的其他方案引入组件更多，维护复杂度较高
-- **极致性能**。虚拟化层由Rust和C++编写，针对NVIDIA GPU做过特殊优化，在LocalGPU模式下，**超过一半基准测试性能甚至超过直接挂载使用GPU设备**
+- **融入现有集群**。一个 Helm chart 安装 controller（webhook 与调度器在同一进程）和带自有 device plugin 的 hypervisor；可与 NVIDIA GPU Operator 共存，并能接管申请 `nvidia.com/gpu` 的 Pod，现有工作负载可以分批迁移
+- **开销低**。`soft` 隔离不设限额时，实测吞吐与原生 GPU 相差 1% 以内（NVIDIA T4 上的 vLLM、ONNX Runtime、TorchBench）。远程和 `hard` 模式把 GPU 调用转发给 worker，调用密集的工作负载开销更大，见[基准测试](https://tensor-fusion.ai/zh/docs/tensor-fusion-engine/reference/system-admins/benchmark)。
 
 <!-- TODO: Realtime Benchmark Link -->
 

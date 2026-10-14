@@ -89,8 +89,8 @@ TensorFusion community version is free for small teams, and a paid commercial ve
 #### Other Differences
 
 - **Open Source**. TensorFusion's pooling, scheduling, and GPU partitioning core components are **open source**, while NVIDIA vGPU, Run.AI, and VirtAI OrionX commercial solutions are closed source.
-- **Lightweight**. TensorFusion does not require Kubernetes DevicePlugin, does not require NVIDIA GPU Operator, while other solutions such as HAMi introduce more components, making maintenance more complex
-- **Unparalleled Performance**. The virtualization layer, crafted in Rust and C++, is meticulously optimized for NVIDIA GPUs. Remarkably, in over 50% of benchmark tests, performance surpasses that of directly running on physical GPU.
+- **Fits into existing clusters**. One Helm chart installs the controller (webhook and scheduler in one process) and a hypervisor with its own device plugin. It runs beside the NVIDIA GPU Operator and can take over Pods that request `nvidia.com/gpu`, so existing workloads move over a few at a time
+- **Low overhead**. With `soft` isolation and no limit set, measured throughput stays within 1% of a native GPU (vLLM, ONNX Runtime and TorchBench on an NVIDIA T4). Remote and `hard` modes forward GPU calls to a worker and cost more on call-heavy workloads; see the [benchmark](https://tensor-fusion.ai/docs/tensor-fusion-engine/reference/system-admins/benchmark).
 
 ### Detailed Comparison Report
 

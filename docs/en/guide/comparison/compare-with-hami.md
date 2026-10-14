@@ -4,111 +4,83 @@ outline: deep
 
 # Compare with HAMi
 
-[HAMi](https://github.com/Project-HAMi/HAMi) is a popular GPU pool management solution, offering fractional GPU and dynamic MIG features for multi-vendor GPU/NPUs.
+::: tip
+The maintained version of this comparison, with per-dimension details, measured overhead and sources, is at [tensor-fusion.ai/docs › Compare with HAMi](https://tensor-fusion.ai/docs/tensor-fusion-engine/comparison/compare-with-hami). This page is a summary, checked in October 2026 against HAMi v2.10.0.
+:::
 
-Compare to HAMi, TensorFusion not only offers fractional GPU, but also offers real GPU virtualization, isolation, remote sharing, live migration by completely different technology, with more features and enterprise-grade features and cloud vendor integration.
+[HAMi](https://github.com/Project-HAMi/HAMi) is an open source Kubernetes middleware for sharing GPUs and other accelerators, and a CNCF Incubating project. It overlaps the most with TensorFusion: both slice a GPU by compute and memory for containers, both enforce the limits with a library loaded into the container, and both ship a GPU-aware scheduler.
 
-### Features
+- **HAMi is stronger** on accelerator coverage (more than ten vendors), on openness (every component Apache 2.0, under CNCF governance), on community size, and on fitting into existing Kubernetes conventions (standard extended resources, `ResourceQuota`, Volcano, Kueue, Koordinator, KAI Scheduler, and a DRA driver).
+- **TensorFusion is stronger** on what happens around the slice: separate requests and limits with QoS levels, limits changed while the workload runs, process-level and remote isolation, GPU-over-IP, GPU node autoscaling with Karpenter, usage-based right-sizing, and per-workload cost data.
+
+## At a glance
+
+| Dimension | TensorFusion | HAMi |
+| --- | --- | --- |
+| Architecture and footprint | One controller (webhook, scheduler, CRD controllers), a hypervisor DaemonSet with its own device plugin, GreptimeDB for metrics. | A mutating webhook, a scheduler extender, and a device plugin per vendor. |
+| Isolation | `shared`, `soft` (in-process limiter), `hard` (separate worker process), `partitioned` (MIG, Ascend vNPU); remote mode adds a node boundary. | HAMi-core, an in-process library that intercepts CUDA calls; dynamic MIG on NVIDIA. |
+| Resource model | Compute in TFLOPS or percent, VRAM in bytes; request and limit set separately. | Memory in MiB or percent, cores in percent, device count; one value per resource. |
+| Scheduling | Own scheduler: bin-packing or spreading, NUMA and peer topology, gang scheduling, namespace quotas, four QoS levels. | Scheduler extender: binpack, spread and mutex policies, topology and NUMA awareness, `ResourceQuota`, PodGroup gang scheduling; queues through Volcano, Kueue or KAI. |
+| Elasticity | GPU nodes added and removed through Karpenter or cloud APIs, compaction, usage-based right-sizing, compute and VRAM oversubscription. | No node provisioning or right-sizing built in; device memory scaling above 1 (experimental). |
+| Remote GPU and VMs | GPU-over-IP for Pods on CPU nodes; VM guests (Linux, Windows) use host GPUs for compute APIs. | Not supported. |
+| Hardware coverage | NVIDIA in all modes; Huawei Ascend, Moore Threads, Alibaba PPU in a subset. | NVIDIA, AMD Instinct, Ascend, Cambricon, Hygon, Iluvatar, Kunlunxin, MetaX, Moore Threads, Enflame, AWS Neuron, Biren, Vastai. |
+| Observability and cost | Per-workload usage, built-in alert rules, unit prices and per-workload cost metrics, optional cloud console. | Prometheus metrics, Grafana dashboards, HAMi-WebUI; no cost attribution. |
+| Performance overhead | `soft` with no limit: within 1% of native (T4, vLLM / ONNX Runtime / TorchBench). API remoting (`hard`, remote) depends on the workload. | Upstream benchmark: vLLM on an A100, v2.9 within about 1–3% of native latency. |
+| Compatibility | Runs beside the NVIDIA GPU Operator; can take over Pods that request `nvidia.com/gpu`. | Replaces the NVIDIA device plugin on the nodes it manages. |
+| License and support | Controller, scheduler, hypervisor: Apache 2.0. Vendor limiters and the remote client/worker: closed source, free under 10 GPUs. Support by NexusGPU. | Apache 2.0, all components. CNCF Incubating since July 2026. Enterprise edition from Dynamia. |
+
+## Feature checklist
 
 | Feature | TensorFusion | HAMi |
 | --- | --- | --- |
-| <b>Basic Features</b> |  |  |
-| Fractional GPU | ✅ | ✅ |
-| GPU Pooling | ✅ | ✅ |
-| GPU Scheduling & Allocation | ✅ | ✅ |
-| Remote GPU Sharing | ✅ | ❌ |
-| <b>Advanced Features</b> |  |  |
-| Seamless Onboarding for Existing Workloads | ✅ | ✅ |
-| Monitoring & Alert | ✅ | ✅ |
-| GPU Resource Oversubscription | ✅ | ✅ |
-| GPU VRAM Expansion and hot/warm/cold tiering | ✅ | ❌ |
-| GPU-first Autoscaling Policies | ✅ | ❌ |
-| Support different QoS levels | ✅ | ❌ |
-| Request Multiple vGPUs | ✅ | ✅ |
-| GPU Node Auto Provisioning/Termination | ✅ | ❌ |
-| GPU Compaction/Bin-packing | 🚧 | 🚧 |
-| Dynamic MIG(Multi-instance GPU) | 👋 | ✅ |
-| Centralized Dashboard & Control Plane | ✅ | ✅ |
-| Support Non-NVIDIA GPU | 🚧 | ✅ |
-| <b>Enterprise Features</b> |  |  |
-| Windows/Linux VM vGPU | ✅ | ❌ |
-| OpenGL Virtualization  | ✅ | ❌ |
-| GPU Live Migration | 🚧 | ❌ |
-| Advanced observability, CUDA Call Profiling/Tracing | 🚧 | ❌ |
-| AI Model Preloading | 🚧 | ❌ |
-| Advanced auto-scaling policies, scale to zero, rebalancing | 🚧 | ❓ |
-| Monetization of your GPU cluster | 🚧 | ❌ |
+| Fractional GPU: VRAM and compute limits | ✅ | ✅ |
+| Separate request and limit | ✅ | ❌ |
+| Limits changed while the Pod runs | ✅ | ❌ |
+| Process-level isolation | ✅ `hard` | ❌ |
+| Hardware partitions | ✅ MIG, Ascend vNPU | ✅ Dynamic MIG, vendor templates |
+| Oversubscription | ✅ compute and VRAM | Partial, memory scaling (experimental) |
+| Remote GPU (GPU-over-IP) | ✅ mainly NVIDIA | ❌ |
+| VM guests using host GPUs | ✅ compute APIs | ❌ |
+| Gang scheduling | ✅ | ✅ PodGroup (v2.10), or Volcano |
+| Namespace GPU quotas | ✅ | ✅ `ResourceQuota` |
+| DRA | ❌ | ✅ HAMi-DRA |
+| GPU node autoscaling (Karpenter, cloud APIs) | ✅ | ❌ |
+| Node compaction | ✅ | ❌ |
+| Usage-based right-sizing | ✅ | ❌ |
+| Per-workload cost attribution | ✅ | ❌ |
+| Web console | ✅ optional cloud console | ✅ HAMi-WebUI |
+| GPU live migration | Commercial edition | ❌ |
+| Vendors beyond NVIDIA | Partial, three | ✅ more than ten |
+| Fully open source | Partial | ✅ |
 
-Notes:
-- ✅ means supported
-- ❌ means not supported
-- 🚧 means Working in progress
-- ❓ means unknown
-- 👋 means not necessary any more
-
-In summary, both TensorFusion and HAMi offer fractional GPU and distributed scheduler in Kubernetes. While TensorFusion offers more features, HAMi supports more GPU vendors.
-
-As for the Fractional GPU feature, there are also design differences, HAMi uses percentage based limit unit, while TensorFusion uses FP16 TFlops. Percentage-based way can lead to unpredictable behaviors, because 1% of GPU card 5 years ago has huge difference with 1% of GPU card today.
-
-**Technically**, Both HAMi and TensorFusion are using Golang for Kubernetes layer, while in virtualization layer, HAMi is written in C, TensorFusion is written in Rust and C++. 
-
-There are also some fundamental differences. HAMi hooks libcuda and injects it to Pods through a special Kubernetes DevicePlugin, while TensorFusion solely depends on Pod mutation webhook, HAMi just hooks libcuda for mem and launchKernel limit, while TensorFusion implements whole GPU device virtualization and remoting.
-
-### Deploy & Usage
-
-HAMi offers Helm deployment, while TensorFusion provides a more user-friendly console to deploy and manage GPU clusters.
-
-TensorFusion's deployment architecture is simpler than HAMi, it doesn't require Kubernetes Device Plugin nor Kubernetes Scheduler Plugin, and offers full-fledged control plane to operator the GPU/NPU cluster for both community and commercial users.
-
-
-Here is the usage comparison:
+## Requesting a GPU
 
 ```yaml
-# HAMI
+# HAMi
 spec:
   containers:
-    - name: python
-      image: ...
+    - name: app
       resources:
         limits:
-          nvidia.com/gpu: 1 // [!code highlight]
-          nvidia.com/gpumem: 3000 # 3000Mi VRAM // [!code highlight]
-          nvidia.com/gpucores: 30 # request 30% computing of each vGPU // [!code highlight] 
+          nvidia.com/gpu: 1        # number of GPUs
+          nvidia.com/gpumem: 4096  # MiB of GPU memory on each
+          nvidia.com/gpucores: 30  # percent of each GPU's compute
 ```
-
-Since TensorFusion doesn't require Kubernetes Device Plugin, just add annotations in PodTemplate, simpler and more flexible.
 
 ```yaml
 # TensorFusion
 metadata:
   labels:
-    tensor-fusion.ai/enabled: 'true' // [!code highlight]
+    tensor-fusion.ai/enabled: "true"
   annotations:
-    tensor-fusion.ai/workload-profile: example-workload-profile // [!code highlight]
-    # you can override profile fields
-    tensor-fusion.ai/vram-limit: 4Gi // [!code highlight]
+    tensor-fusion.ai/tflops-request: "10"
+    tensor-fusion.ai/tflops-limit: "20"
+    tensor-fusion.ai/vram-request: "4Gi"
+    tensor-fusion.ai/vram-limit: "4Gi"
 ```
 
+## When to choose which
 
-<!-- ### Performance Comparison -->
-<!-- Benchmark -->
+Choose HAMi when you run accelerators TensorFusion does not support, need every component open source under CNCF governance, already use Volcano, Kueue, Koordinator or KAI Scheduler, or only need local fractional GPUs with fixed limits and as few components as possible.
 
-## Total Cost of Ownership
-
-> TL;DR: TCO of HAMi open-source version is medium and similar to TensorFusion when GPU pool is small and you don't need rich feature set, but HAMi will grow much faster than TensorFusion when GPU pool is large and complex orchestration, scheduling and autoscaling is needed.
-
-### Small GPU Pool Scenario
-
-If your AI Infra team has rich experience of Kubernetes and GPU/NPU management and can build observability stack and troubleshoot complex issues, HAMi open-source version is a good choice, otherwise, TensorFusion TCO is a bit lower since it has less dependencies and cognitive load.
-
-### Medium and Large GPU Pool Scenario
-
-When GPU Pool grows larger, rich feature set will be more important. HAMi doesn't support oversubscription and remote sharing nor GPU live migration to achieve higher utilization or high availability, TCO of HAMi will be much higher than TensorFusion in this case.
-
-### Other Considerations
-
-Since HAMi also offers enterprise paid version, but it's mainly focused on Chinese GPU vendors and Chinese market.
-
-While TensorFusion is built by a Singapore company NexusGPU PTE.LTD., and focusing on global market from day one. 
-
-For enterprise users, NexusGPU PTE.LTD. offers 24x7 commercial support and enterprise-level security and compliance (currently working in progress), including SAML/OIDC, SOC2, ISO27001 certification etc. 
+Choose TensorFusion when you want fewer GPU nodes on a cloud (packing, Karpenter node autoscaling, releasing empty nodes), GPU limits right-sized from real usage without restarts, requests and limits with QoS levels, Pods or VMs using GPUs on other machines, or per-workload cost data for chargeback.
