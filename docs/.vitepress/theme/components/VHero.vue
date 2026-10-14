@@ -59,7 +59,7 @@
         </div>
     </section>
     <div class="demo-for-mobile">
-        <VideoPlayer class="vjs-fluid vjs-16-9" src="https://cdn.tensor-fusion.ai/TensorFusion-demo.mp4" poster="https://cdn.tensor-fusion.ai/tfs-poster-center.png" :controls="true">
+        <VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-demo-voiced.mp4" poster="https://files.gpu.tf/demo/tensorfusion-demo-poster.jpg" :controls="true">
         </VideoPlayer>
     </div>
     <div class="demo-for-desktop overflow-hidden">
@@ -71,13 +71,13 @@
                             srcset="/cpu-chips.png" alt="Slider Image" class="image" /></div>
                     <div data-w-id="16b69460-66f0-c83d-2c5f-5e56a35c1395" class="sticky-images middle center-image">
                         <div class="video-container" style="height: 100%;" @click="toggleVideo">
-                            <img v-if="!isPlaying" src="https://cdn.tensor-fusion.ai/tfs-poster-center.png"
+                            <img v-if="!isPlaying" src="https://files.gpu.tf/demo/tensorfusion-demo-poster.jpg"
                                 alt="Hero Image" class="image" />
                             <VideoPlayer class="vjs-fluid vjs-16-9" :style="{
                                 'display': isPlaying ? 'block' : 'none',
                                 'opacity': isPlaying ? 1 : 0,
                                 'transition': 'opacity 1.5s ease-in-out'
-                            }" src="https://cdn.tensor-fusion.ai/TensorFusion-demo.mp4" :controls="true"
+                            }" src="https://files.gpu.tf/demo/tensorfusion-demo-voiced.mp4" :controls="true"
                                 @mounted="onPlayerMounted">
                             </VideoPlayer>
                         </div>

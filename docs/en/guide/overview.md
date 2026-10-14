@@ -18,14 +18,29 @@ TensorFusion is a cutting-edge GPU virtualization and pooling platform designed 
 
 ## 🎬 Demo
 
-### Fractional vGPU & GPU-over-IP & Resource Allocation 
+### End-to-End Demo
 
-<VideoPlayer class="vjs-fluid vjs-16-9" src="https://cdn.tensor-fusion.ai/tensor-fusion-vgpu-allocation-demo.mp4" :controls="true">
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-demo-voiced.mp4" :controls="true">
 </VideoPlayer>
 
-### Comprehensive AI Infra Console
+### Scale on Demand
 
-<VideoPlayer class="vjs-fluid vjs-16-9" src="https://cdn.tensor-fusion.ai/ai-infra-console-demo.mp4" :controls="true">
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-case-1-scale-on-demand.mp4" :controls="true">
+</VideoPlayer>
+
+### Share One GPU
+
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-case-2-share-one-gpu.mp4" :controls="true">
+</VideoPlayer>
+
+### Enforce the Limit
+
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-case-3-enforce-the-limit.mp4" :controls="true">
+</VideoPlayer>
+
+### Remote GPU
+
+<VideoPlayer class="vjs-fluid vjs-16-9" src="https://files.gpu.tf/demo/tensorfusion-case-4-remote-gpu.mp4" :controls="true">
 </VideoPlayer>
 
 ### GPU Live Migration 
